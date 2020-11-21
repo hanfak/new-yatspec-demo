@@ -1,0 +1,15 @@
+- Test other use cases
+- Assert on files
+- Split builder for prod and test 
+    - have test example for using map instead of actual db
+    - needed for messages/queue testing (maybe??)
+- Use of queue
+    - when consume message from queue
+    - produce message and send to queue, assert on message sent to queue
+- table tests
+    - common
+    - custom
+- linking notes
+- dictionary
+- html ouput index page, renderer
+- Have tests run when docker is running ie build
