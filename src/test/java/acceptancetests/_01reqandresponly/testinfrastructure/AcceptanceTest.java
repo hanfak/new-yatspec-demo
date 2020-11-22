@@ -1,7 +1,12 @@
-package testinfrastructure;
+package acceptancetests._01reqandresponly.testinfrastructure;
 
+import acceptancetests._01reqandresponly.thens.ThenTheResponseVersion2;
 import acceptancetests._01reqandresponly.thens.ThenTheResponse;
 import acceptancetests._01reqandresponly.whens.WhenARequestIsMadeTo;
+import acceptancetests._01reqandresponly.testinfrastructure.renderers.CustomJavaSourceRenderer;
+import acceptancetests._01reqandresponly.testinfrastructure.renderers.HttpRequestRenderer;
+import acceptancetests._01reqandresponly.testinfrastructure.renderers.HttpResponseRenderer;
+import acceptancetests._01reqandresponly.whens.WhenARequestIsMadeToBuilder;
 import com.googlecode.yatspec.junit.SequenceDiagramExtension;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.junit.WithCustomResultListeners;
@@ -16,9 +21,6 @@ import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
-import testinfrastructure.renderers.CustomJavaSourceRenderer;
-import testinfrastructure.renderers.HttpRequestRenderer;
-import testinfrastructure.renderers.HttpResponseRenderer;
 import wiring.Application;
 
 import java.net.http.HttpRequest;
@@ -33,14 +35,9 @@ public class AcceptanceTest implements WithCustomResultListeners {
 
   protected static final String APP = "app";
   protected static final String CLIENT = "client";
-  protected static final String STAR_WARS_API = "starWarsApi";
-  protected static final String XML_SERVICE = "xmlService";
 
   protected static final Participant APP_PARTICIPANT = Participants.PARTICIPANT.create(APP);
   protected static final Participant CLIENT_ACTOR = Participants.ACTOR.create(CLIENT);
-
-  protected static final Participant STAR_WARS_API_PARTICIPANT = Participants.PARTICIPANT.create(STAR_WARS_API);
-  protected static final Participant XML_SERVICE_PARTICIPANT = Participants.PARTICIPANT.create(XML_SERVICE);
 
   protected static final String RESPONSE_FORMAT = "Response from %s to %s";
   protected static final String REQUEST_FORMAT = "Request from %s to %s";
@@ -48,17 +45,16 @@ public class AcceptanceTest implements WithCustomResultListeners {
   public static final String REQUEST_FROM_CLIENT_TO_APP = format(REQUEST_FORMAT, CLIENT, APP);
   public static final String RESPONSE_FROM_APP_TO_CLIENT = format(RESPONSE_FORMAT, APP, CLIENT);
 
-  public static final String REQUEST_FROM_APP_TO_STAR_WARS_API = format(REQUEST_FORMAT, APP, STAR_WARS_API);
-  public static final String RESPONSE_FROM_STAR_WARS_API_TO_APP = format(RESPONSE_FORMAT, STAR_WARS_API, APP);
-
-  public static final String REQUEST_FROM_APP_TO_XML_SERVICE = format(REQUEST_FORMAT, APP, XML_SERVICE);
-  public static final String RESPONSE_FROM_XML_SERVICE_TO_APP = format(RESPONSE_FORMAT, XML_SERVICE, APP);
-
   public final TestState testState = new TestState();
 
   private final TestDataProvider testDataProvider = new TestDataProvider();
   public final WhenARequestIsMadeTo whenARequestIsMadeTo = new WhenARequestIsMadeTo(testState);
   public final ThenTheResponse thenTheResponse = new ThenTheResponse(whenARequestIsMadeTo::getHttpResponse);
+
+  public final WhenARequestIsMadeToBuilder whenARequest = new WhenARequestIsMadeToBuilder(testState);
+  public final ThenTheResponse thenResponse = new ThenTheResponse(whenARequest::getHttpResponse);
+  public final ThenTheResponseVersion2 thenReturnedResponse = new ThenTheResponseVersion2(whenARequest::getHttpResponse);
+
   private final Application application = new Application();
 
   @Override
@@ -72,12 +68,11 @@ public class AcceptanceTest implements WithCustomResultListeners {
             new HtmlIndexRenderer()
     );  }
 
-  // Instead of starting application each time during build, can use docker image
-  // created before tests are run during build, and the tests are run against this. Will need some logic
-  // To check if container is running, then dont start app locally
   @BeforeEach
   void setUp() {
-    // start wiremock
+    // Instead of starting application each time during build, can use docker image
+    // created before tests are run during build, and the tests are run against this. Will need some logic
+    // To check if container is running, then dont start app locally
     application.start("target/test-classes/application.test.properties");
     testDataProvider.deleteAllInfoFromAllTables();
   }
@@ -85,7 +80,5 @@ public class AcceptanceTest implements WithCustomResultListeners {
   @AfterEach
   void tearDown() {
     application.stop();
-
-    // stop wiremock
   }
 }
