@@ -3,6 +3,7 @@ package webserver;
 import org.eclipse.jetty.server.CustomRequestLog;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ErrorHandler;
 import org.slf4j.Logger;
 
 import static java.lang.String.format;
@@ -48,6 +49,11 @@ public class JettyWebServer {
 
     public JettyWebServer withRequestLog(CustomRequestLog requestLog) {
         server.setRequestLog(requestLog);
+        return this;
+    }
+
+    public JettyWebServer withBean(ErrorHandler errorHandler) {
+        server.addBean(errorHandler);
         return this;
     }
 }

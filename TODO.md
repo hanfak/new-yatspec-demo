@@ -1,6 +1,6 @@
 - Test other use cases
 - Assert on files
-- Split builder for prod and test 
+- Split wiring builder for prod and test 
     - have test example for using map instead of actual db
     - needed for messages/queue testing (maybe??)
 - Use of queue
@@ -11,5 +11,10 @@
     - custom
 - linking notes
 - dictionary
+- Make more clean architecture
+    - package structure
+    - modules?
+    - interfaces, DIP
+    - Extract usecases from servlets
 - html ouput index page, renderer
 - Have tests run when docker is running ie build

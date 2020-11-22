@@ -7,6 +7,7 @@ import org.jooq.Record1;
 import org.jooq.Record3;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
+import webserver.DataProvider;
 
 import javax.sql.DataSource;
 import java.util.Optional;

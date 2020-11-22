@@ -1,4 +1,4 @@
-package databaseservice;
+package webserver;
 
 import domain.Person;
 import domain.SpeciesInfo;

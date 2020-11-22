@@ -1,6 +1,5 @@
 package webserver;
 
-import databaseservice.DataProvider;
 import domain.SpeciesInfo;
 
 import javax.servlet.http.HttpServlet;

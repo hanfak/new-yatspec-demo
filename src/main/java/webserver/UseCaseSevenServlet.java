@@ -1,6 +1,5 @@
 package webserver;
 
-import databaseservice.DataProvider;
 import domain.Person;
 import domain.Species;
 

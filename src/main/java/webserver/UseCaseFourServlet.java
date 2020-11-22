@@ -1,6 +1,5 @@
 package webserver;
 
-import databaseservice.DataProvider;
 import domain.SpeciesInfo;
 import logging.LoggingCategory;
 import org.slf4j.Logger;

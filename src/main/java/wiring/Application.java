@@ -85,6 +85,7 @@ public class Application {
   private ServletContextHandler createWebserver() {
     jettyWebServer = new JettyWebServer(2222, APPLICATION_LOGGER);
     jettyWebServer.withRequestLog(createRequestLog());
+    jettyWebServer.withBean(new UncaughtErrorHandler());
     ServletContextHandler servletContextHandler = new ServletContextHandler();
     addLoggingFilter(servletContextHandler);
     return servletContextHandler;
