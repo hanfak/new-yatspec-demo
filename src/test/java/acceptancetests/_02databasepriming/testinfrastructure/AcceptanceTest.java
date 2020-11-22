@@ -1,13 +1,13 @@
 package acceptancetests._02databasepriming.testinfrastructure;
 
-import acceptancetests._02databasepriming.givens.GivenTheDatabaseContains;
-import acceptancetests._02databasepriming.testinfrastructure.renderers.CustomJavaSourceRenderer;
-import acceptancetests._02databasepriming.testinfrastructure.renderers.HttpRequestRenderer;
-import acceptancetests._02databasepriming.testinfrastructure.renderers.HttpResponseRenderer;
 import acceptancetests._01reqandresponly.thens.ThenTheResponse;
 import acceptancetests._01reqandresponly.thens.ThenTheResponseVersion2;
 import acceptancetests._01reqandresponly.whens.WhenARequestIsMadeTo;
 import acceptancetests._01reqandresponly.whens.WhenARequestIsMadeToBuilder;
+import acceptancetests._02databasepriming.givens.GivenTheDatabaseContains;
+import acceptancetests._02databasepriming.testinfrastructure.renderers.CustomJavaSourceRenderer;
+import acceptancetests._02databasepriming.testinfrastructure.renderers.HttpRequestRenderer;
+import acceptancetests._02databasepriming.testinfrastructure.renderers.HttpResponseRenderer;
 import com.googlecode.yatspec.junit.SequenceDiagramExtension;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.junit.WithCustomResultListeners;
@@ -65,13 +65,14 @@ public class AcceptanceTest implements WithCustomResultListeners {
   @Override
   public Collection<SpecResultListener> getResultListeners() throws Exception {
     return List.of(
-            new HtmlResultRenderer()
-                    .withCustomRenderer(HttpRequest.class, new HttpRequestRenderer())
-                    .withCustomRenderer(HttpResponse.class, new HttpResponseRenderer())
-                    .withCustomRenderer(JavaSource.class, new CustomJavaSourceRenderer())
-                    .withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer<>()),
-            new HtmlIndexRenderer()
-    );  }
+        new HtmlResultRenderer()
+            .withCustomRenderer(HttpRequest.class, new HttpRequestRenderer())
+            .withCustomRenderer(HttpResponse.class, new HttpResponseRenderer())
+            .withCustomRenderer(JavaSource.class, new CustomJavaSourceRenderer())
+            .withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer<>()),
+        new HtmlIndexRenderer()
+    );
+  }
 
   @BeforeEach
   void setUp() {

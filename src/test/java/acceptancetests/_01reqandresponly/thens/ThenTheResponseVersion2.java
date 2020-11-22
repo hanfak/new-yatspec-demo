@@ -27,7 +27,7 @@ public class ThenTheResponseVersion2 extends AbstractAssert<ThenTheResponseVersi
   public ThenTheResponseVersion2 hasBody(String expectedBody) {
     // Equivalent to
     // assertThat(response.get().body()).isEqualTo(expectedBody);
-    if (Objects.isNull(response.get().body())){
+    if (Objects.isNull(response.get().body())) {
       failWithMessage("Expecting actual not to be null");
     }
 
@@ -39,8 +39,8 @@ public class ThenTheResponseVersion2 extends AbstractAssert<ThenTheResponseVersi
 
   public ThenTheResponseVersion2 hasContentType(String expectedContentType) {
     String headValueOfContentType = response.get().headers()
-            .firstValue("content-type")
-            .orElse("not_found");
+        .firstValue("content-type")
+        .orElse("not_found");
     assertThat(headValueOfContentType).isEqualTo(expectedContentType);
     return this;
   }

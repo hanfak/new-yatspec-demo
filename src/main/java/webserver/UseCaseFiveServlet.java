@@ -34,9 +34,9 @@ public class UseCaseFiveServlet extends HttpServlet {
 
     // Outgoing Response
     response.getWriter().print(format("Hello, %s, who lives for %s years and has average height of %s metres and is born in 19BBY",
-            personName,
-            speciesInfo.lifeSpan,
-            speciesInfo.avgHeight));
+        personName,
+        speciesInfo.lifeSpan,
+        speciesInfo.avgHeight));
     response.setHeader("Content-Type", "text/html");
     response.setStatus(200);
   }

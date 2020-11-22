@@ -8,9 +8,9 @@ import java.net.http.HttpRequest;
 
 public class HttpRequestRenderer implements Renderer<HttpRequest> {
 
-    @Override
-    public String render(HttpRequest httpRequest) {
-        return new HttpRequestFormatter().formatRequest(httpRequest);
-    }
+  @Override
+  public String render(HttpRequest httpRequest) {
+    return new HttpRequestFormatter().formatRequest(httpRequest);
+  }
 }
 

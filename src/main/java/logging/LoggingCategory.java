@@ -1,5 +1,5 @@
 package logging;
 
 public enum LoggingCategory {
-    APPLICATION, AUDIT, ACCESS
+  APPLICATION, AUDIT, ACCESS
 }

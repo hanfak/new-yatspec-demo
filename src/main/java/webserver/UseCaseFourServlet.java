@@ -36,9 +36,9 @@ public class UseCaseFourServlet extends HttpServlet {
     APPLICATION_LOGGER.info("Retrieved speciesInfo from dataProvider");
     // Outgoing Response
     response.getWriter().print(format("Hello, %s, who lives for %s years and has average height of %s metres",
-            personName,
-            speciesInfo.lifeSpan,
-            speciesInfo.avgHeight));
+        personName,
+        speciesInfo.lifeSpan,
+        speciesInfo.avgHeight));
     response.setHeader("Content-Type", "text/html");
     response.setStatus(200);
   }

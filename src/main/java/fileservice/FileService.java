@@ -39,16 +39,16 @@ public class FileService {
     try {
       Files.createDirectories(Paths.get(DIRECTORY_OF_LOCATION_OF_CREATED_FILES));
       CharacterDetails data = new CharacterDetails(
-              personId,
-              characterInfo.getName(),
-              characterInfo.getBirthYear(),
-              speciesInfo.getAverageHeight(),
-              speciesInfo.getLifeSpan(),
-              speciesInfo.getName());
+          personId,
+          characterInfo.getName(),
+          characterInfo.getBirthYear(),
+          speciesInfo.getAverageHeight(),
+          speciesInfo.getLifeSpan(),
+          speciesInfo.getName());
       String s = ReflectionToStringBuilder.toString(data, new MultilineRecursiveToStringStyle());
       APPLICATION_LOGGER.info("file contents written to file: " + s);
       xmlMapper.writeValue(new FileOutputStream(
-              format(DIRECTORY_OF_LOCATION_OF_CREATED_FILES + FILE_NAME,
+          format(DIRECTORY_OF_LOCATION_OF_CREATED_FILES + FILE_NAME,
               counterService.execute())), data);
     } catch (IOException e) {
       APPLICATION_LOGGER.error("error processing file", e);

@@ -30,7 +30,7 @@ public class UseCaseSevenServlet extends HttpServlet {
     Species speciesInfo = starWarsInterfaceService.getSpeciesInfo(characterInfo.getSpecies());
 
     response.getWriter().print(format("{\"Description\": \"%s was born on %s and is %s species\"}",
-            characterInfo.getName(), characterInfo.getBirthYear(), speciesInfo.getName()));
+        characterInfo.getName(), characterInfo.getBirthYear(), speciesInfo.getName()));
     response.setHeader("Content-Type", "application/json");
     response.setStatus(200);
   }

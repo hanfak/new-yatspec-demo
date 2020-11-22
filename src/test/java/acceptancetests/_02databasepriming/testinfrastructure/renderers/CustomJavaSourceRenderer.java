@@ -11,22 +11,22 @@ import static com.googlecode.totallylazy.Xml.escape;
 import static java.lang.System.lineSeparator;
 
 public class CustomJavaSourceRenderer implements Renderer<JavaSource> {
-    private static final Pattern DOT_CLASS = Pattern.compile("\\.class(\\W|$)");
+  private static final Pattern DOT_CLASS = Pattern.compile("\\.class(\\W|$)");
 
-    @Override
-    public String render(JavaSource javaSource) {
-        return escape(lines(removateDotClass(javaSource.value().trim()))
-                .map(Text::wordify)
-                .toString("\n"));
-    }
+  @Override
+  public String render(JavaSource javaSource) {
+    return escape(lines(removateDotClass(javaSource.value().trim()))
+        .map(Text::wordify)
+        .toString("\n"));
+  }
 
 
-    public static Sequence<String> lines(final String sourceCode) {
-        return sequence(sourceCode.split(lineSeparator()));
-    }
+  public static Sequence<String> lines(final String sourceCode) {
+    return sequence(sourceCode.split(lineSeparator()));
+  }
 
-    public static String removateDotClass(String s) {
-        return DOT_CLASS.matcher(s).replaceAll("$1");
-    }
+  public static String removateDotClass(String s) {
+    return DOT_CLASS.matcher(s).replaceAll("$1");
+  }
 
 }

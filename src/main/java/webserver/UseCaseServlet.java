@@ -50,7 +50,7 @@ public class UseCaseServlet extends HttpServlet {
 
     // Outgoing Response
     response.getWriter().print(format("{\"Description\": \"%s is a %s is born on %s\"}",
-            characterInfo.getName(), speciesInfo.getName(), characterInfo.getBirthYear()));
+        characterInfo.getName(), speciesInfo.getName(), characterInfo.getBirthYear()));
     response.setHeader("Content-Type", "application/json");
     response.setStatus(200);
   }

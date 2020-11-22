@@ -24,9 +24,9 @@ public class UseCaseThreeServlet extends HttpServlet {
     SpeciesInfo speciesInfo = dataProvider.getSpeciesInfo(personId);
     // Outgoing Response
     response.getWriter().print(format("Hello, %s, who lives for %s years and has average height of %s metres",
-            speciesInfo.species,
-            speciesInfo.lifeSpan,
-            speciesInfo.avgHeight));
+        speciesInfo.species,
+        speciesInfo.lifeSpan,
+        speciesInfo.avgHeight));
     response.setHeader("Content-Type", "text/html");
     response.setStatus(200);
   }

@@ -28,9 +28,9 @@ public class Person {
   @Override
   public String toString() {
     return new StringJoiner(", ", Person.class.getSimpleName() + "[", "]")
-            .add("species='" + species + "'")
-            .add("name='" + name + "'")
-            .add("birthYear='" + birthYear + "'")
-            .toString();
+        .add("species='" + species + "'")
+        .add("name='" + name + "'")
+        .add("birthYear='" + birthYear + "'")
+        .toString();
   }
 }

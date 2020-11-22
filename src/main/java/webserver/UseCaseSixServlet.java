@@ -28,7 +28,7 @@ public class UseCaseSixServlet extends HttpServlet {
     Person characterInfo = starWarsInterfaceService.getCharacterInfo("1");
 
     response.getWriter().print(format("{\"Description\": \"%s was born on %s\"}",
-            characterInfo.getName(), characterInfo.getBirthYear()));
+        characterInfo.getName(), characterInfo.getBirthYear()));
     response.setHeader("Content-Type", "application/json");
     response.setStatus(200);
   }

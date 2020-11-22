@@ -24,9 +24,9 @@ public class UseCaseTwoServlet extends HttpServlet {
     // Outgoing Response
     // Can extract to some marshalling service/delegate
     response.getWriter().print(format("Hello, %s, who lives for %s years and has average height of %s metres",
-            speciesInfo.species,
-            speciesInfo.lifeSpan,
-            speciesInfo.avgHeight));
+        speciesInfo.species,
+        speciesInfo.lifeSpan,
+        speciesInfo.avgHeight));
     response.setHeader("Content-Type", "text/html");
     response.setStatus(200);
   }

@@ -8,15 +8,16 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-@SuppressWarnings("SameParameterValue") // For test readability
+@SuppressWarnings("SameParameterValue")
+    // For test readability
 class UsecaseOneMoreExamplesTest extends AcceptanceTest implements WithParticipants {
 
   @Test
   @Notes("Using a builder to create a fluent when")
   void shouldReturnResponseVersionOne() throws Exception {
     whenARequest
-            .withUri("http://localhost:2222/usecaseone")
-            .isCalledUsingHttpGetMethod();
+        .withUri("http://localhost:2222/usecaseone")
+        .isCalledUsingHttpGetMethod();
 
     thenResponse.hasStatusCode().isEqualTo(200);
     thenResponse.hasContentType().isEqualTo("text/html");
@@ -27,18 +28,18 @@ class UsecaseOneMoreExamplesTest extends AcceptanceTest implements WithParticipa
   @Notes("Using a custom Assertj assertions to create fluent then, with custom assertion error")
   void shouldReturnResponseVersionTwo() throws Exception {
     whenARequest
-            .withUri("http://localhost:2222/usecaseone")
-            .isCalledUsingHttpGetMethod();
+        .withUri("http://localhost:2222/usecaseone")
+        .isCalledUsingHttpGetMethod();
 
     thenReturnedResponse
-            .hasStatusCode(200)
-            .hasContentType("text/html")
-            .hasBody("Hello, World");
+        .hasStatusCode(200)
+        .hasContentType("text/html")
+        .hasBody("Hello, World");
   }
 
   @Override
   public List<Participant> participants() {
-   // This is ordered in terms of how the diagram is generated
+    // This is ordered in terms of how the diagram is generated
     return List.of(CLIENT_ACTOR, APP_PARTICIPANT);
   }
 }

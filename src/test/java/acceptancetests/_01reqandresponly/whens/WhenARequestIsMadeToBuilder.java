@@ -51,8 +51,8 @@ public class WhenARequestIsMadeToBuilder {
   private HttpRequest.Builder createGetRequest() {
     String[] headers = this.headers.toArray(String[]::new);
     HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
-            .GET() // This can be extracted as builder method
-            .uri(URI.create(this.uri));
+        .GET() // This can be extracted as builder method
+        .uri(URI.create(this.uri));
     if (headers.length > 0) {
       return requestBuilder.headers(headers);
     }

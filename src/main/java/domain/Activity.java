@@ -12,10 +12,10 @@ public class Activity {
 
   @JsonCreator
   public Activity(
-          @JsonProperty("ID") Integer id,
-          @JsonProperty("Completed") Boolean completed,
-          @JsonProperty("Title") String title,
-          @JsonProperty("DueDate")String dueDate) {
+      @JsonProperty("ID") Integer id,
+      @JsonProperty("Completed") Boolean completed,
+      @JsonProperty("Title") String title,
+      @JsonProperty("DueDate") String dueDate) {
     this.id = id;
     this.completed = completed;
     this.title = title;

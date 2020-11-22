@@ -35,8 +35,8 @@ public class UseCaseEightServlet extends HttpServlet {
     Species speciesInfo = starWarsService.getSpeciesInfo(characterInfo.getSpecies());
     Activity activity = randomXmlService.getCharacterInfo(personIdInt);
     response.getWriter().print(format("{\"Description\": \"%s was born on %s and is %s species and has performed %s and has status: %s at %s\"}",
-            characterInfo.getName(), characterInfo.getBirthYear(), speciesInfo.getName(),
-            activity.getTitle(), activity.getCompleted(), activity.getDueDate()));
+        characterInfo.getName(), characterInfo.getBirthYear(), speciesInfo.getName(),
+        activity.getTitle(), activity.getCompleted(), activity.getDueDate()));
     response.setHeader("Content-Type", "application/json");
     response.setStatus(200);
   }

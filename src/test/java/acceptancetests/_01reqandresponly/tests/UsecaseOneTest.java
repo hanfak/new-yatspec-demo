@@ -8,7 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-@SuppressWarnings("SameParameterValue") // For test readability
+@SuppressWarnings("SameParameterValue")
+    // For test readability
 class UsecaseOneTest extends AcceptanceTest implements WithParticipants {
 
   @Test
@@ -44,7 +45,7 @@ class UsecaseOneTest extends AcceptanceTest implements WithParticipants {
 
   @Override
   public List<Participant> participants() {
-   // This is ordered in terms of how the diagram is generated
+    // This is ordered in terms of how the diagram is generated
     return List.of(CLIENT_ACTOR, APP_PARTICIPANT);
   }
 }

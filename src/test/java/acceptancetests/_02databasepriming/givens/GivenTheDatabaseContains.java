@@ -17,24 +17,24 @@ public class GivenTheDatabaseContains {
     this.dataSource = dataSource;
   }
 
-  public GivenTheDatabaseContains aSpeciesInfo(SpeciesInfoRecord.SpeciesInfoRecordBuilder builder){
+  public GivenTheDatabaseContains aSpeciesInfo(SpeciesInfoRecord.SpeciesInfoRecordBuilder builder) {
     SpeciesInfoRecord speciesInfoRecord = builder.build();
     DSLContext dslContext = DSL.using(dataSource, SQLDialect.POSTGRES);
     dslContext.insertInto(SPECIFIESINFO)
-            .set(SPECIFIESINFO.PERSON_ID, speciesInfoRecord.getId())
-            .set(SPECIFIESINFO.SPECIES, speciesInfoRecord.getName())
-            .set(SPECIFIESINFO.AVG_HEIGHT, speciesInfoRecord.getAverageHeight())
-            .set(SPECIFIESINFO.LIFESPAN, speciesInfoRecord.getLifespan())
-            .execute();
+        .set(SPECIFIESINFO.PERSON_ID, speciesInfoRecord.getId())
+        .set(SPECIFIESINFO.SPECIES, speciesInfoRecord.getName())
+        .set(SPECIFIESINFO.AVG_HEIGHT, speciesInfoRecord.getAverageHeight())
+        .set(SPECIFIESINFO.LIFESPAN, speciesInfoRecord.getLifespan())
+        .execute();
     return this;
   }
 
-  public GivenTheDatabaseContains aCharacterStored(Integer personId, String name){
+  public GivenTheDatabaseContains aCharacterStored(Integer personId, String name) {
     DSLContext dslContext = DSL.using(dataSource, SQLDialect.POSTGRES);
     dslContext.insertInto(CHARACTERS)
-            .set(CHARACTERS.PERSON_ID, personId)
-            .set(CHARACTERS.PERSON_NAME, name)
-            .execute();
+        .set(CHARACTERS.PERSON_ID, personId)
+        .set(CHARACTERS.PERSON_NAME, name)
+        .execute();
     return this;
   }
 

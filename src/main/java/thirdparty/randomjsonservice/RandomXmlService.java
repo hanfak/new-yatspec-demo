@@ -32,14 +32,14 @@ public class RandomXmlService {
   }
 
   public Activity getCharacterInfo(Integer id) throws IOException {
-      String apiAddress = settings.randomJsonApiAddress();
-      HttpRequest.Builder requestBuilder =  HttpRequest.newBuilder(URI.create(apiAddress + "Activities/" + id))
-              .GET()
-              .timeout(Duration.ofSeconds(10))
-              .header("Accept", "application/xml");
-      java.net.http.HttpResponse<String> response = tryAndSendRequest(requestBuilder);
-      ObjectMapper xmlMapper = new XmlMapper();
-      return xmlMapper.readValue(response.body(), Activity.class);
+    String apiAddress = settings.randomJsonApiAddress();
+    HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(URI.create(apiAddress + "Activities/" + id))
+        .GET()
+        .timeout(Duration.ofSeconds(10))
+        .header("Accept", "application/xml");
+    java.net.http.HttpResponse<String> response = tryAndSendRequest(requestBuilder);
+    ObjectMapper xmlMapper = new XmlMapper();
+    return xmlMapper.readValue(response.body(), Activity.class);
   }
 
   // Local tester to remove
@@ -48,7 +48,7 @@ public class RandomXmlService {
     randomXmlService.getCharacterInfo(1);
   }
 
-  private java.net.http.HttpResponse<String> tryAndSendRequest(HttpRequest.Builder requestBuilder)  {
+  private java.net.http.HttpResponse<String> tryAndSendRequest(HttpRequest.Builder requestBuilder) {
     try {
       return httpClient.send(requestBuilder);
     } catch (Exception e) {

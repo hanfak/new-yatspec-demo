@@ -93,8 +93,8 @@ public class Application {
 
   public static void addLoggingFilter(ServletContextHandler servletContextHandler) {
     Logbook logbook = Logbook.builder()
-            .writer(new DefaultHttpLogWriter(getLogger(LoggingCategory.AUDIT.name()), INFO))
-            .build();
+        .writer(new DefaultHttpLogWriter(getLogger(LoggingCategory.AUDIT.name()), INFO))
+        .build();
     FilterHolder filterHolder = new FilterHolder(new LogbookFilter(logbook));
     servletContextHandler.addFilter(filterHolder, "/*", EnumSet.of(REQUEST, ASYNC, ERROR));
   }
@@ -107,6 +107,6 @@ public class Application {
 
   // For testing
   public void stop() {
-    jettyWebServer.stopServer();
+//    jettyWebServer.stopServer();
   }
 }

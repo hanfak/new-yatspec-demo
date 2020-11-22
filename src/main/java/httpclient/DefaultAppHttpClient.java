@@ -11,14 +11,14 @@ import static java.net.http.HttpResponse.BodyHandlers.ofString;
 
 public class DefaultAppHttpClient implements AppHttpClient {
 
-    private final HttpClient httpClient;
+  private final HttpClient httpClient;
 
-    public DefaultAppHttpClient() {
-        httpClient = HttpClient.newHttpClient();
-    }
+  public DefaultAppHttpClient() {
+    httpClient = HttpClient.newHttpClient();
+  }
 
-    @Override
-    public HttpResponse<String> send(HttpRequest.Builder requestBuilder) throws IOException, InterruptedException {
-        return httpClient.send(requestBuilder.build(), ofString());
-    }
+  @Override
+  public HttpResponse<String> send(HttpRequest.Builder requestBuilder) throws IOException, InterruptedException {
+    return httpClient.send(requestBuilder.build(), ofString());
+  }
 }
