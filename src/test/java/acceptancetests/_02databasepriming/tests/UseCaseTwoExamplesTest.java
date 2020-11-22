@@ -5,9 +5,7 @@ import acceptancetests._02databasepriming.givens.SpeciesInfoRecord;
 import acceptancetests._02databasepriming.testinfrastructure.AcceptanceTest;
 import com.googlecode.yatspec.junit.WithParticipants;
 import com.googlecode.yatspec.sequence.Participant;
-import httpclient.Timer;
 import org.junit.jupiter.api.Test;
-import wiring.Application;
 
 import java.util.List;
 

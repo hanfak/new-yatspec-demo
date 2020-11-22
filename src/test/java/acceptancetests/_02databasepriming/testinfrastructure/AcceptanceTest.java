@@ -1,13 +1,11 @@
 package acceptancetests._02databasepriming.testinfrastructure;
 
-import acceptancetests._01reqandresponly.thens.ThenTheResponse;
-import acceptancetests._01reqandresponly.thens.ThenTheResponseVersion2;
-import acceptancetests._01reqandresponly.whens.WhenARequestIsMadeTo;
-import acceptancetests._01reqandresponly.whens.WhenARequestIsMadeToBuilder;
 import acceptancetests._02databasepriming.givens.GivenTheDatabaseContains;
 import acceptancetests._02databasepriming.testinfrastructure.renderers.CustomJavaSourceRenderer;
 import acceptancetests._02databasepriming.testinfrastructure.renderers.HttpRequestRenderer;
 import acceptancetests._02databasepriming.testinfrastructure.renderers.HttpResponseRenderer;
+import acceptancetests._02databasepriming.thens.ThenTheResponseVersion2;
+import acceptancetests._02databasepriming.whens.WhenARequestIsMadeToBuilder;
 import com.googlecode.yatspec.junit.SequenceDiagramExtension;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.junit.WithCustomResultListeners;
@@ -19,14 +17,11 @@ import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 import com.googlecode.yatspec.sequence.Participant;
 import com.googlecode.yatspec.sequence.Participants;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
-import databaseservice.DatasourceConfig;
-import httpclient.Timer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import wiring.Application;
 
-import javax.sql.DataSource;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Collection;
