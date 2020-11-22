@@ -22,6 +22,7 @@ public class UseCaseTwoServlet extends HttpServlet {
     // Getting data from db
     SpeciesInfo speciesInfo = dataProvider.getSpeciesInfo(1);
     // Outgoing Response
+    // Can extract to some marshalling service/delegate
     response.getWriter().print(format("Hello, %s, who lives for %s years and has average height of %s metres",
             speciesInfo.species,
             speciesInfo.lifeSpan,

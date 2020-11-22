@@ -11,6 +11,7 @@
     - custom
 - linking notes
 - dictionary
+- Extract dabaseconfiguration as singleton and extract out
 - Make more clean architecture
     - package structure
     - modules?
