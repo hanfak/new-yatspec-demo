@@ -47,7 +47,7 @@ public class AcceptanceTest implements WithCustomResultListeners {
 
   public final TestState testState = new TestState();
 
-  private final TestDataProvider testDataProvider = new TestDataProvider();
+  private final TestDataProvider testDataProvider = new TestDataProvider(Application.dataSource);
   public final WhenARequestIsMadeTo whenARequestIsMadeTo = new WhenARequestIsMadeTo(testState);
   public final ThenTheResponse thenTheResponse = new ThenTheResponse(whenARequestIsMadeTo::getHttpResponse);
 

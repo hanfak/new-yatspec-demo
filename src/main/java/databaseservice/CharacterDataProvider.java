@@ -18,7 +18,11 @@ import static org.jooq.sources.Tables.SPECIFIESINFO;
 
 public class CharacterDataProvider implements DataProvider {
 
-  private final DataSource dataSource = DatasourceConfig.createDataSource();
+  private final DataSource dataSource;
+
+  public CharacterDataProvider(DataSource dataSource) {
+    this.dataSource = dataSource;
+  }
 
   @Override
   public Integer getPersonId(String personName) {

@@ -2,6 +2,7 @@ package wiring;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import databaseservice.CharacterDataProvider;
+import databaseservice.DatasourceConfig;
 import fileservice.CounterService;
 import fileservice.FileService;
 import httpclient.*;
@@ -22,6 +23,7 @@ import thirdparty.randomjsonservice.RandomXmlService;
 import thirdparty.starwarsservice.StarWarsService;
 import webserver.*;
 
+import javax.sql.DataSource;
 import java.util.EnumSet;
 
 import static javax.servlet.DispatcherType.ASYNC;
@@ -37,6 +39,7 @@ public class Application {
 
   private final static Logger APPLICATION_LOGGER = getLogger(LoggingCategory.APPLICATION.name());
   private final static Logger AUDIT_LOGGER = LoggerFactory.getLogger(LoggingCategory.AUDIT.name());
+  public final static DataSource dataSource = DatasourceConfig.createDataSource();
 
   private JettyWebServer jettyWebServer;
 
@@ -48,7 +51,7 @@ public class Application {
   // For test to access
   public void start(String propertyFile) {
     Settings settings = load(propertyFile);
-    CharacterDataProvider characterDataProvider = new CharacterDataProvider();
+    CharacterDataProvider characterDataProvider = new CharacterDataProvider(dataSource);
     AppHttpClient httpClient = new LoggingHttpClient(new DefaultAppHttpClient(), AUDIT_LOGGER, Timer::start, new HttpRequestFormatter(), new HttpResponseFormatter());
     StarWarsInterfaceService starWarsInterfaceService = new StarWarsService(httpClient, settings);
     RandomXmlService randomXmlService = new RandomXmlService(httpClient, settings);
@@ -107,6 +110,6 @@ public class Application {
 
   // For testing
   public void stop() {
-//    jettyWebServer.stopServer();
+    jettyWebServer.stopServer();
   }
 }

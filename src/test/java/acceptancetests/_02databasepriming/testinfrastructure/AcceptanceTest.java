@@ -20,6 +20,7 @@ import com.googlecode.yatspec.sequence.Participant;
 import com.googlecode.yatspec.sequence.Participants;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import databaseservice.DatasourceConfig;
+import httpclient.Timer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,17 +51,12 @@ public class AcceptanceTest implements WithCustomResultListeners {
 
   public final TestState testState = new TestState();
 
-  public final DataSource dataSource = DatasourceConfig.createDataSource();
-  private final TestDataProvider testDataProvider = new TestDataProvider(dataSource);
-  public final GivenTheDatabaseContains givenTheDatabaseContains = new GivenTheDatabaseContains(dataSource);
-  public final WhenARequestIsMadeTo whenARequestIsMadeTo = new WhenARequestIsMadeTo(testState);
-  public final ThenTheResponse thenTheResponse = new ThenTheResponse(whenARequestIsMadeTo::getHttpResponse);
+  private final Application application = new Application();
+  private final TestDataProvider testDataProvider = new TestDataProvider(Application.dataSource);
+  public final GivenTheDatabaseContains givenTheDatabaseContains = new GivenTheDatabaseContains(Application.dataSource);
 
   public final WhenARequestIsMadeToBuilder whenARequest = new WhenARequestIsMadeToBuilder(testState);
-  public final ThenTheResponse thenResponse = new ThenTheResponse(whenARequest::getHttpResponse);
   public final ThenTheResponseVersion2 thenReturnedResponse = new ThenTheResponseVersion2(whenARequest::getHttpResponse);
-
-  private final Application application = new Application();
 
   @Override
   public Collection<SpecResultListener> getResultListeners() throws Exception {

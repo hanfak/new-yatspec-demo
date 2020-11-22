@@ -1,6 +1,5 @@
 package acceptancetests._01reqandresponly.testinfrastructure;
 
-import databaseservice.DatasourceConfig;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -15,7 +14,11 @@ import static org.jooq.sources.Tables.SPECIFIESINFO;
 // TODO need to seperate factories into new class, n pass into app.start
 //TODO settings for different db name, so prod is not used
 public class TestDataProvider {
-  private final DataSource dataSource = DatasourceConfig.createDataSource();
+  private final DataSource dataSource;
+
+  public TestDataProvider(DataSource dataSource) {
+    this.dataSource = dataSource;
+  }
 
   public void deleteAllInfoFromAllTables() {
     DSLContext dslContext = DSL.using(dataSource, SQLDialect.POSTGRES);
