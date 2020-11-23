@@ -11,8 +11,9 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static acceptancetests._02databasepriming.givens.SpeciesInfoRecord.SpeciesInfoRecordBuilder.speciesInfoRecord;
+
 // see class acceptancetests/_02databasepriming/givens/GivenTheDatabaseContainsVersion1.java for more implementation details
-public class UseCaseTwoExamples2Test extends AcceptanceTest implements WithParticipants {
+public class UseCaseTwoExamples3Test extends AcceptanceTest implements WithParticipants {
   @Notes("This test demonstrates the use of intereting givens feature in yatspec")
   @Test
   void shouldReturnAResponseAfterAccessingDatabase() throws Exception {

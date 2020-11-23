@@ -1,6 +1,6 @@
 package acceptancetests._02databasepriming.tests;
 
-import acceptancetests._02databasepriming.givens.GivenTheDatabaseContains;
+import acceptancetests._02databasepriming.givens.GivenTheDatabaseContainsVersion1;
 import acceptancetests._02databasepriming.givens.SpeciesInfoRecord;
 import acceptancetests._02databasepriming.testinfrastructure.AcceptanceTest;
 import com.googlecode.yatspec.junit.WithParticipants;
@@ -11,7 +11,7 @@ import java.util.List;
 
 import static acceptancetests._02databasepriming.givens.SpeciesInfoRecord.SpeciesInfoRecordBuilder.speciesInfoRecord;
 
-public class UseCaseTwoExamplesTest extends AcceptanceTest implements WithParticipants {
+public class UseCaseTwoExamples1Test extends AcceptanceTest implements WithParticipants {
 
   @Test
   void shouldReturnAResponseAfterAccessingDatabase() throws Exception {
@@ -33,10 +33,10 @@ public class UseCaseTwoExamplesTest extends AcceptanceTest implements WithPartic
         .hasBody("Hello, Ogier, who lives for 500 years and has average height of 3.5 metres");
   }
 
-  private GivenTheDatabaseContains givenTheDatabaseContains() {
+  private GivenTheDatabaseContainsVersion1 givenTheDatabaseContains() {
     // This needs to be primed, but does not need to be seen in documentation (upto user)
-    givenTheDatabaseContains.aCharacterStored(1, "blah");
-    return givenTheDatabaseContains;
+    givenTheDatabaseContainsVersion1.aCharacterStored(1, "blah");
+    return givenTheDatabaseContainsVersion1;
   }
 
   // For readability
