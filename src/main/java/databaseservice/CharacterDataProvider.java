@@ -19,14 +19,15 @@ import static org.jooq.sources.Tables.SPECIFIESINFO;
 public class CharacterDataProvider implements DataProvider {
 
   private final DataSource dataSource;
-
+  private final DSLContext dslContext;
+  // tODO extract to separate class dslcontextadpater
   public CharacterDataProvider(DataSource dataSource) {
     this.dataSource = dataSource;
+    dslContext = DSL.using(this.dataSource, SQLDialect.POSTGRES);
   }
 
   @Override
   public Integer getPersonId(String personName) {
-    DSLContext dslContext = DSL.using(dataSource, SQLDialect.POSTGRES);
     Optional<Record1<Integer>> result = dslContext.select(CHARACTERS.PERSON_ID)
         .from(CHARACTERS)
         .where(CHARACTERS.PERSON_NAME.eq(personName))
@@ -38,7 +39,6 @@ public class CharacterDataProvider implements DataProvider {
 
   @Override
   public void storeCharacterInfo(String personId, Person characterInfo) {
-    DSLContext dslContext = DSL.using(dataSource, SQLDialect.POSTGRES);
     dslContext.insertInto(CHARACTERINFO)
         .set(CHARACTERINFO.PERSON_ID, Integer.parseInt(personId))
         .set(CHARACTERINFO.BIRTH_YEAR, characterInfo.getBirthYear())
@@ -48,7 +48,6 @@ public class CharacterDataProvider implements DataProvider {
 
   @Override
   public SpeciesInfo getSpeciesInfo(Integer personId) {
-    DSLContext dslContext = DSL.using(dataSource, SQLDialect.POSTGRES);
     Optional<Record3<String, Float, Integer>> result = dslContext.select(SPECIFIESINFO.SPECIES, SPECIFIESINFO.AVG_HEIGHT, SPECIFIESINFO.LIFESPAN)
         .from(SPECIFIESINFO)
         .where(SPECIFIESINFO.PERSON_ID.eq(personId))

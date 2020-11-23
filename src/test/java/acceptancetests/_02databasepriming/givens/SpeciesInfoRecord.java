@@ -1,5 +1,7 @@
 package acceptancetests._02databasepriming.givens;
 
+import java.util.StringJoiner;
+
 public class SpeciesInfoRecord {
 
   private final Integer id;
@@ -29,6 +31,16 @@ public class SpeciesInfoRecord {
 
   public Integer getLifespan() {
     return lifespan;
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", SpeciesInfoRecord.class.getSimpleName() + "[", "]")
+        .add("id=" + id)
+        .add("name='" + name + "'")
+        .add("averageHeight=" + averageHeight)
+        .add("lifespan=" + lifespan)
+        .toString();
   }
 
   public static class SpeciesInfoRecordBuilder {

@@ -12,14 +12,16 @@ import static org.jooq.sources.Tables.SPECIFIESINFO;
 public class GivenTheDatabaseContains {
 
   private final DataSource dataSource;
+  private final DSLContext dslContext;
 
+  // tODO extract to separate class dslcontextadpater
   public GivenTheDatabaseContains(DataSource dataSource) {
     this.dataSource = dataSource;
+    dslContext = DSL.using(this.dataSource, SQLDialect.POSTGRES);
   }
 
   public GivenTheDatabaseContains aSpeciesInfo(SpeciesInfoRecord.SpeciesInfoRecordBuilder builder) {
     SpeciesInfoRecord speciesInfoRecord = builder.build();
-    DSLContext dslContext = DSL.using(dataSource, SQLDialect.POSTGRES);
     dslContext.insertInto(SPECIFIESINFO)
         .set(SPECIFIESINFO.PERSON_ID, speciesInfoRecord.getId())
         .set(SPECIFIESINFO.SPECIES, speciesInfoRecord.getName())
@@ -30,7 +32,6 @@ public class GivenTheDatabaseContains {
   }
 
   public GivenTheDatabaseContains aCharacterStored(Integer personId, String name) {
-    DSLContext dslContext = DSL.using(dataSource, SQLDialect.POSTGRES);
     dslContext.insertInto(CHARACTERS)
         .set(CHARACTERS.PERSON_ID, personId)
         .set(CHARACTERS.PERSON_NAME, name)
