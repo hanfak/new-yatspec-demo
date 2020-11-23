@@ -2,42 +2,38 @@ package acceptancetests._02databasepriming.givens;
 
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.jooq.DSLContext;
+import org.jooq.Record5;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 
 import javax.sql.DataSource;
+import java.util.Optional;
 
+import static java.lang.String.format;
 import static org.jooq.sources.Tables.CHARACTERS;
 import static org.jooq.sources.Tables.SPECIFIESINFO;
 
 public class GivenTheDatabaseContainsVersion3 {
 
-  private final DataSource dataSource;
   private final DSLContext dslContext;
   private final TestState testState;
 
   // tODO extract to separate class dslcontextadpater
   public GivenTheDatabaseContainsVersion3(DataSource dataSource, TestState testState) {
-    this.dataSource = dataSource;
     this.testState = testState;
-    dslContext = DSL.using(this.dataSource, SQLDialect.POSTGRES);
+    dslContext = DSL.using(dataSource, SQLDialect.POSTGRES);
   }
 
   public GivenTheDatabaseContainsVersion3 aSpeciesInfo(SpeciesInfoRecord.SpeciesInfoRecordBuilder builder) {
     SpeciesInfoRecord speciesInfoRecord = builder.build();
-    // Can add important primings into a map, and display in output
-    testState.interestingGivens().add("SpeciesInfoRecord specific key", speciesInfoRecord);
-    // Can use ths instance, and have the name of the class as the key, good if using domain objects
-    testState.interestingGivens().add(speciesInfoRecord);
-
-    //Contrived example, as can get state from variable on line 27
-    // Can grab the data from entry in interesting givens using the class, instead of using key in line 29
+    testState.interestingGivens().add(speciesInfoRecord); // As this is of type which matches on renderer, then interesting givens will also be rendered
+    testState.interestingGivens().add("speciesInfoRecord object used to prime in database", speciesInfoRecord); // Even if you set the key, this will still be rendered
     SpeciesInfoRecord speciesInfoRecordFromInterestingGivens = testState.interestingGivens().getType(SpeciesInfoRecord.class);
     dslContext.insertInto(SPECIFIESINFO)
-        .set(SPECIFIESINFO.PERSON_ID, speciesInfoRecordFromInterestingGivens.getId())
-        .set(SPECIFIESINFO.SPECIES, speciesInfoRecordFromInterestingGivens.getName())
-        .set(SPECIFIESINFO.AVG_HEIGHT, speciesInfoRecordFromInterestingGivens.getAverageHeight())
-        .set(SPECIFIESINFO.LIFESPAN, speciesInfoRecordFromInterestingGivens.getLifespan())
+        .set(SPECIFIESINFO.PERSON_ID, speciesInfoRecord.getPersonId())
+        .set(SPECIFIESINFO.SPECIES, speciesInfoRecord.getName())
+        .set(SPECIFIESINFO.AVG_HEIGHT, speciesInfoRecord.getAverageHeight())
+        .set(SPECIFIESINFO.LIFESPAN, speciesInfoRecord.getLifespan())
         .execute();
     return this;
   }
@@ -53,5 +49,30 @@ public class GivenTheDatabaseContainsVersion3 {
   public void isStoredInTheDatabase() {
     // For readability
     // Can also do the database insertions here
+
+    // We can use the database methods (test or prod) to read from database and add to testState.capturedInputs
+    //    Which will be displayed in yatspec output, via the custom renderer SpeciesInfoInDatabaseRenderer.class
+    // This can lead to extra database calls during test invocation. But if database contents is being tested,
+    //    then db reads are already happening. So can read from db and cache the result here, then use the cached
+    //    result in the thens (for asserting on)
+    readSpeciesInfoFromDatabase();
+  }
+
+  private void readSpeciesInfoFromDatabase() {
+    Optional<Record5<Integer, Integer, String, Float, Integer>> result = dslContext.select(
+        SPECIFIESINFO.SPECIES_ID,
+        SPECIFIESINFO.PERSON_ID,
+        SPECIFIESINFO.SPECIES,
+        SPECIFIESINFO.AVG_HEIGHT,
+        SPECIFIESINFO.LIFESPAN)
+        .from(SPECIFIESINFO).fetchOptional();
+    SpeciesInfoRecord speciesInfo = result.map(record -> new SpeciesInfoRecord(
+        record.component1(),
+        record.component2(),
+        record.component3(),
+        record.component4(),
+        record.component5())).orElseThrow(IllegalStateException::new);
+    // Test log
+    testState.log(format("Species Info primed in database for speciesInfo id '%s'", speciesInfo.getSpeciesInfoId()), speciesInfo);
   }
 }

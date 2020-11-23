@@ -11,19 +11,17 @@ import static org.jooq.sources.Tables.SPECIFIESINFO;
 
 public class GivenTheDatabaseContainsVersion1 {
 
-  private final DataSource dataSource;
   private final DSLContext dslContext;
 
   // tODO extract to separate class dslcontextadpater
   public GivenTheDatabaseContainsVersion1(DataSource dataSource) {
-    this.dataSource = dataSource;
-    dslContext = DSL.using(this.dataSource, SQLDialect.POSTGRES);
+    dslContext = DSL.using(dataSource, SQLDialect.POSTGRES);
   }
 
   public GivenTheDatabaseContainsVersion1 aSpeciesInfo(SpeciesInfoRecord.SpeciesInfoRecordBuilder builder) {
     SpeciesInfoRecord speciesInfoRecord = builder.build();
     dslContext.insertInto(SPECIFIESINFO)
-        .set(SPECIFIESINFO.PERSON_ID, speciesInfoRecord.getId())
+        .set(SPECIFIESINFO.PERSON_ID, speciesInfoRecord.getPersonId())
         .set(SPECIFIESINFO.SPECIES, speciesInfoRecord.getName())
         .set(SPECIFIESINFO.AVG_HEIGHT, speciesInfoRecord.getAverageHeight())
         .set(SPECIFIESINFO.LIFESPAN, speciesInfoRecord.getLifespan())

@@ -11,13 +11,14 @@ import java.util.List;
 
 import static acceptancetests._02databasepriming.givens.SpeciesInfoRecord.SpeciesInfoRecordBuilder.speciesInfoRecord;
 
+// see class acceptancetests/_02databasepriming/givens/GivenTheDatabaseContainsVersion1.java for more implementation details
 public class UseCaseTwoExamples1Test extends AcceptanceTest implements WithParticipants {
 
   @Test
   void shouldReturnAResponseAfterAccessingDatabase() throws Exception {
     givenTheDatabaseContains()
         .aSpeciesInfo(record()
-            .withId(1)
+            .withPersonId(1)
             .withName("Ogier")
             .withAverageHeight(3.5F)
             .withLifespan(500))

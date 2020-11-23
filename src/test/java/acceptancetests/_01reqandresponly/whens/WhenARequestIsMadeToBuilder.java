@@ -14,12 +14,12 @@ import static acceptancetests._01reqandresponly.testinfrastructure.AcceptanceTes
 import static acceptancetests._01reqandresponly.testinfrastructure.AcceptanceTest.RESPONSE_FROM_APP_TO_CLIENT;
 
 public class WhenARequestIsMadeToBuilder {
-  private static final String BASE_URI = "http://localhost:2222/";
   private final TestState testState;
-  private String uri = "undefined";
   private final HttpClient httpClient;
+
+  private String uri = "undefined";
   private HttpResponse<String> httpResponse;
-  private List<String> headers = new ArrayList<>();
+  private final List<String> headers = new ArrayList<>();
 
   public WhenARequestIsMadeToBuilder(TestState testState) {
     this.testState = testState;

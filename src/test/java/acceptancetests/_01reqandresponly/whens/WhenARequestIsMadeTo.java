@@ -55,6 +55,8 @@ public class WhenARequestIsMadeTo {
         .header("Content-Type", "application/json")
         .uri(URI.create(url))
         .build();
+    // testState.log method adds info to the captured inputs, and displayed in output
+    //    Using REQUEST_FROM_CLIENT_TO_APP allows the sequence diagram to be generated in output
     testState.log(REQUEST_FROM_CLIENT_TO_APP, httpRequest);
     httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
     testState.log(RESPONSE_FROM_APP_TO_CLIENT, httpResponse);

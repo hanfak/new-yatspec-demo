@@ -11,6 +11,7 @@
     - custom
 - linking notes
 - dictionary
+- Extension (??) that does not generate html report on main local build, but on other builds
 - Extract dabaseconfiguration as singleton and extract out
 - Make more clean architecture
     - package structure
