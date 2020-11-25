@@ -1,0 +1,6 @@
+- Use of stub 
+- Use of wiremock
+- https://github.com/Prominence/openweathermap-java-api to use
+- assert on request sent(args sent, obj sent to api method)
+- prime client api method to responsed with object
+    - captured inputs and outputs here for req and resp to client

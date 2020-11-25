@@ -3,9 +3,11 @@ package acceptancetests._02databasepriming.testinfrastructure;
 import acceptancetests._02databasepriming.givens.GivenTheDatabaseContainsVersion1;
 import acceptancetests._02databasepriming.givens.GivenTheDatabaseContainsVersion2;
 import acceptancetests._02databasepriming.givens.GivenTheDatabaseContainsVersion3;
+import acceptancetests._02databasepriming.givens.GivenTheDatabaseContainsVersion4;
 import acceptancetests._02databasepriming.testinfrastructure.renderers.CustomJavaSourceRenderer;
 import acceptancetests._02databasepriming.testinfrastructure.renderers.HttpRequestRenderer;
 import acceptancetests._02databasepriming.testinfrastructure.renderers.HttpResponseRenderer;
+import acceptancetests._02databasepriming.thens.ThenTheDatabaseContains;
 import acceptancetests._02databasepriming.thens.ThenTheResponseVersion2;
 import acceptancetests._02databasepriming.whens.WhenARequestIsMadeToBuilder;
 import com.googlecode.yatspec.junit.SequenceDiagramExtension;
@@ -53,9 +55,11 @@ public class AcceptanceTest implements WithCustomResultListeners {
   public final GivenTheDatabaseContainsVersion1 givenTheDatabaseContainsVersion1 = new GivenTheDatabaseContainsVersion1(Application.dataSource);
   public final GivenTheDatabaseContainsVersion2 givenTheDatabaseContainsVersion2 = new GivenTheDatabaseContainsVersion2(Application.dataSource, testState);
   public final GivenTheDatabaseContainsVersion3 givenTheDatabaseContainsVersion3 = new GivenTheDatabaseContainsVersion3(Application.dataSource, testState);
+  public final GivenTheDatabaseContainsVersion4 givenTheDatabaseContainsVersion4 = new GivenTheDatabaseContainsVersion4(Application.dataSource, testState);
 
   public final WhenARequestIsMadeToBuilder whenARequest = new WhenARequestIsMadeToBuilder(testState);
   public final ThenTheResponseVersion2 thenReturnedResponse = new ThenTheResponseVersion2(whenARequest::getHttpResponse);
+  public final ThenTheDatabaseContains thenTheDatabaseContains = new ThenTheDatabaseContains(testState, Application.dataSource);
 
   @Override
   public Collection<SpecResultListener> getResultListeners() throws Exception {

@@ -1,0 +1,7 @@
+- usecase 7 and 8
+- 2 calls to same service 
+- 2 calls to one service, 1 call to another service
+    - json and xml respons
+    - sequence diagram shown
+- Assert on request sent to services 
+- prime response back using wiremock
