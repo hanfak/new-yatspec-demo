@@ -1,6 +1,7 @@
-package acceptancetests._02databasepriming.tests;
+package acceptancetests._02databasepriming.tests.usecasethree;
 
-import acceptancetests._02databasepriming.givens.GivenTheDatabaseContainsVersion4;
+import acceptancetests._02databasepriming.givens.CharacterInfoRecord;
+import acceptancetests._02databasepriming.givens.GivenTheDatabaseContainsVersion5;
 import acceptancetests._02databasepriming.givens.SpeciesInfoId;
 import acceptancetests._02databasepriming.givens.SpeciesInfoRecord;
 import acceptancetests._02databasepriming.testinfrastructure.AcceptanceTest;
@@ -22,48 +23,54 @@ import java.net.http.HttpResponse;
 import java.util.Collection;
 import java.util.List;
 
+import static acceptancetests._02databasepriming.givens.CharacterInfoRecord.CharacterInfoRecordBuilder.characterInfoRecord;
 import static acceptancetests._02databasepriming.givens.SpeciesInfoRecord.SpeciesInfoRecordBuilder.speciesInfoRecord;
 
 // see class acceptancetests/_02databasepriming/givens/GivenTheDatabaseContainsVersion4.java for more implementation details
-public class UseCaseTwoExamples4Test extends AcceptanceTest implements WithParticipants {
-  @Notes("This test demonstrates the use of asserting on the database, using the builder pattern and reading from db")
+public class UseCaseThreeExamples1Test extends AcceptanceTest implements WithParticipants {
+  @Notes("This test demonstrates the multiple tables being primed in smae given. While asserted on in different thens")
   @Test
   void shouldReturnAResponseAfterAccessingDatabase() throws Exception {
     givenTheDatabaseContains()
-        .aSpeciesInfo(record()
-            .withPersonId(1)
+        .hasCharacterInfo(data()
+            .withPersonId(12345)
+            .withBirthYear("1502")
+            .withPersonName("Loial"))
+        .hasASpeciesInfo(record()
+            .withPersonId(12345)
             .withName("Ogier")
             .withAverageHeight(3.5F)
             .withLifespan(500))
         .isStoredInTheDatabase();
 
     whenARequest
-        .withUri("http://localhost:2222/usecasetwo")
+        .withUri("http://localhost:2222/usecasethree/12345")
         .isCalledUsingHttpGetMethod();
 
-    thenTheDatabaseContainsARecord()
-        .forSpeciesInfoId(generatedId())
-        .forPersonId(1)
-        .forName("Ogier")
-        .forLifespan(500)
-        .forAverageHeight(3.5F)
+    thenTheSpeciesInfoDatabaseContainsARecord()
+        .withSpeciesInfo(record()
+          .withSpeciesInfoId(generatedId())
+          .withPersonId(12345)
+          .withName("Ogier")
+          .withLifespan(500)
+          .withAverageHeight(3.5F))
         .wasSuccessfullyPersisted();
-
+    thenTheCharacterInfoDatabaseContains.aCharacterInfo(data()
+          .withCharacterInfoId(generatedCharacterInfoId())
+          .withPersonId(12345)
+          .withBirthYear("1502")
+          .withPersonName("Loial"))
+        .wasInsertedIntoTheDatabase();
+    thenReturnedResponse
+        .hasStatusCode(200)
+        .hasContentType("text/html")
+        .hasBody("Hello, Ogier, who lives for 500 years and has average height of 3.5 metres, and was born 1502");
   }
-  private Integer generatedId() {
-    // Use interetsting givens, to get the generated id, depending on how it was set,
-    // need to get from database in the givens or thens
-    return testState.interestingGivens().getType(SpeciesInfoId.class).getValue();
-  }
 
-  private GivenTheDatabaseContainsVersion4 givenTheDatabaseContains() {
-    testState.interestingGivens().add("personId", 1);
-    testState.interestingGivens().add("name", "blah");
-    givenTheDatabaseContainsVersion4.aCharacterStored(
-        testState.interestingGivens().getType("personId", Integer.class),
-        testState.interestingGivens().getType("name", String.class));
-
-    return givenTheDatabaseContainsVersion4;
+  private GivenTheDatabaseContainsVersion5 givenTheDatabaseContains() {
+    testState.interestingGivens().add("personId", 12345);
+    testState.interestingGivens().add("name", "Loial");
+    return givenTheDatabaseContainsVersion5.aCharacterStored(12345, "Loial");
   }
 
   // For readability
@@ -71,7 +78,20 @@ public class UseCaseTwoExamples4Test extends AcceptanceTest implements WithParti
     return speciesInfoRecord();
   }
 
-  private ThenTheDatabaseContains thenTheDatabaseContainsARecord() {
+  // For readability
+  private CharacterInfoRecord.CharacterInfoRecordBuilder data() {
+    return characterInfoRecord();
+  }
+
+  private Integer generatedId() {
+    return testState.interestingGivens().getType(SpeciesInfoId.class).getValue();
+  }
+
+  private Integer generatedCharacterInfoId() {
+    return testState.interestingGivens().getType("characterInfoId", Integer.class);
+  }
+
+  private ThenTheDatabaseContains thenTheSpeciesInfoDatabaseContainsARecord() {
     return thenTheDatabaseContains;
   }
 
@@ -88,8 +108,8 @@ public class UseCaseTwoExamples4Test extends AcceptanceTest implements WithParti
             .withCustomRenderer(HttpRequest.class, new HttpRequestRenderer())
             .withCustomRenderer(HttpResponse.class, new HttpResponseRenderer())
             .withCustomRenderer(JavaSource.class, new CustomJavaSourceRenderer())
-            // This looks in capturedInputs for this class type, and uses the renderer to display it correctly in output
             .withCustomRenderer(SpeciesInfoRecord.class, new SpeciesInfoInDatabaseRendererVersion2())
+            .withCustomRenderer(CharacterInfoRecord.class, new CharacterInfoInDatabaseRenderer())
             .withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer<>()),
         new HtmlIndexRenderer()
     );

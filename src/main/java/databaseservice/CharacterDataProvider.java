@@ -56,4 +56,13 @@ public class CharacterDataProvider implements DataProvider {
     System.out.println("name = " + name);
     return result.map(record -> new SpeciesInfo(record.component1(), record.component3(), record.component2())).orElseThrow(IllegalStateException::new);
   }
+
+  @Override
+  public String getBirthYear(int personId) {
+    Optional<Record1<String>> result = dslContext.select(CHARACTERINFO.BIRTH_YEAR)
+        .from(CHARACTERINFO)
+        .where(CHARACTERINFO.PERSON_ID.eq(personId))
+        .fetchOptional();
+    return result.orElseThrow(IllegalStateException::new).component1();
+  }
 }

@@ -22,11 +22,13 @@ public class UseCaseThreeServlet extends HttpServlet {
 
     // Getting data from db
     SpeciesInfo speciesInfo = dataProvider.getSpeciesInfo(personId);
+    String birthYear = dataProvider.getBirthYear(personId);
     // Outgoing Response
-    response.getWriter().print(format("Hello, %s, who lives for %s years and has average height of %s metres",
+    response.getWriter().print(format("Hello, %s, who lives for %s years and has average height of %s metres, and was born %s",
         speciesInfo.species,
         speciesInfo.lifeSpan,
-        speciesInfo.avgHeight));
+        speciesInfo.avgHeight,
+        birthYear));
     response.setHeader("Content-Type", "text/html");
     response.setStatus(200);
   }

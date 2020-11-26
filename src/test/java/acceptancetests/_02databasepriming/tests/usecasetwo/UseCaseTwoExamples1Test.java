@@ -1,9 +1,8 @@
-package acceptancetests._02databasepriming.tests;
+package acceptancetests._02databasepriming.tests.usecasetwo;
 
-import acceptancetests._02databasepriming.givens.GivenTheDatabaseContainsVersion2;
+import acceptancetests._02databasepriming.givens.GivenTheDatabaseContainsVersion1;
 import acceptancetests._02databasepriming.givens.SpeciesInfoRecord;
 import acceptancetests._02databasepriming.testinfrastructure.AcceptanceTest;
-import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.WithParticipants;
 import com.googlecode.yatspec.sequence.Participant;
 import org.junit.jupiter.api.Test;
@@ -11,9 +10,10 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static acceptancetests._02databasepriming.givens.SpeciesInfoRecord.SpeciesInfoRecordBuilder.speciesInfoRecord;
-// see class acceptancetests/_02databasepriming/givens/GivenTheDatabaseContainsVersion2.java for more implementation details
-public class UseCaseTwoExamples2Test extends AcceptanceTest implements WithParticipants {
-  @Notes("This test demonstrates the use of interesting givens feature in yatspec")
+
+// see class acceptancetests/_02databasepriming/givens/GivenTheDatabaseContainsVersion1.java for more implementation details
+public class UseCaseTwoExamples1Test extends AcceptanceTest implements WithParticipants {
+
   @Test
   void shouldReturnAResponseAfterAccessingDatabase() throws Exception {
     givenTheDatabaseContains()
@@ -34,16 +34,10 @@ public class UseCaseTwoExamples2Test extends AcceptanceTest implements WithParti
         .hasBody("Hello, Ogier, who lives for 500 years and has average height of 3.5 metres");
   }
 
-  private GivenTheDatabaseContainsVersion2 givenTheDatabaseContains() {
-    testState.interestingGivens().add("personId", 1);
-    testState.interestingGivens().add("name", "blah");
-    // When in interesting given (a map) can extract them out,
-    // especially useful if generating random primings
-    givenTheDatabaseContainsVersion2.aCharacterStored(
-        testState.interestingGivens().getType("personId", Integer.class),
-        testState.interestingGivens().getType("name", String.class));
-
-    return givenTheDatabaseContainsVersion2;
+  private GivenTheDatabaseContainsVersion1 givenTheDatabaseContains() {
+    // This needs to be primed, but does not need to be seen in documentation (upto user)
+    givenTheDatabaseContainsVersion1.aCharacterStored(1, "blah");
+    return givenTheDatabaseContainsVersion1;
   }
 
   // For readability

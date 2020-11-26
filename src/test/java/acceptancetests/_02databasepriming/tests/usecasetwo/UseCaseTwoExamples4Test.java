@@ -1,12 +1,11 @@
-package acceptancetests._02databasepriming.tests;
+package acceptancetests._02databasepriming.tests.usecasetwo;
 
-import acceptancetests._02databasepriming.givens.GivenTheDatabaseContainsVersion3;
+import acceptancetests._02databasepriming.givens.GivenTheDatabaseContainsVersion4;
+import acceptancetests._02databasepriming.givens.SpeciesInfoId;
 import acceptancetests._02databasepriming.givens.SpeciesInfoRecord;
 import acceptancetests._02databasepriming.testinfrastructure.AcceptanceTest;
-import acceptancetests._02databasepriming.testinfrastructure.renderers.CustomJavaSourceRenderer;
-import acceptancetests._02databasepriming.testinfrastructure.renderers.HttpRequestRenderer;
-import acceptancetests._02databasepriming.testinfrastructure.renderers.HttpResponseRenderer;
-import acceptancetests._02databasepriming.testinfrastructure.renderers.SpeciesInfoInDatabaseRenderer;
+import acceptancetests._02databasepriming.testinfrastructure.renderers.*;
+import acceptancetests._02databasepriming.thens.ThenTheDatabaseContains;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.junit.WithParticipants;
@@ -25,11 +24,9 @@ import java.util.List;
 
 import static acceptancetests._02databasepriming.givens.SpeciesInfoRecord.SpeciesInfoRecordBuilder.speciesInfoRecord;
 
-// see class acceptancetests/_02databasepriming/givens/GivenTheDatabaseContainsVersion3.java for more implementation details
-public class UseCaseTwoExamples3Test extends AcceptanceTest implements WithParticipants {
-  @Notes("This test demonstrates the use of rendering the primed database in yatspec output,\n" +
-      "Use of custom renderer to display special formating depending on the object type in the test state (interesting givens or captured inputs)" +
-      "useful for priming knowing state of db, to prime manually when running black box testing")
+// see class acceptancetests/_02databasepriming/givens/GivenTheDatabaseContainsVersion4.java for more implementation details
+public class UseCaseTwoExamples4Test extends AcceptanceTest implements WithParticipants {
+  @Notes("This test demonstrates the use of asserting on the database, using the builder pattern and reading from db")
   @Test
   void shouldReturnAResponseAfterAccessingDatabase() throws Exception {
     givenTheDatabaseContains()
@@ -44,25 +41,38 @@ public class UseCaseTwoExamples3Test extends AcceptanceTest implements WithParti
         .withUri("http://localhost:2222/usecasetwo")
         .isCalledUsingHttpGetMethod();
 
-    thenReturnedResponse
-        .hasStatusCode(200)
-        .hasContentType("text/html")
-        .hasBody("Hello, Ogier, who lives for 500 years and has average height of 3.5 metres");
+    thenTheDatabaseContainsARecord()
+        .forSpeciesInfoId(generatedId())
+        .forPersonId(1)
+        .forName("Ogier")
+        .forLifespan(500)
+        .forAverageHeight(3.5F)
+        .wasSuccessfullyPersisted();
+
+  }
+  private Integer generatedId() {
+    // Use interetsting givens, to get the generated id, depending on how it was set,
+    // need to get from database in the givens or thens
+    return testState.interestingGivens().getType(SpeciesInfoId.class).getValue();
   }
 
-  private GivenTheDatabaseContainsVersion3 givenTheDatabaseContains() {
+  private GivenTheDatabaseContainsVersion4 givenTheDatabaseContains() {
     testState.interestingGivens().add("personId", 1);
     testState.interestingGivens().add("name", "blah");
-    givenTheDatabaseContainsVersion3.aCharacterStored(
+    givenTheDatabaseContainsVersion4.aCharacterStored(
         testState.interestingGivens().getType("personId", Integer.class),
         testState.interestingGivens().getType("name", String.class));
 
-    return givenTheDatabaseContainsVersion3;
+    return givenTheDatabaseContainsVersion4;
   }
 
   // For readability
   private SpeciesInfoRecord.SpeciesInfoRecordBuilder record() {
     return speciesInfoRecord();
+  }
+
+  private ThenTheDatabaseContains thenTheDatabaseContainsARecord() {
+    return thenTheDatabaseContains;
   }
 
   @Override
@@ -79,7 +89,7 @@ public class UseCaseTwoExamples3Test extends AcceptanceTest implements WithParti
             .withCustomRenderer(HttpResponse.class, new HttpResponseRenderer())
             .withCustomRenderer(JavaSource.class, new CustomJavaSourceRenderer())
             // This looks in capturedInputs for this class type, and uses the renderer to display it correctly in output
-            .withCustomRenderer(SpeciesInfoRecord.class, new SpeciesInfoInDatabaseRenderer())
+            .withCustomRenderer(SpeciesInfoRecord.class, new SpeciesInfoInDatabaseRendererVersion2())
             .withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer<>()),
         new HtmlIndexRenderer()
     );

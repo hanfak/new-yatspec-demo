@@ -9,4 +9,6 @@ public interface DataProvider {
   void storeCharacterInfo(String personId, Person characterInfo);
 
   SpeciesInfo getSpeciesInfo(Integer personId);
+
+  String getBirthYear(int personId);
 }
