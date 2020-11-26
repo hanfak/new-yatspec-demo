@@ -54,7 +54,7 @@ public class UseCaseThreeExamples1Test extends AcceptanceTest implements WithPar
           .withName("Ogier")
           .withLifespan(500)
           .withAverageHeight(3.5F))
-        .wasSuccessfullyPersisted();
+        .wasInsertedIntoTheDatabase();
     thenTheCharacterInfoDatabaseContains.aCharacterInfo(data()
           .withCharacterInfoId(generatedCharacterInfoId())
           .withPersonId(12345)

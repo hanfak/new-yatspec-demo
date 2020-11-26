@@ -81,6 +81,7 @@ public class ThenTheDatabaseContains {
     assertThat(actualSpeciesInfoRecord.getName()).isEqualTo(expectedName);
     assertThat(actualSpeciesInfoRecord.getAverageHeight()).isEqualTo(expectedAverageHeight);
     // Benefit of using optional allows for null check then does the assertion
+    // Negative it gives false positive, if all fields asserted on are optional, and was not set in test then, it would still pass
     expectedLifespan.ifPresent(expectedLifespan -> assertThat(actualSpeciesInfoRecord.getLifespan()).isEqualTo(expectedLifespan));
   }
 
