@@ -1,7 +1,6 @@
-package webserver;
+package webserver.servlets;
 
 import domain.Person;
-import domain.Species;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -10,12 +9,12 @@ import java.io.IOException;
 
 import static java.lang.String.format;
 
-public class UseCaseSevenServlet extends HttpServlet {
+public class UseCaseSixServlet extends HttpServlet {
 
   private final StarWarsInterfaceService starWarsInterfaceService;
   private final DataProvider dataProvider;
 
-  public UseCaseSevenServlet(StarWarsInterfaceService starWarsInterfaceService, DataProvider dataProvider) {
+  public UseCaseSixServlet(StarWarsInterfaceService starWarsInterfaceService, DataProvider dataProvider) {
     this.starWarsInterfaceService = starWarsInterfaceService;
     this.dataProvider = dataProvider;
   }
@@ -26,11 +25,10 @@ public class UseCaseSevenServlet extends HttpServlet {
     String personId = String.valueOf(dataProvider.getPersonId(personName));
 
     // Go to third party app get data
-    Person characterInfo = starWarsInterfaceService.getCharacterInfo(personId);
-    Species speciesInfo = starWarsInterfaceService.getSpeciesInfo(characterInfo.getSpecies());
+    Person characterInfo = starWarsInterfaceService.getCharacterInfo("1");
 
-    response.getWriter().print(format("{\"Description\": \"%s was born on %s and is %s species\"}",
-        characterInfo.getName(), characterInfo.getBirthYear(), speciesInfo.getName()));
+    response.getWriter().print(format("{\"Description\": \"%s was born on %s\"}",
+        characterInfo.getName(), characterInfo.getBirthYear()));
     response.setHeader("Content-Type", "application/json");
     response.setStatus(200);
   }

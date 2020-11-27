@@ -20,6 +20,7 @@ import testinfrastructure.renderers.CustomJavaSourceRenderer;
 import testinfrastructure.renderers.HttpRequestRenderer;
 import testinfrastructure.renderers.HttpResponseRenderer;
 import wiring.Application;
+import wiring.ApplicationWiring;
 
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -27,6 +28,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static java.lang.String.format;
+import static settings.PropertyLoader.load;
 
 @ExtendWith(SequenceDiagramExtension.class)
 public class AcceptanceTest implements WithCustomResultListeners {
@@ -59,7 +61,7 @@ public class AcceptanceTest implements WithCustomResultListeners {
   private final TestDataProvider testDataProvider = new TestDataProvider();
   public final WhenARequestIsMadeTo whenARequestIsMadeTo = new WhenARequestIsMadeTo(testState);
   public final ThenTheResponse thenTheResponse = new ThenTheResponse(whenARequestIsMadeTo::getHttpResponse);
-  private final Application application = new Application();
+  private final Application application = new Application(ApplicationWiring.wiring(load("target/test-classes/application.prod.properties")));
 
   @Override
   public Collection<SpecResultListener> getResultListeners() throws Exception {
@@ -78,7 +80,7 @@ public class AcceptanceTest implements WithCustomResultListeners {
   @BeforeEach
   void setUp() {
     // start wiremock
-    application.start("target/test-classes/application.test.properties");
+    application.start();
     testDataProvider.deleteAllInfoFromAllTables();
   }
 

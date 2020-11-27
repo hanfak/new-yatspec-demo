@@ -1,4 +1,4 @@
-package webserver;
+package webserver.servlets;
 
 import domain.SpeciesInfo;
 import logging.LoggingCategory;

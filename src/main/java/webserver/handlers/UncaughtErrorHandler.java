@@ -1,4 +1,4 @@
-package webserver;
+package webserver.handlers;
 
 import logging.LoggingCategory;
 import org.eclipse.jetty.server.handler.ErrorHandler;

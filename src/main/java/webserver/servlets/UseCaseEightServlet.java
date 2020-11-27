@@ -1,4 +1,4 @@
-package webserver;
+package webserver.servlets;
 
 import domain.Activity;
 import domain.Person;

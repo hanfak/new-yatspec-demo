@@ -23,13 +23,16 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import wiring.Application;
+import wiring.ApplicationWiring;
 
+import javax.sql.DataSource;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Collection;
 import java.util.List;
 
 import static java.lang.String.format;
+import static settings.PropertyLoader.load;
 
 @ExtendWith(SequenceDiagramExtension.class)
 public class AcceptanceTest implements WithCustomResultListeners {
@@ -48,17 +51,18 @@ public class AcceptanceTest implements WithCustomResultListeners {
 
   public final TestState testState = new TestState();
 
-  private final Application application = new Application();
-  private final TestDataProvider testDataProvider = new TestDataProvider(Application.dataSource);
-  public final GivenTheDatabaseContainsVersion1 givenTheDatabaseContainsVersion1 = new GivenTheDatabaseContainsVersion1(Application.dataSource);
-  public final GivenTheDatabaseContainsVersion2 givenTheDatabaseContainsVersion2 = new GivenTheDatabaseContainsVersion2(Application.dataSource, testState);
-  public final GivenTheDatabaseContainsVersion3 givenTheDatabaseContainsVersion3 = new GivenTheDatabaseContainsVersion3(Application.dataSource, testState);
-  public final GivenTheDatabaseContainsVersion4 givenTheDatabaseContainsVersion4 = new GivenTheDatabaseContainsVersion4(Application.dataSource, testState);
+  private final Application application = new Application(ApplicationWiring.wiring(load("target/test-classes/application.test.properties")));
+  private final DataSource dataSource = application.getDataSource();
+  private final TestDataProvider testDataProvider = new TestDataProvider(dataSource);
+  public final GivenTheDatabaseContainsVersion1 givenTheDatabaseContainsVersion1 = new GivenTheDatabaseContainsVersion1(dataSource);
+  public final GivenTheDatabaseContainsVersion2 givenTheDatabaseContainsVersion2 = new GivenTheDatabaseContainsVersion2(dataSource, testState);
+  public final GivenTheDatabaseContainsVersion3 givenTheDatabaseContainsVersion3 = new GivenTheDatabaseContainsVersion3(dataSource, testState);
+  public final GivenTheDatabaseContainsVersion4 givenTheDatabaseContainsVersion4 = new GivenTheDatabaseContainsVersion4(dataSource, testState);
   public final GivenTheDatabaseContainsVersion5 givenTheDatabaseContainsVersion5 = new GivenTheDatabaseContainsVersion5(testState, testDataProvider);
 
   public final WhenARequestIsMadeToBuilder whenARequest = new WhenARequestIsMadeToBuilder(testState);
   public final ThenTheResponseVersion2 thenReturnedResponse = new ThenTheResponseVersion2(whenARequest::getHttpResponse);
-  public final ThenTheDatabaseContains thenTheDatabaseContains = new ThenTheDatabaseContains(testState, Application.dataSource);
+  public final ThenTheDatabaseContains thenTheDatabaseContains = new ThenTheDatabaseContains(testState, dataSource);
   public final ThenTheCharacterInfoDatabaseContains thenTheCharacterInfoDatabaseContains = new ThenTheCharacterInfoDatabaseContains(testState, testDataProvider);
 
   @Override
@@ -78,7 +82,7 @@ public class AcceptanceTest implements WithCustomResultListeners {
     // Instead of starting application each time during build, can use docker image
     // created before tests are run during build, and the tests are run against this. Will need some logic
     // To check if container is running, then dont start app locally
-    application.start("target/test-classes/application.test.properties");
+    application.start();
     testDataProvider.deleteAllInfoFromAllTables();
   }
 

@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import settings.Settings;
 import thirdparty.AppHttpClient;
-import webserver.StarWarsInterfaceService;
+import webserver.servlets.StarWarsInterfaceService;
 
 import java.net.URI;
 import java.net.http.HttpRequest;

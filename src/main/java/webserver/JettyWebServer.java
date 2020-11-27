@@ -10,11 +10,12 @@ import static java.lang.String.format;
 
 public class JettyWebServer {
 
+  private static final int PORT = 2222;
   private Server server;
   private final Logger logger;
 
-  public JettyWebServer(int port, Logger logger) {
-    this.server = new Server(port);
+  public JettyWebServer(Logger logger) {
+    this.server = new Server(PORT);
     this.logger = logger;
   }
 

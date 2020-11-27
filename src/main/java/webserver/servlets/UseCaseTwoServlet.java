@@ -1,4 +1,4 @@
-package webserver;
+package webserver.servlets;
 
 import domain.SpeciesInfo;
 
@@ -9,26 +9,24 @@ import java.io.IOException;
 
 import static java.lang.String.format;
 
-public class UseCaseThreeServlet extends HttpServlet {
+public class UseCaseTwoServlet extends HttpServlet {
   private final DataProvider dataProvider;
 
-  public UseCaseThreeServlet(DataProvider dataProvider) {
+  public UseCaseTwoServlet(DataProvider dataProvider) {
     this.dataProvider = dataProvider;
   }
 
+  // TODO add path for id, which will get info from database which is radomised in test
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    int personId = Integer.parseInt(request.getPathInfo().substring(1));
-
     // Getting data from db
-    SpeciesInfo speciesInfo = dataProvider.getSpeciesInfo(personId);
-    String birthYear = dataProvider.getBirthYear(personId);
+    SpeciesInfo speciesInfo = dataProvider.getSpeciesInfo(1);
     // Outgoing Response
-    response.getWriter().print(format("Hello, %s, who lives for %s years and has average height of %s metres, and was born %s",
+    // Can extract to some marshalling service/delegate
+    response.getWriter().print(format("Hello, %s, who lives for %s years and has average height of %s metres",
         speciesInfo.species,
         speciesInfo.lifeSpan,
-        speciesInfo.avgHeight,
-        birthYear));
+        speciesInfo.avgHeight));
     response.setHeader("Content-Type", "text/html");
     response.setStatus(200);
   }

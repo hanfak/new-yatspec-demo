@@ -22,6 +22,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import wiring.Application;
+import wiring.ApplicationWiring;
 
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -29,6 +30,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static java.lang.String.format;
+import static settings.PropertyLoader.load;
 
 @ExtendWith(SequenceDiagramExtension.class)
 public class AcceptanceTest implements WithCustomResultListeners {
@@ -47,7 +49,8 @@ public class AcceptanceTest implements WithCustomResultListeners {
 
   public final TestState testState = new TestState();
 
-  private final TestDataProvider testDataProvider = new TestDataProvider(Application.dataSource);
+  private final Application application = new Application(ApplicationWiring.wiring(load("target/test-classes/application.test.properties")));
+  private final TestDataProvider testDataProvider = new TestDataProvider(application.getDataSource());
   public final WhenARequestIsMadeTo whenARequestIsMadeTo = new WhenARequestIsMadeTo(testState);
   public final ThenTheResponse thenTheResponse = new ThenTheResponse(whenARequestIsMadeTo::getHttpResponse);
 
@@ -55,7 +58,6 @@ public class AcceptanceTest implements WithCustomResultListeners {
   public final ThenTheResponse thenResponse = new ThenTheResponse(whenARequest::getHttpResponse);
   public final ThenTheResponseVersion2 thenReturnedResponse = new ThenTheResponseVersion2(whenARequest::getHttpResponse);
 
-  private final Application application = new Application();
 
   @Override
   public Collection<SpecResultListener> getResultListeners() throws Exception {
@@ -74,7 +76,7 @@ public class AcceptanceTest implements WithCustomResultListeners {
     // Instead of starting application each time during build, can use docker image
     // created before tests are run during build, and the tests are run against this. Will need some logic
     // To check if container is running, then dont start app locally
-    application.start("target/test-classes/application.test.properties");
+    application.start();
     testDataProvider.deleteAllInfoFromAllTables();
   }
 
