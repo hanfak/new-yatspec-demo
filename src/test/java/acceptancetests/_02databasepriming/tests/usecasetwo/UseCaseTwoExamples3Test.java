@@ -3,6 +3,7 @@ package acceptancetests._02databasepriming.tests.usecasetwo;
 import acceptancetests._02databasepriming.givens.GivenTheDatabaseContainsVersion3;
 import acceptancetests._02databasepriming.givens.SpeciesInfoRecord;
 import acceptancetests._02databasepriming.testinfrastructure.AcceptanceTest;
+import acceptancetests._02databasepriming.testinfrastructure.YatspecConstants;
 import acceptancetests._02databasepriming.testinfrastructure.renderers.CustomJavaSourceRenderer;
 import acceptancetests._02databasepriming.testinfrastructure.renderers.HttpRequestRenderer;
 import acceptancetests._02databasepriming.testinfrastructure.renderers.HttpResponseRenderer;
@@ -67,7 +68,7 @@ public class UseCaseTwoExamples3Test extends AcceptanceTest implements WithParti
 
   @Override
   public List<Participant> participants() {
-    return List.of(CLIENT_ACTOR, APP_PARTICIPANT);
+    return List.of(YatspecConstants.CLIENT_ACTOR, YatspecConstants.APP_PARTICIPANT);
   }
 
   // This is normally in AcceptanceTest class, but only wanted new renderer for this test

@@ -5,10 +5,7 @@ import acceptancetests._02databasepriming.givens.SpeciesInfoRecord;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.jooq.DSLContext;
 import org.jooq.Record5;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 
-import javax.sql.DataSource;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,9 +28,9 @@ public class ThenTheDatabaseContains {
   private final TestState testState;
   private final DSLContext dslContext;
 
-  public ThenTheDatabaseContains(TestState testState, DataSource dataSource) {
+  public ThenTheDatabaseContains(TestState testState, DSLContext dslContext) {
     this.testState = testState;
-    this.dslContext = DSL.using(dataSource, SQLDialect.POSTGRES);
+    this.dslContext = dslContext;
   }
 
   public ThenTheDatabaseContains forSpeciesInfoId(Integer expectedSpeciesInfoId) {

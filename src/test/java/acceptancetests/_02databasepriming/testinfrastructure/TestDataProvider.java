@@ -3,33 +3,39 @@ package acceptancetests._02databasepriming.testinfrastructure;
 import acceptancetests._02databasepriming.givens.CharacterInfoRecord;
 import acceptancetests._02databasepriming.givens.SpeciesInfoId;
 import acceptancetests._02databasepriming.givens.SpeciesInfoRecord;
+import logging.LoggingCategory;
 import org.jooq.DSLContext;
 import org.jooq.Record4;
 import org.jooq.Record5;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
+import org.slf4j.Logger;
 
-import javax.sql.DataSource;
 import java.util.Optional;
 
 import static org.jooq.sources.Tables.CHARACTERINFO;
 import static org.jooq.sources.Tables.CHARACTERS;
 import static org.jooq.sources.Tables.SPECIFIESINFO;
+import static org.slf4j.LoggerFactory.getLogger;
 
 // TODO extend CharacterDataProvider, which is newed when app is started in test context
 // TODO need to seperate factories into new class, n pass into app.start
 //TODO settings for different db name, so prod is not used
 public class TestDataProvider {
+
+  static Logger APPLICATION_LOGGER = getLogger(LoggingCategory.APPLICATION.name());
+
   private final DSLContext dslContext;
 
-  public TestDataProvider(DataSource dataSource) {
-    this.dslContext = DSL.using(dataSource, SQLDialect.POSTGRES);
+  public TestDataProvider(DSLContext dslContext) {
+    this.dslContext = dslContext;
   }
 
   public void deleteAllInfoFromAllTables() {
+    APPLICATION_LOGGER.info("Deleting database before test");
     dslContext.deleteFrom(CHARACTERINFO).execute();
     dslContext.deleteFrom(SPECIFIESINFO).execute();
     dslContext.deleteFrom(CHARACTERS).execute();
+    APPLICATION_LOGGER.info("Database clean before test execution");
+
   }
 
   public void addCharacter(Integer personId, String name) {

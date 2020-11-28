@@ -3,6 +3,7 @@ package acceptancetests._02databasepriming.tests.usecasetwo;
 import acceptancetests._02databasepriming.givens.GivenTheDatabaseContainsVersion2;
 import acceptancetests._02databasepriming.givens.SpeciesInfoRecord;
 import acceptancetests._02databasepriming.testinfrastructure.AcceptanceTest;
+import acceptancetests._02databasepriming.testinfrastructure.YatspecConstants;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.WithParticipants;
 import com.googlecode.yatspec.sequence.Participant;
@@ -55,6 +56,6 @@ public class UseCaseTwoExamples2Test extends AcceptanceTest implements WithParti
   @Override
   public List<Participant> participants() {
     // This is ordered in terms of how the diagram is generated
-    return List.of(CLIENT_ACTOR, APP_PARTICIPANT);
+    return List.of(YatspecConstants.CLIENT_ACTOR, YatspecConstants.APP_PARTICIPANT);
   }
 }

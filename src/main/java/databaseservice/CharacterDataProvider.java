@@ -5,11 +5,8 @@ import domain.SpeciesInfo;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
 import org.jooq.Record3;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 import webserver.servlets.DataProvider;
 
-import javax.sql.DataSource;
 import java.util.Optional;
 
 import static org.jooq.sources.Tables.CHARACTERINFO;
@@ -18,12 +15,11 @@ import static org.jooq.sources.Tables.SPECIFIESINFO;
 
 public class CharacterDataProvider implements DataProvider {
 
-  private final DataSource dataSource;
   private final DSLContext dslContext;
+
   // tODO extract to separate class dslcontextadpater
-  public CharacterDataProvider(DataSource dataSource) {
-    this.dataSource = dataSource;
-    dslContext = DSL.using(this.dataSource, SQLDialect.POSTGRES);
+  public CharacterDataProvider(DSLContext dslContext) {
+    this.dslContext = dslContext;
   }
 
   @Override

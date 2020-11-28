@@ -1,10 +1,6 @@
 package acceptancetests._02databasepriming.givens;
 
 import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
-
-import javax.sql.DataSource;
 
 import static org.jooq.sources.Tables.CHARACTERS;
 import static org.jooq.sources.Tables.SPECIFIESINFO;
@@ -13,9 +9,8 @@ public class GivenTheDatabaseContainsVersion1 {
 
   private final DSLContext dslContext;
 
-  // tODO extract to separate class dslcontextadpater
-  public GivenTheDatabaseContainsVersion1(DataSource dataSource) {
-    dslContext = DSL.using(dataSource, SQLDialect.POSTGRES);
+  public GivenTheDatabaseContainsVersion1(DSLContext dslContext) {
+    this.dslContext = dslContext;
   }
 
   public GivenTheDatabaseContainsVersion1 aSpeciesInfo(SpeciesInfoRecord.SpeciesInfoRecordBuilder builder) {

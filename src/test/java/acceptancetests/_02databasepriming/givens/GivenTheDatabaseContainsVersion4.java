@@ -3,10 +3,7 @@ package acceptancetests._02databasepriming.givens;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.jooq.DSLContext;
 import org.jooq.Record5;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 
-import javax.sql.DataSource;
 import java.util.Optional;
 
 import static java.lang.String.format;
@@ -19,9 +16,9 @@ public class GivenTheDatabaseContainsVersion4 {
   private final TestState testState;
 
   // tODO extract to separate class dslcontextadpater
-  public GivenTheDatabaseContainsVersion4(DataSource dataSource, TestState testState) {
+  public GivenTheDatabaseContainsVersion4(TestState testState, DSLContext dslContext) {
     this.testState = testState;
-    dslContext = DSL.using(dataSource, SQLDialect.POSTGRES);
+    this.dslContext = dslContext;
   }
 
   public GivenTheDatabaseContainsVersion4 aSpeciesInfo(SpeciesInfoRecord.SpeciesInfoRecordBuilder builder) {

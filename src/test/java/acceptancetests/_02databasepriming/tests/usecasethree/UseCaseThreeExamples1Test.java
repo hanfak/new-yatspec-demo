@@ -5,6 +5,7 @@ import acceptancetests._02databasepriming.givens.GivenTheDatabaseContainsVersion
 import acceptancetests._02databasepriming.givens.SpeciesInfoId;
 import acceptancetests._02databasepriming.givens.SpeciesInfoRecord;
 import acceptancetests._02databasepriming.testinfrastructure.AcceptanceTest;
+import acceptancetests._02databasepriming.testinfrastructure.YatspecConstants;
 import acceptancetests._02databasepriming.testinfrastructure.renderers.*;
 import acceptancetests._02databasepriming.thens.ThenTheDatabaseContains;
 import com.googlecode.yatspec.junit.Notes;
@@ -97,7 +98,7 @@ public class UseCaseThreeExamples1Test extends AcceptanceTest implements WithPar
 
   @Override
   public List<Participant> participants() {
-    return List.of(CLIENT_ACTOR, APP_PARTICIPANT);
+    return List.of(YatspecConstants.CLIENT_ACTOR, YatspecConstants.APP_PARTICIPANT);
   }
 
   // This is normally in AcceptanceTest class, but only wanted new renderer for this test

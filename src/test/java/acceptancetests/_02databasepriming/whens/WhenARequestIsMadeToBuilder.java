@@ -10,8 +10,8 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-import static acceptancetests._02databasepriming.testinfrastructure.AcceptanceTest.REQUEST_FROM_CLIENT_TO_APP;
-import static acceptancetests._02databasepriming.testinfrastructure.AcceptanceTest.RESPONSE_FROM_APP_TO_CLIENT;
+import static acceptancetests._02databasepriming.testinfrastructure.YatspecConstants.REQUEST_FROM_CLIENT_TO_APP;
+import static acceptancetests._02databasepriming.testinfrastructure.YatspecConstants.RESPONSE_FROM_APP_TO_CLIENT;
 
 public class WhenARequestIsMadeToBuilder {
   private static final String BASE_URI = "http://localhost:2222/";

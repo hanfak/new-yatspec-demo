@@ -6,6 +6,9 @@ import fileservice.CounterService;
 import fileservice.FileService;
 import httpclient.*;
 import logging.LoggingCategory;
+import org.jooq.DSLContext;
+import org.jooq.SQLDialect;
+import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import settings.Settings;
@@ -52,11 +55,15 @@ public class ApplicationWiring {
     return singletons.dataSource;
   }
 
+  public DSLContext databaseContextFactory() {
+    return DSL.using(getDataSource(), SQLDialect.POSTGRES);
+  }
+
   public JettyWebServer jettyWebServer() {
     return webserverWiring.setupWebServer(this);
   }
   public DataProvider characterDataProvider() {
-    return new CharacterDataProvider(getDataSource());
+    return new CharacterDataProvider(databaseContextFactory());
   }
 
   public AppHttpClient appHttpClient() {
