@@ -31,6 +31,8 @@ Here is a demo of how to use it for different contexts.
  \c "starwarslocal"
  --show tables
  \dt
+ -- show table with schema
+ \dt records.<name of table>
  -- show schema
  \d+ <name of table>
  

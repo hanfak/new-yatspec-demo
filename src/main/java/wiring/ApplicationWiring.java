@@ -32,7 +32,7 @@ public class ApplicationWiring {
   private final Singletons singletons;
   private final WebserverWiring webserverWiring;
 
-  public static class Singletons {
+  private static class Singletons {
     final DataSource dataSource;
 
     public Singletons(DataSource dataSource) {
@@ -59,62 +59,63 @@ public class ApplicationWiring {
     return DSL.using(getDataSource(), SQLDialect.POSTGRES);
   }
 
-  public JettyWebServer jettyWebServer() {
+  protected JettyWebServer jettyWebServer() {
     return webserverWiring.setupWebServer(this);
   }
-  public DataProvider characterDataProvider() {
+
+  private DataProvider characterDataProvider() {
     return new CharacterDataProvider(databaseContextFactory());
   }
 
-  public AppHttpClient appHttpClient() {
+  private AppHttpClient appHttpClient() {
     return new LoggingHttpClient(new DefaultAppHttpClient(), AUDIT_LOGGER, Timer::start, new HttpRequestFormatter(), new HttpResponseFormatter());
   }
 
-  public StarWarsInterfaceService starWarsInterfaceService() {
+  private StarWarsInterfaceService starWarsInterfaceService() {
     return new StarWarsService(appHttpClient(), settings);
   }
 
-  public RandomXmlService randomXmlService() {
+  private RandomXmlService randomXmlService() {
     return new RandomXmlService(appHttpClient(), settings);
   }
 
-  public FileService fileService() {
+  private FileService fileService() {
     return new FileService(new CounterService(), new XmlMapper());
   }
 
-  public UseCaseServlet useCaseServlet() {
+  protected UseCaseServlet useCaseServlet() {
     return new UseCaseServlet(starWarsInterfaceService(), characterDataProvider(), fileService());
   }
 
-  public UseCaseOneServlet useCaseOneServlet() {
+  protected UseCaseOneServlet useCaseOneServlet() {
     return new UseCaseOneServlet();
   }
 
-  public UseCaseTwoServlet useCaseTwoServlet() {
+  protected UseCaseTwoServlet useCaseTwoServlet() {
     return new UseCaseTwoServlet(characterDataProvider());
   }
 
-  public UseCaseThreeServlet useCaseThreeServlet() {
+  protected UseCaseThreeServlet useCaseThreeServlet() {
     return new UseCaseThreeServlet(characterDataProvider());
   }
 
-  public UseCaseFourServlet useCaseFourServlet() {
+  protected UseCaseFourServlet useCaseFourServlet() {
     return new UseCaseFourServlet(characterDataProvider());
   }
 
-  public UseCaseFiveServlet useCaseFiveServlet() {
+  protected UseCaseFiveServlet useCaseFiveServlet() {
     return new UseCaseFiveServlet(characterDataProvider());
   }
 
-  public UseCaseSixServlet useCaseSixServlet() {
+  protected UseCaseSixServlet useCaseSixServlet() {
     return new UseCaseSixServlet(starWarsInterfaceService(), characterDataProvider());
   }
 
-  public UseCaseSevenServlet useCaseSevenServlet() {
+  protected UseCaseSevenServlet useCaseSevenServlet() {
     return new UseCaseSevenServlet(starWarsInterfaceService(), characterDataProvider());
   }
 
-  public UseCaseEightServlet useCaseEightServlet() {
+  protected UseCaseEightServlet useCaseEightServlet() {
     return new UseCaseEightServlet(starWarsInterfaceService(), randomXmlService(), characterDataProvider());
   }
 }

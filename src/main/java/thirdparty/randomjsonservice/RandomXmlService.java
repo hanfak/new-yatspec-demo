@@ -1,7 +1,6 @@
 package thirdparty.randomjsonservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import domain.Activity;
 import httpclient.*;
 import logging.LoggingCategory;
@@ -33,13 +32,13 @@ public class RandomXmlService {
 
   public Activity getCharacterInfo(Integer id) throws IOException {
     String apiAddress = settings.randomJsonApiAddress();
-    HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(URI.create(apiAddress + "Activities/" + id))
+    HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(URI.create(apiAddress + id))
         .GET()
         .timeout(Duration.ofSeconds(10))
-        .header("Accept", "application/xml");
+        .header("Accept", "application/json");
     java.net.http.HttpResponse<String> response = tryAndSendRequest(requestBuilder);
-    ObjectMapper xmlMapper = new XmlMapper();
-    return xmlMapper.readValue(response.body(), Activity.class);
+    ObjectMapper objectMapper = new ObjectMapper();
+    return objectMapper.readValue(response.body(), Activity.class);
   }
 
   // Local tester to remove
