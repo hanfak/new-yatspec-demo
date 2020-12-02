@@ -17,7 +17,7 @@ public class CharacterDataProvider implements DataProvider {
 
   private final DSLContext dslContext;
 
-  // tODO extract to separate class dslcontextadpater
+  // tODO split methods out
   public CharacterDataProvider(DSLContext dslContext) {
     this.dslContext = dslContext;
   }

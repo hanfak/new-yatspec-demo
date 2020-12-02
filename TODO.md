@@ -1,6 +1,4 @@
-- Split usecase/app logic and response creation from servlets
-- use jersey framework
-- extract out  DSL.using(this.dataSource, SQLDialect.POSTGRES) to wiring
+- ~~extract out  DSL.using(this.dataSource, SQLDialect.POSTGRES) to wiring~~
 - Test other use cases
 - Assert on files
 - Split wiring builder for prod and test 
@@ -14,15 +12,19 @@
     - custom
 - linking notes
 - dictionary
-- Extension (??) that does not generate html report on main local build, but on other builds
-- Extract dabaseconfiguration as singleton and extract out
-- Display logs in captured outputs
-- Use jersey for rest examples
+- ~~Extract dabaseconfiguration as singleton and extract out~~
+
+- new usecase to test rules
+      - use rules engine
+      - split the usecase from the servlets, have inject a httpResponseMarshaller class into servlet
 - Make more clean architecture
     - package structure
     - modules?
     - interfaces, DIP
     - Extract usecases from servlets
 - html ouput index page, renderer
+- Use jersey for rest examples
+- Display logs in captured outputs
+- Extension (??) that does not generate html report on main local build, but on other builds
 - Notfoundpage
 - Have tests run when docker is running ie build
