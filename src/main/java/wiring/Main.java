@@ -10,26 +10,30 @@ import static wiring.ApplicationWiring.APPLICATION_LOGGER;
 
 public final class Main {
 
+  // Could use java command line env variable to set this
   private static final String PROD_PROPERTIES = "target/classes/application.prod.properties";
 
   public static void main(String... args) {
     Application application = new Application(PROD_PROPERTIES);
-    cleanDatabase(application);
-    populateDatabase(application);
+    setupData(application);
     application.start();
   }
 
-  private static void cleanDatabase(Application application) {
-    APPLICATION_LOGGER.info("cleaning data");
+  private static void setupData(Application application) {
     DSLContext dslContext = DSL.using(application.getDataSource(), SQLDialect.POSTGRES);
+    cleanDatabase(dslContext);
+    populateDatabase(dslContext);
+  }
+
+  private static void cleanDatabase(DSLContext dslContext) {
+    APPLICATION_LOGGER.info("cleaning data");
     dslContext.deleteFrom(CHARACTERINFO).execute();
     dslContext.deleteFrom(SPECIFIESINFO).execute();
   }
 
   // Some data to use in running app for some end points
-  private static void populateDatabase(Application application) {
+  private static void populateDatabase(DSLContext dslContext) {
     APPLICATION_LOGGER.info("inserting data");
-    DSLContext dslContext = DSL.using(application.getDataSource(), SQLDialect.POSTGRES);
     dslContext.insertInto(SPECIFIESINFO)
         .set(SPECIFIESINFO.PERSON_ID, 1)
         .set(SPECIFIESINFO.SPECIES, "human")
