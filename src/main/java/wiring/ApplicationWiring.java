@@ -1,9 +1,9 @@
 package wiring;
 
+import async.ExecutorServiceAsyncProcessor;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import databaseservice.CharacterDataProvider;
-import fileservice.CounterService;
-import fileservice.FileService;
+import fileservice.*;
 import httpclient.*;
 import logging.LoggingCategory;
 import org.jooq.DSLContext;
@@ -15,6 +15,7 @@ import settings.Settings;
 import thirdparty.AppHttpClient;
 import thirdparty.randomjsonservice.RandomXmlService;
 import thirdparty.starwarsservice.StarWarsService;
+import usecases.LetterCreator;
 import webserver.JettyWebServer;
 import webserver.servlets.*;
 
@@ -25,6 +26,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 // can override methods here in subclass for testing
 public class ApplicationWiring {
+
   final static Logger APPLICATION_LOGGER = getLogger(LoggingCategory.APPLICATION.name());
   private final static Logger AUDIT_LOGGER = LoggerFactory.getLogger(LoggingCategory.AUDIT.name());
 
@@ -80,7 +82,7 @@ public class ApplicationWiring {
   }
 
   private FileService fileService() {
-    return new FileService(new CounterService(), new XmlMapper());
+    return new MyFileService(new CounterService(), new XmlMapper(), APPLICATION_LOGGER);
   }
 
   protected UseCaseServlet useCaseServlet() {
@@ -117,5 +119,11 @@ public class ApplicationWiring {
 
   protected UseCaseEightServlet useCaseEightServlet() {
     return new UseCaseEightServlet(starWarsInterfaceService(), randomXmlService(), characterDataProvider());
+  }
+
+  protected GenerateResponseLetterUseCaseServlet generateResponseLetterUseCase() {
+    LetterCreator letterCreator = new LetterCreator(new ResponseLetterReplacer(), new FileSystemFileReader(), new FileSystemWriter(APPLICATION_LOGGER), new ResponseLetterFilenameService(), APPLICATION_LOGGER);
+
+    return new GenerateResponseLetterUseCaseServlet(new GenerateResponseLetterUnmarshaller(), letterCreator, new ExecutorServiceAsyncProcessor());
   }
 }

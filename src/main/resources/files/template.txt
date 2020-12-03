@@ -1,0 +1,13 @@
+Hello $<NAME>,
+
+I have looked at your query below:
+
+"$<QUERY_DETAILS>"
+
+dated: $<DATE>
+
+And we are processing it.
+
+Regards,
+
+The Firm
