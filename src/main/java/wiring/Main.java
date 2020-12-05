@@ -1,20 +1,23 @@
 package wiring;
 
+import logging.LoggingCategory;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
+import org.slf4j.Logger;
 
 import static org.jooq.sources.Tables.CHARACTERINFO;
 import static org.jooq.sources.Tables.SPECIFIESINFO;
-import static wiring.ApplicationWiring.APPLICATION_LOGGER;
+import static org.slf4j.LoggerFactory.getLogger;
 
 public final class Main {
 
+  private final static Logger APPLICATION_LOGGER = getLogger(LoggingCategory.APPLICATION.name());
   // Could use java command line env variable to set this
   private static final String PROD_PROPERTIES = "target/classes/application.prod.properties";
 
   public static void main(String... args) {
-    Application application = new Application(PROD_PROPERTIES);
+    Application application = new Application(PROD_PROPERTIES, APPLICATION_LOGGER);
     setupData(application);
     application.start();
   }

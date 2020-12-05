@@ -6,6 +6,7 @@ import org.slf4j.Marker;
 import java.util.ArrayList;
 import java.util.List;
 
+// Useful for testing logs, instead of using mocks
 public class TestLogger implements Logger {
 
     private final List<String> infoLogs = new ArrayList<>();

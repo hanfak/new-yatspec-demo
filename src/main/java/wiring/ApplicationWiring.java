@@ -15,24 +15,25 @@ import settings.Settings;
 import thirdparty.AppHttpClient;
 import thirdparty.randomjsonservice.RandomXmlService;
 import thirdparty.starwarsservice.StarWarsService;
-import usecases.LetterCreator;
+import usecases.generateresponseletter.PersonalisedLetterCreatorUseCase;
+import usecases.generateresponseletter.ResponseLetterReplacer;
 import webserver.JettyWebServer;
 import webserver.servlets.*;
+import webserver.servlets.generateResponseLetter.GenerateResponseLetterUnmarshaller;
+import webserver.servlets.generateResponseLetter.GenerateResponseLetterUseCaseServlet;
 
 import javax.sql.DataSource;
 
 import static databaseservice.DatasourceConfig.createDataSource;
-import static org.slf4j.LoggerFactory.getLogger;
 
 // can override methods here in subclass for testing
 public class ApplicationWiring {
-
-  final static Logger APPLICATION_LOGGER = getLogger(LoggingCategory.APPLICATION.name());
   private final static Logger AUDIT_LOGGER = LoggerFactory.getLogger(LoggingCategory.AUDIT.name());
 
   private final Settings settings;
   private final Singletons singletons;
   private final WebserverWiring webserverWiring;
+  private final Logger applicationLogger;
 
   private static class Singletons {
     final DataSource dataSource;
@@ -43,14 +44,17 @@ public class ApplicationWiring {
   }
 
   // Can be used to create object graph for test specific purposes
-  ApplicationWiring(Singletons singletons, Settings settings, WebserverWiring webserverWiring) {
+  ApplicationWiring(Singletons singletons, Settings settings, WebserverWiring webserverWiring, Logger applicationLogger) {
     this.singletons = singletons;
     this.settings = settings;
     this.webserverWiring = webserverWiring;
+    this.applicationLogger = applicationLogger;
   }
 
-  public static ApplicationWiring wiring(Settings settings) {
-    return new ApplicationWiring(new Singletons(createDataSource()), settings, WebserverWiring.webserverWiring());
+  public static ApplicationWiring wiring(Settings settings, Logger applicationLogger) {
+    Singletons singletons = new Singletons(createDataSource(settings));
+    WebserverWiring webserverWiring = WebserverWiring.webserverWiring(applicationLogger);
+    return new ApplicationWiring(singletons, settings, webserverWiring, applicationLogger);
   }
 
   public DataSource getDataSource() {
@@ -82,7 +86,7 @@ public class ApplicationWiring {
   }
 
   private FileService fileService() {
-    return new MyFileService(new CounterService(), new XmlMapper(), APPLICATION_LOGGER);
+    return new MyFileService(new InMemoryIdService(), new XmlMapper(), applicationLogger);
   }
 
   protected UseCaseServlet useCaseServlet() {
@@ -122,8 +126,8 @@ public class ApplicationWiring {
   }
 
   protected GenerateResponseLetterUseCaseServlet generateResponseLetterUseCase() {
-    LetterCreator letterCreator = new LetterCreator(new ResponseLetterReplacer(), new FileSystemFileReader(), new FileSystemWriter(APPLICATION_LOGGER), new ResponseLetterFilenameService(), APPLICATION_LOGGER);
+    PersonalisedLetterCreatorUseCase personalisedLetterCreatorUseCase = new PersonalisedLetterCreatorUseCase(new ResponseLetterReplacer(), new FileSystemFileReader(), new FileSystemWriter(applicationLogger), new InMemoryIdService(), settings, applicationLogger);
 
-    return new GenerateResponseLetterUseCaseServlet(new GenerateResponseLetterUnmarshaller(), letterCreator, new ExecutorServiceAsyncProcessor());
+    return new GenerateResponseLetterUseCaseServlet(new GenerateResponseLetterUnmarshaller(), personalisedLetterCreatorUseCase, new ExecutorServiceAsyncProcessor());
   }
 }

@@ -1,4 +1,4 @@
-package webserver.servlets;
+package webserver.servlets.generateResponseLetter;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,7 +10,7 @@ public class ReadFileUpdaterDTO {
   private final String date;
 
   @JsonCreator
-  public ReadFileUpdaterDTO(@JsonProperty(value = "name", required = true) String name,
+  ReadFileUpdaterDTO(@JsonProperty(value = "name", required = true) String name,
                             @JsonProperty(value = "queryDetails", required = true)String queryDetails,
                             @JsonProperty(value = "date", required = true) String date) {
     this.name = name;

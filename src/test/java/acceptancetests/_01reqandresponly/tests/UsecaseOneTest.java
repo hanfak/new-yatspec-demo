@@ -8,8 +8,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-@SuppressWarnings("SameParameterValue")
-    // For test readability
+import static acceptancetests._01reqandresponly.testinfrastructure.YatspecConstants.APP_PARTICIPANT;
+import static acceptancetests._01reqandresponly.testinfrastructure.YatspecConstants.CLIENT_ACTOR;
+
+@SuppressWarnings("SameParameterValue") // For test readability
 class UsecaseOneTest extends AcceptanceTest implements WithParticipants {
 
   @Test

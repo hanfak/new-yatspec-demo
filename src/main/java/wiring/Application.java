@@ -1,5 +1,6 @@
 package wiring;
 
+import org.slf4j.Logger;
 import webserver.JettyWebServer;
 
 import javax.sql.DataSource;
@@ -8,17 +9,17 @@ import static settings.PropertyLoader.load;
 
 public final class Application {
 
-  private JettyWebServer jettyWebServer;
-
   private final ApplicationWiring wiring;
+
+  private JettyWebServer jettyWebServer;
 
   // For testing
   public Application(ApplicationWiring wiring) {
     this.wiring = wiring;
   }
 
-  public Application(String propertyFile) {
-    this(ApplicationWiring.wiring(load(propertyFile)));
+  public Application(String propertyFile, Logger applicationLogger) {
+    this(ApplicationWiring.wiring(load(propertyFile), applicationLogger));
   }
 
   // remove start method

@@ -24,12 +24,12 @@ public class MyFileService implements FileService {
   private static final String DIRECTORY_OF_LOCATION_OF_CREATED_FILES = "target/test-classes/testFiles/created";
   private static final String FILE_NAME = "/data-%d.xml";
 
-  private final CounterService counterService;
+  private final UniqueIdService uniqueIdService;
   private final XmlMapper xmlMapper;
   private final Logger logger;
 
-  public MyFileService(CounterService counterService, XmlMapper xmlMapper, Logger logger) {
-    this.counterService = counterService;
+  public MyFileService(UniqueIdService uniqueIdService, XmlMapper xmlMapper, Logger logger) {
+    this.uniqueIdService = uniqueIdService;
     this.xmlMapper = xmlMapper;
     this.logger = logger;
   }
@@ -51,7 +51,7 @@ public class MyFileService implements FileService {
       logger.info("file contents written to file: " + s);
       xmlMapper.writeValue(new FileOutputStream(
           format(DIRECTORY_OF_LOCATION_OF_CREATED_FILES + FILE_NAME,
-              counterService.execute())), data);
+              uniqueIdService.execute())), data);
     } catch (IOException e) {
       logger.error("error processing file", e);
     }
@@ -68,7 +68,7 @@ public class MyFileService implements FileService {
   }
 
   public static void main(String... args) throws IOException {
-    FileService fileService = new MyFileService(new CounterService(), new XmlMapper(), getLogger(LoggingCategory.APPLICATION.name()));
+    FileService fileService = new MyFileService(new InMemoryIdService(), new XmlMapper(), getLogger(LoggingCategory.APPLICATION.name()));
     fileService.readData("example.xml");
   }
 }

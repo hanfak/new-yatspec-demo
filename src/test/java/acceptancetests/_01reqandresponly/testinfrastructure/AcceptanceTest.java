@@ -15,12 +15,12 @@ import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
 import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
-import com.googlecode.yatspec.sequence.Participant;
-import com.googlecode.yatspec.sequence.Participants;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
+import logging.LoggingCategory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
 import wiring.Application;
 import wiring.ApplicationWiring;
 
@@ -29,27 +29,17 @@ import java.net.http.HttpResponse;
 import java.util.Collection;
 import java.util.List;
 
-import static java.lang.String.format;
+import static org.slf4j.LoggerFactory.getLogger;
 import static settings.PropertyLoader.load;
 
 @ExtendWith(SequenceDiagramExtension.class)
 public class AcceptanceTest implements WithCustomResultListeners {
 
-  protected static final String APP = "app";
-  protected static final String CLIENT = "client";
-
-  protected static final Participant APP_PARTICIPANT = Participants.PARTICIPANT.create(APP);
-  protected static final Participant CLIENT_ACTOR = Participants.ACTOR.create(CLIENT);
-
-  protected static final String RESPONSE_FORMAT = "Response from %s to %s";
-  protected static final String REQUEST_FORMAT = "Request from %s to %s";
-
-  public static final String REQUEST_FROM_CLIENT_TO_APP = format(REQUEST_FORMAT, CLIENT, APP);
-  public static final String RESPONSE_FROM_APP_TO_CLIENT = format(RESPONSE_FORMAT, APP, CLIENT);
-
   public final TestState testState = new TestState();
 
-  private final Application application = new Application(ApplicationWiring.wiring(load("target/test-classes/application.test.properties")));
+  private final static Logger APPLICATION_LOGGER = getLogger(LoggingCategory.APPLICATION.name());
+
+  private final Application application = new Application(ApplicationWiring.wiring(load("target/test-classes/application.test.properties"), APPLICATION_LOGGER));
   private final TestDataProvider testDataProvider = new TestDataProvider(application.getDataSource());
   public final WhenARequestIsMadeTo whenARequestIsMadeTo = new WhenARequestIsMadeTo(testState);
   public final ThenTheResponse thenTheResponse = new ThenTheResponse(whenARequestIsMadeTo::getHttpResponse);

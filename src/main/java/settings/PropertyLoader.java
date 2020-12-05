@@ -26,6 +26,6 @@ public class PropertyLoader {
       APPLICATION_LOGGER.error(message, e);
       throw new IllegalStateException(message, e);
     }
-    return new Settings(properties);
+    return new Settings(properties, APPLICATION_LOGGER);
   }
 }

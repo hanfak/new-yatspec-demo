@@ -1,8 +1,6 @@
 package settings;
 
-import logging.LoggingCategory;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
@@ -10,12 +8,12 @@ import static java.lang.String.format;
 
 public class EnhancedProperties {
 
-  private final static Logger logger = LoggerFactory.getLogger(LoggingCategory.APPLICATION.name());
-
   private final Properties properties;
+  private final Logger logger;
 
-  public EnhancedProperties(Properties properties) {
+  public EnhancedProperties(Properties properties, Logger logger) {
     this.properties = properties;
+    this.logger = logger;
   }
 
   public String getPropertyOrDefaultValue(String propertyName, String defaultValue) {

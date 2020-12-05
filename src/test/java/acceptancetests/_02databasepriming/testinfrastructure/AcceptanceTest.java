@@ -17,6 +17,7 @@ import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
+import logging.LoggingCategory;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -24,6 +25,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
 import wiring.Application;
 import wiring.ApplicationWiring;
 
@@ -32,6 +34,7 @@ import java.net.http.HttpResponse;
 import java.util.Collection;
 import java.util.List;
 
+import static org.slf4j.LoggerFactory.getLogger;
 import static settings.PropertyLoader.load;
 
 @ExtendWith(SequenceDiagramExtension.class)
@@ -41,7 +44,9 @@ public class AcceptanceTest implements WithCustomResultListeners {
 
   public final TestState testState = new TestState();
 
-  private static  Application application = new Application(ApplicationWiring.wiring(load(TEST_PROPERTIES_PATH)));
+  private final static Logger APPLICATION_LOGGER = getLogger(LoggingCategory.APPLICATION.name());
+
+  private static  Application application = new Application(ApplicationWiring.wiring(load(TEST_PROPERTIES_PATH), APPLICATION_LOGGER));
   // Give control of what db to use in test, will need to configure pom.xml
   private final DSLContext dslContext = DSL.using(application.getDataSource(), SQLDialect.POSTGRES);
   private final TestDataProvider testDataProvider = new TestDataProvider(dslContext);

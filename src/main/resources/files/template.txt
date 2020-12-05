@@ -1,5 +1,7 @@
 Hello $<NAME>,
 
+Reference: $<ID>
+
 I have looked at your query below:
 
 "$<QUERY_DETAILS>"

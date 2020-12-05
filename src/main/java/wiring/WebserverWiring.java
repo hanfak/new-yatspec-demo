@@ -1,16 +1,22 @@
 package wiring;
 
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.slf4j.Logger;
 import webserver.JettyWebServer;
 
 import static webserver.factories.JettyWebServerFactory.jettyWebServer;
 import static webserver.factories.ServletBuilder.createServlet;
-import static wiring.ApplicationWiring.APPLICATION_LOGGER;
 
 public class WebserverWiring {
 
-  public static WebserverWiring webserverWiring() {
-    return new WebserverWiring();
+  private final Logger applicationLogger;
+
+  public WebserverWiring(Logger applicationLogger) {
+    this.applicationLogger = applicationLogger;
+  }
+
+  public static WebserverWiring webserverWiring(Logger applicationLogger) {
+    return new WebserverWiring(applicationLogger);
   }
 
   JettyWebServer setupWebServer(ApplicationWiring applicationWiring) {
@@ -27,6 +33,6 @@ public class WebserverWiring {
         .addServlet(applicationWiring.useCaseEightServlet(), "/usecaseeight/*")
         .addServlet(applicationWiring.generateResponseLetterUseCase(), "/generateResponseLetter");
 
-    return jettyWebServer(APPLICATION_LOGGER).create(servletContextHandler);
+    return jettyWebServer(applicationLogger).create(servletContextHandler);
   }
 }
