@@ -18,8 +18,10 @@ Here is a demo of how to use it for different contexts.
     - Use of testState and storing captured inputs(req and resp) in logs (a map) in the when and extracting during thens
     - Use of builder pattern to create fluent whens
     - Use of inheritence to hide common methods, fields etc
+    
 ## Instructions 
 
+### Docker Database setup
 * mkdir -p $HOME/docker/volumes/postgres
 * docker run --rm --name pg-docker -e POSTGRES_PASSWORD=docker -d -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data  postgres:11
 * docker exec -it postgres bash
@@ -36,8 +38,18 @@ Here is a demo of how to use it for different contexts.
  -- show schema
  \d+ <name of table>
  
+ ### ActiveMQ Docker Setup
  
-********
+* docker run -d --name='activemq' -it --rm -e 'ACTIVEMQ_CONFIG_MINMEMORY=256' -e 'ACTIVEMQ_CONFIG_MAXMEMORY=512'  -v
+ /data/activemq:/data  -v /var/log/activemq:/var/log/activemq -p 8161:8161 -p 61616:61616  --network=host webcenter/activemq:latest
+* http://127.0.0.1:8161/admin/
+  * admin:admin
+* https://activemq.apache.org/getting-started
+       
+ 
+ 
+## Uses
+
  Access: 
  http://localhost:2222/usecase/Luke%20Skywalker
  

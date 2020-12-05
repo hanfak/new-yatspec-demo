@@ -18,7 +18,7 @@ public final class Application {
     this.wiring = wiring;
   }
 
-  public Application(String propertyFile, Logger applicationLogger) {
+  Application(String propertyFile, Logger applicationLogger) {
     this(ApplicationWiring.wiring(load(propertyFile), applicationLogger));
   }
 

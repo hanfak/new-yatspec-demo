@@ -5,7 +5,6 @@ import org.eclipse.jetty.server.CustomRequestLog;
 import org.eclipse.jetty.server.Slf4jRequestLogWriter;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.slf4j.Logger;
 import org.zalando.logbook.DefaultHttpLogFormatter;
 import org.zalando.logbook.DefaultHttpLogWriter;
 import org.zalando.logbook.Logbook;
@@ -25,18 +24,17 @@ import static org.zalando.logbook.DefaultHttpLogWriter.Level.INFO;
 
 public class JettyWebServerFactory {
 
-  private final Logger logger;
+  private final JettyWebServer jettyWebServer;
 
-  private JettyWebServerFactory(Logger logger) {
-    this.logger = logger;
+  private JettyWebServerFactory(JettyWebServer jettyWebServer) {
+    this.jettyWebServer = jettyWebServer;
   }
 
-  public static JettyWebServerFactory jettyWebServer(Logger logger) {
-    return new JettyWebServerFactory(logger);
+  public static JettyWebServerFactory jettyWebServer(JettyWebServer jettyWebServer) {
+    return new JettyWebServerFactory(jettyWebServer);
   }
 
   public JettyWebServer create(ServletContextHandler servletContextHandler) {
-    JettyWebServer jettyWebServer = new JettyWebServer(logger);
     jettyWebServer.withRequestLog(createRequestLog());
     jettyWebServer.withBean(new UncaughtErrorHandler()); // TODO monkey patch zalendo
     addLoggingFilter(servletContextHandler);

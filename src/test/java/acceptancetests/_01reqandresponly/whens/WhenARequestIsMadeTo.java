@@ -8,8 +8,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import static acceptancetests._01reqandresponly.testinfrastructure.AcceptanceTest.REQUEST_FROM_CLIENT_TO_APP;
-import static acceptancetests._01reqandresponly.testinfrastructure.AcceptanceTest.RESPONSE_FROM_APP_TO_CLIENT;
+import static acceptancetests._01reqandresponly.testinfrastructure.YatspecConstants.REQUEST_FROM_CLIENT_TO_APP;
+import static acceptancetests._01reqandresponly.testinfrastructure.YatspecConstants.RESPONSE_FROM_APP_TO_CLIENT;
 import static java.net.http.HttpRequest.BodyPublishers.ofString;
 
 public class WhenARequestIsMadeTo {

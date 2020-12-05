@@ -1,13 +1,17 @@
 package settings;
 
+import jmsservice.QueueName;
 import org.slf4j.Logger;
 
+import java.util.Optional;
 import java.util.Properties;
+
+import static java.lang.String.format;
 
 // TODO interface for fileservice config etc
 // Having multiple settings interface allows users to be specific, plus can create new interfaces which extend
 // several interfaces, and users can use this.
-public class Settings implements ResponseLetterSettings, StarWarsApiSettings, RandomJsonApiSettings, DatabaseSettings {
+public class Settings implements ResponseLetterSettings, StarWarsApiSettings, RandomJsonApiSettings, DatabaseSettings, ActiveMQSettings {
 
   private final EnhancedProperties properties;
 
@@ -53,5 +57,25 @@ public class Settings implements ResponseLetterSettings, StarWarsApiSettings, Ra
   @Override
   public int maxDatabasePoolSize() {
     return Integer.parseInt(properties.getPropertyOrDefaultValue("database.max.database.pool.size", "1"));
+  }
+
+  @Override
+  public String brokerUrl() {
+    return properties.getPropertyOrThrowRuntimeException("broker.url");
+  }
+
+  @Override
+  public Optional<String> getActiveSiteForConsumer(QueueName queueName) {
+    return properties.getOptionalProperty(String.format("switcheroo.queue.%s.active.consumer.site", queueName.getActiveMQDestination().getPhysicalName().toLowerCase()));
+  }
+
+  @Override
+  public int getMaxConsumersFor(QueueName queueName) {
+    String propertyKey = format("switcheroo.queue.%s.max.consumers", queueName.getActiveMQDestination().getPhysicalName().toLowerCase());
+    return Integer.parseInt(properties.getPropertyOrDefaultValue(propertyKey, "1"));
+  }
+
+  public int webserverPort() {
+    return Integer.parseInt(properties.getPropertyOrDefaultValue("webserver.port", "2222"));
   }
 }

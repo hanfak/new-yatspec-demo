@@ -10,12 +10,11 @@ import static java.lang.String.format;
 
 public class JettyWebServer {
 
-  private static final int PORT = 2222;
-  private Server server;
+  private final Server server;
   private final Logger logger;
 
-  public JettyWebServer(Logger logger) {
-    this.server = new Server(PORT);
+  public JettyWebServer(Logger logger, Server server) {
+    this.server = server;
     this.logger = logger;
   }
 
@@ -24,7 +23,6 @@ public class JettyWebServer {
       server.start();
       logger.info("Server started at: " + server.getURI().toString());
     } catch (Exception e) {
-      // Unit tests are testing this, but not being picked up with jacoco
       String message = format("Could not start server on port '%d'", server.getURI().getPort());
       logger.error(message, e);
       throw new IllegalStateException(message, e);
@@ -36,7 +34,6 @@ public class JettyWebServer {
       server.stop();
       logger.info("Server stopped");
     } catch (Exception e) {
-      // Unit tests are testing this, but not being picked up with jacoco
       String message = format("Could not stop server on port '%d'", server.getURI().getPort());
       logger.error(message, e);
       throw new IllegalStateException(message, e);

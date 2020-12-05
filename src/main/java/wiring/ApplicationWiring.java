@@ -6,6 +6,7 @@ import databaseservice.CharacterDataProvider;
 import fileservice.*;
 import httpclient.*;
 import logging.LoggingCategory;
+import org.eclipse.jetty.server.Server;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -28,33 +29,35 @@ import static databaseservice.DatasourceConfig.createDataSource;
 
 // can override methods here in subclass for testing
 public class ApplicationWiring {
+
   private final static Logger AUDIT_LOGGER = LoggerFactory.getLogger(LoggingCategory.AUDIT.name());
 
   private final Settings settings;
   private final Singletons singletons;
-  private final WebserverWiring webserverWiring;
   private final Logger applicationLogger;
 
   private static class Singletons {
     final DataSource dataSource;
+    final WebserverWiring webserverWiring;
 
-    public Singletons(DataSource dataSource) {
+    public Singletons(DataSource dataSource, WebserverWiring webserverWiring) {
       this.dataSource = dataSource;
+      this.webserverWiring = webserverWiring;
     }
   }
 
   // Can be used to create object graph for test specific purposes
-  ApplicationWiring(Singletons singletons, Settings settings, WebserverWiring webserverWiring, Logger applicationLogger) {
+  private ApplicationWiring(Singletons singletons, Settings settings, Logger applicationLogger) {
     this.singletons = singletons;
     this.settings = settings;
-    this.webserverWiring = webserverWiring;
     this.applicationLogger = applicationLogger;
   }
 
   public static ApplicationWiring wiring(Settings settings, Logger applicationLogger) {
-    Singletons singletons = new Singletons(createDataSource(settings));
-    WebserverWiring webserverWiring = WebserverWiring.webserverWiring(applicationLogger);
-    return new ApplicationWiring(singletons, settings, webserverWiring, applicationLogger);
+    JettyWebServer jettyWebServer = new JettyWebServer(applicationLogger, new Server(settings.webserverPort()));
+    WebserverWiring webserverWiring = WebserverWiring.webserverWiring(jettyWebServer);
+    Singletons singletons = new Singletons(createDataSource(settings), webserverWiring);
+    return new ApplicationWiring(singletons, settings, applicationLogger);
   }
 
   public DataSource getDataSource() {
@@ -65,11 +68,12 @@ public class ApplicationWiring {
     return DSL.using(getDataSource(), SQLDialect.POSTGRES);
   }
 
-  protected JettyWebServer jettyWebServer() {
-    return webserverWiring.setupWebServer(this);
+  JettyWebServer jettyWebServer() {
+    return singletons.webserverWiring.setupWebServer(this); // TODO: Fix passing this object
   }
 
-  private DataProvider characterDataProvider() {
+  // Can be overridden for tests
+  public DataProvider characterDataProvider() {
     return new CharacterDataProvider(databaseContextFactory());
   }
 
@@ -85,7 +89,8 @@ public class ApplicationWiring {
     return new RandomXmlService(appHttpClient(), settings);
   }
 
-  private FileService fileService() {
+  // Can be overridden for tests
+  public FileService fileService() {
     return new MyFileService(new InMemoryIdService(), new XmlMapper(), applicationLogger);
   }
 
@@ -125,9 +130,17 @@ public class ApplicationWiring {
     return new UseCaseEightServlet(starWarsInterfaceService(), randomXmlService(), characterDataProvider());
   }
 
-  protected GenerateResponseLetterUseCaseServlet generateResponseLetterUseCase() {
-    PersonalisedLetterCreatorUseCase personalisedLetterCreatorUseCase = new PersonalisedLetterCreatorUseCase(new ResponseLetterReplacer(), new FileSystemFileReader(), new FileSystemWriter(applicationLogger), new InMemoryIdService(), settings, applicationLogger);
+  // Can be overridden for tests
+  public FileSystemWriter fileWriter() {
+    return new FileSystemWriter(applicationLogger);
+  }
 
-    return new GenerateResponseLetterUseCaseServlet(new GenerateResponseLetterUnmarshaller(), personalisedLetterCreatorUseCase, new ExecutorServiceAsyncProcessor());
+  private PersonalisedLetterCreatorUseCase personalisedLetterCreatorUseCase() {
+    return new PersonalisedLetterCreatorUseCase(new ResponseLetterReplacer(), new FileSystemFileReader(),
+        fileWriter(), new InMemoryIdService(), settings, applicationLogger);
+  }
+
+  GenerateResponseLetterUseCaseServlet generateResponseLetterUseCase() {
+    return new GenerateResponseLetterUseCaseServlet(new GenerateResponseLetterUnmarshaller(), personalisedLetterCreatorUseCase(), new ExecutorServiceAsyncProcessor());
   }
 }

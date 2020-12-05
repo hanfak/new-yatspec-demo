@@ -1,7 +1,6 @@
 package wiring;
 
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.slf4j.Logger;
 import webserver.JettyWebServer;
 
 import static webserver.factories.JettyWebServerFactory.jettyWebServer;
@@ -9,14 +8,18 @@ import static webserver.factories.ServletBuilder.createServlet;
 
 public class WebserverWiring {
 
-  private final Logger applicationLogger;
+  private final JettyWebServer jettyWebServer;
 
-  public WebserverWiring(Logger applicationLogger) {
-    this.applicationLogger = applicationLogger;
+  private WebserverWiring() {
+    throw new AssertionError("Should not be instantiated outside of static factory method");
   }
 
-  public static WebserverWiring webserverWiring(Logger applicationLogger) {
-    return new WebserverWiring(applicationLogger);
+  private WebserverWiring(JettyWebServer jettyWebServer) {
+    this.jettyWebServer = jettyWebServer;
+  }
+
+  static WebserverWiring webserverWiring(JettyWebServer jettyWebServer) {
+    return new WebserverWiring(jettyWebServer);
   }
 
   JettyWebServer setupWebServer(ApplicationWiring applicationWiring) {
@@ -33,6 +36,6 @@ public class WebserverWiring {
         .addServlet(applicationWiring.useCaseEightServlet(), "/usecaseeight/*")
         .addServlet(applicationWiring.generateResponseLetterUseCase(), "/generateResponseLetter");
 
-    return jettyWebServer(applicationLogger).create(servletContextHandler);
+    return jettyWebServer(jettyWebServer).create(servletContextHandler);
   }
 }

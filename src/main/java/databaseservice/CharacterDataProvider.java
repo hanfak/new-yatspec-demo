@@ -15,6 +15,7 @@ import static org.jooq.sources.Tables.SPECIFIESINFO;
 
 public class CharacterDataProvider implements DataProvider {
 
+  // TODO inject logger, and use in methods
   private final DSLContext dslContext;
 
   // tODO split methods out

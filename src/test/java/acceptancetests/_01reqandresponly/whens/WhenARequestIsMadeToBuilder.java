@@ -10,8 +10,8 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-import static acceptancetests._01reqandresponly.testinfrastructure.AcceptanceTest.REQUEST_FROM_CLIENT_TO_APP;
-import static acceptancetests._01reqandresponly.testinfrastructure.AcceptanceTest.RESPONSE_FROM_APP_TO_CLIENT;
+import static acceptancetests._01reqandresponly.testinfrastructure.YatspecConstants.REQUEST_FROM_CLIENT_TO_APP;
+import static acceptancetests._01reqandresponly.testinfrastructure.YatspecConstants.RESPONSE_FROM_APP_TO_CLIENT;
 
 public class WhenARequestIsMadeToBuilder {
   private final TestState testState;
