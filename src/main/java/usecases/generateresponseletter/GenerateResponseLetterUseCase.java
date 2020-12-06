@@ -11,7 +11,7 @@ import usecases.generateresponseletter.TemplateReplacementFileService.TemplateDa
 import static java.lang.String.format;
 import static java.nio.file.Paths.get;
 
-public class PersonalisedLetterCreatorUseCase implements LetterCreator {
+public class GenerateResponseLetterUseCase implements GenerateResponseLetterUseCasePort {
 
   private final TemplateReplacementFileService templateReplacementFileService;
   private final FileReader<String, String> fileReader;
@@ -20,12 +20,12 @@ public class PersonalisedLetterCreatorUseCase implements LetterCreator {
   private final ResponseLetterSettings settings;
   private final Logger logger;
 
-  public PersonalisedLetterCreatorUseCase(TemplateReplacementFileService templateReplacementFileService,
-                                          FileReader<String, String> fileReader,
-                                          FileWriter fileWriter,
-                                          UniqueIdService uniqueIdService,
-                                          ResponseLetterSettings settings,
-                                          Logger logger) {
+  public GenerateResponseLetterUseCase(TemplateReplacementFileService templateReplacementFileService,
+                                       FileReader<String, String> fileReader,
+                                       FileWriter fileWriter,
+                                       UniqueIdService uniqueIdService,
+                                       ResponseLetterSettings settings,
+                                       Logger logger) {
     this.templateReplacementFileService = templateReplacementFileService;
     this.fileReader = fileReader;
     this.fileWriter = fileWriter;
@@ -35,18 +35,18 @@ public class PersonalisedLetterCreatorUseCase implements LetterCreator {
   }
 
   @Override
-  public void createLetter(UserLetterData data) {
+  public void createLetter(GenerateResponseLetterCommand command) {
     logger.info("Generating file in separate thread");
 
     // TODO: new usecase/flow Add business logic, database call, change return value to result(??)
-    // if(nameService.getnames.contains(data.getName()) {
+    // if(nameService.getnames.contains(command.getName()) {
     //    create letter
 
     // TODO: refactor out to outer layer ??
-    // This can be moved to an outer layer as it is mainly file io, but does contain business logic (what template to use, data etc
+    // This can be moved to an outer layer as it is mainly file io, but does contain business logic (what template to use, command etc
     String template = fileReader.readFile(settings.responseLetterTemplatePath());
-    String responseLetterUpdated = templateReplacementFileService.replacePlaceHolder(template, buildTemplateData(data));
-    String letterName = format(settings.responseLetterFilenameTemplate(), data.getName());
+    String responseLetterUpdated = templateReplacementFileService.replacePlaceHolder(template, buildTemplateData(command));
+    String letterName = format(settings.responseLetterFilenameTemplate(), command.getName());
     fileWriter.write(
         () -> get(letterName),
         responseLetterUpdated);
@@ -56,8 +56,8 @@ public class PersonalisedLetterCreatorUseCase implements LetterCreator {
     logger.info("Generating file has finished");
   }
 
-  private TemplateData buildTemplateData(UserLetterData data) {
-    return new TemplateData(data.getName(), data.getQueryDetails(), data.getDate(), uniqueIdService.execute());
+  private TemplateData buildTemplateData(GenerateResponseLetterCommand command) {
+    return new TemplateData(command.getName(), command.getQueryDetails(), command.getDate(), uniqueIdService.execute());
   }
 
   private void someExtraProcessing() {

@@ -16,7 +16,8 @@ import settings.Settings;
 import thirdparty.AppHttpClient;
 import thirdparty.randomjsonservice.RandomXmlService;
 import thirdparty.starwarsservice.StarWarsService;
-import usecases.generateresponseletter.PersonalisedLetterCreatorUseCase;
+import usecases.generateresponseletter.GenerateResponseLetterUseCase;
+import usecases.generateresponseletter.GenerateResponseLetterUseCasePort;
 import usecases.generateresponseletter.ResponseLetterReplacer;
 import webserver.JettyWebServer;
 import webserver.servlets.*;
@@ -135,12 +136,12 @@ public class ApplicationWiring {
     return new FileSystemWriter(applicationLogger);
   }
 
-  private PersonalisedLetterCreatorUseCase personalisedLetterCreatorUseCase() {
-    return new PersonalisedLetterCreatorUseCase(new ResponseLetterReplacer(), new FileSystemFileReader(),
+  private GenerateResponseLetterUseCasePort generateResponseLetterUseCase() {
+    return new GenerateResponseLetterUseCase(new ResponseLetterReplacer(), new FileSystemFileReader(),
         fileWriter(), new InMemoryIdService(), settings, applicationLogger);
   }
 
-  GenerateResponseLetterUseCaseServlet generateResponseLetterUseCase() {
-    return new GenerateResponseLetterUseCaseServlet(new GenerateResponseLetterUnmarshaller(), personalisedLetterCreatorUseCase(), new ExecutorServiceAsyncProcessor());
+  GenerateResponseLetterUseCaseServlet generateResponseLetterUseCaseServlet() {
+    return new GenerateResponseLetterUseCaseServlet(new GenerateResponseLetterUnmarshaller(), generateResponseLetterUseCase(), new ExecutorServiceAsyncProcessor());
   }
 }

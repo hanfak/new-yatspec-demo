@@ -34,7 +34,7 @@ public class WebserverWiring {
         .addServlet(applicationWiring.useCaseSixServlet(), "/usecasesix/*")
         .addServlet(applicationWiring.useCaseSevenServlet(), "/usecaseseven/*")
         .addServlet(applicationWiring.useCaseEightServlet(), "/usecaseeight/*")
-        .addServlet(applicationWiring.generateResponseLetterUseCase(), "/generateResponseLetter");
+        .addServlet(applicationWiring.generateResponseLetterUseCaseServlet(), "/generateResponseLetter");
 
     return jettyWebServer(jettyWebServer).create(servletContextHandler);
   }

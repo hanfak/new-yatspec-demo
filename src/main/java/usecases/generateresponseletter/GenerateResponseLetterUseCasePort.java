@@ -2,12 +2,13 @@ package usecases.generateresponseletter;
 
 import javax.validation.constraints.NotNull;
 
-public interface LetterCreator {
+@FunctionalInterface
+public interface GenerateResponseLetterUseCasePort {
 
-  void createLetter(UserLetterData data);
+  void createLetter(GenerateResponseLetterCommand command);
 
   // Could just be in domain package as only used in usecase layer
-  final class UserLetterData {
+  final class GenerateResponseLetterCommand {
     // Add validation here, does not pollute usecase code and creates an anti corruption layer
     // as there might be multiple callers from adapters (outer layers)
     // Could do it in the use case, if this object was not part of interface
@@ -16,15 +17,15 @@ public interface LetterCreator {
     @NotNull private final String queryDetails;
     @NotNull private final String date;
 
-    private UserLetterData(String name, String queryDetails, String date) {
+    private GenerateResponseLetterCommand(String name, String queryDetails, String date) {
       this.name = name;
       this.queryDetails = queryDetails;
       this.date = date;
     }
 
-    public static UserLetterData userLetterData(String name, String queryDetails, String date) {
+    public static GenerateResponseLetterCommand userLetterData(String name, String queryDetails, String date) {
       validateDate(date);
-      return new UserLetterData(name, queryDetails, date);
+      return new GenerateResponseLetterCommand(name, queryDetails, date);
     }
 
     private static void validateDate(String date) {

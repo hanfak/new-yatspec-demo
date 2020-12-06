@@ -1,8 +1,8 @@
 package webserver.servlets.generateResponseLetter;
 
 import async.AsyncProcessor;
-import usecases.generateresponseletter.LetterCreator;
-import usecases.generateresponseletter.LetterCreator.UserLetterData;
+import usecases.generateresponseletter.GenerateResponseLetterUseCasePort;
+import usecases.generateresponseletter.GenerateResponseLetterUseCasePort.GenerateResponseLetterCommand;
 import webserver.servlets.Unmarshaller;
 
 import javax.servlet.ServletException;
@@ -12,19 +12,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static usecases.generateresponseletter.LetterCreator.UserLetterData.userLetterData;
+import static usecases.generateresponseletter.GenerateResponseLetterUseCasePort.GenerateResponseLetterCommand.userLetterData;
 
 public class GenerateResponseLetterUseCaseServlet extends HttpServlet {
 
   private final Unmarshaller<ServletInputStream, ReadFileUpdaterDTO> unmarshaller;
-  private final LetterCreator letterCreator;
+  private final GenerateResponseLetterUseCasePort generateResponseLetterUseCasePort;
   private final AsyncProcessor asyncProcessor;
 
   public GenerateResponseLetterUseCaseServlet(Unmarshaller<ServletInputStream, ReadFileUpdaterDTO> unmarshaller,
-                                              LetterCreator letterCreator,
+                                              GenerateResponseLetterUseCasePort generateResponseLetterUseCasePort,
                                               AsyncProcessor asyncProcessor) {
     this.unmarshaller = unmarshaller;
-    this.letterCreator = letterCreator;
+    this.generateResponseLetterUseCasePort = generateResponseLetterUseCasePort;
     this.asyncProcessor = asyncProcessor;
   }
 
@@ -34,9 +34,11 @@ public class GenerateResponseLetterUseCaseServlet extends HttpServlet {
     // But I dont want the jackson logic to be passed to inner layer, it should stay in outer layer. And helps with SRP
     // its a trade off
     ReadFileUpdaterDTO dto = unmarshaller.unmarshall(req.getInputStream());
-    UserLetterData userLetterData = userLetterData(dto.getName(), dto.getQueryDetails(), dto.getDate());
+    GenerateResponseLetterCommand command = userLetterData(dto.getName(), dto.getQueryDetails(), dto.getDate());
 
-    asyncProcessor.process(() -> letterCreator.createLetter(userLetterData));
+    // Debatable whether the async processing should be in usecase or here.
+    // In prod, this will send to a external queue for processing with reliability
+    asyncProcessor.process(() -> generateResponseLetterUseCasePort.createLetter(command));
 
     // This could be extracted to delegate which takes care of creating http response, ie creating json,set status
     resp.getWriter().print("generating file");
