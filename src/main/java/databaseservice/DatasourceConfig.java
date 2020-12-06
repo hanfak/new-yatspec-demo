@@ -10,6 +10,7 @@ public class DatasourceConfig {
   private DatasourceConfig() {
   }
 
+  //TODO change type to HikariDataSource
   public static DataSource createDataSource(Settings settings) {
     HikariConfig config = new HikariConfig();
     config.setJdbcUrl(settings.jdbcUrl());

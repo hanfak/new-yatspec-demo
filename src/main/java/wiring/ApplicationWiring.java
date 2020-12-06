@@ -5,13 +5,22 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import databaseservice.CharacterDataProvider;
 import fileservice.*;
 import httpclient.*;
+import jmsservice.listener.AuditMessageListener;
+import jmsservice.listener.configuration.ApplicationQueueConsumerConfiguration;
+import jmsservice.listener.configuration.QueueConsumerConfiguration;
+import jmsservice.listener.queuelisteners.UseCaseExampleOneStepTwoInstructionListener;
+import jmsservice.sender.ActiveMqMessageSender;
+import jmsservice.sender.AuditMessageSender;
+import jmsservice.sender.MessageSender;
 import logging.LoggingCategory;
+import org.apache.activemq.ActiveMQConnectionFactory;
 import org.eclipse.jetty.server.Server;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jms.core.JmsTemplate;
 import settings.Settings;
 import thirdparty.AppHttpClient;
 import thirdparty.randomjsonservice.RandomXmlService;
@@ -19,14 +28,20 @@ import thirdparty.starwarsservice.StarWarsService;
 import usecases.generateresponseletter.GenerateResponseLetterUseCase;
 import usecases.generateresponseletter.GenerateResponseLetterUseCasePort;
 import usecases.generateresponseletter.ResponseLetterReplacer;
+import usecases.jmsexample.UseCaseExampleOneStepOne;
+import usecases.jmsexample.UseCaseExampleOneStepTwo;
 import webserver.JettyWebServer;
 import webserver.servlets.*;
 import webserver.servlets.generateResponseLetter.GenerateResponseLetterUnmarshaller;
 import webserver.servlets.generateResponseLetter.GenerateResponseLetterUseCaseServlet;
+import webserver.servlets.jmsexample.JmsExampleOneServlet;
 
+import javax.jms.MessageListener;
 import javax.sql.DataSource;
+import java.util.function.UnaryOperator;
 
 import static databaseservice.DatasourceConfig.createDataSource;
+import static jmsservice.QueueName.EXAMPLE_ONE_STEP_ONE_INSTRUCTION;
 
 // can override methods here in subclass for testing
 public class ApplicationWiring {
@@ -40,14 +55,19 @@ public class ApplicationWiring {
   private static class Singletons {
     final DataSource dataSource;
     final WebserverWiring webserverWiring;
+    final ActiveMQConnectionFactory activeMQConnectionFactory;
 
-    public Singletons(DataSource dataSource, WebserverWiring webserverWiring) {
+    public Singletons(DataSource dataSource, WebserverWiring webserverWiring, ActiveMQConnectionFactory activeMQConnectionFactory) {
       this.dataSource = dataSource;
       this.webserverWiring = webserverWiring;
+      this.activeMQConnectionFactory = activeMQConnectionFactory;
     }
   }
 
-  // Can be used to create object graph for test specific purposes
+  public ApplicationWiring() {
+    throw new AssertionError("Should not be instantiated outside of static factory method");
+  }
+
   private ApplicationWiring(Singletons singletons, Settings settings, Logger applicationLogger) {
     this.singletons = singletons;
     this.settings = settings;
@@ -57,12 +77,17 @@ public class ApplicationWiring {
   public static ApplicationWiring wiring(Settings settings, Logger applicationLogger) {
     JettyWebServer jettyWebServer = new JettyWebServer(applicationLogger, new Server(settings.webserverPort()));
     WebserverWiring webserverWiring = WebserverWiring.webserverWiring(jettyWebServer);
-    Singletons singletons = new Singletons(createDataSource(settings), webserverWiring);
+    ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory(settings.brokerUrl());
+    Singletons singletons = new Singletons(createDataSource(settings), webserverWiring, activeMQConnectionFactory);
     return new ApplicationWiring(singletons, settings, applicationLogger);
   }
 
   public DataSource getDataSource() {
     return singletons.dataSource;
+  }
+
+  ActiveMQConnectionFactory activeMQConnectionFactory() {
+    return singletons.activeMQConnectionFactory;
   }
 
   public DSLContext databaseContextFactory() {
@@ -143,5 +168,17 @@ public class ApplicationWiring {
 
   GenerateResponseLetterUseCaseServlet generateResponseLetterUseCaseServlet() {
     return new GenerateResponseLetterUseCaseServlet(new GenerateResponseLetterUnmarshaller(), generateResponseLetterUseCase(), new ExecutorServiceAsyncProcessor());
+  }
+
+  JmsExampleOneServlet jmsExampleOneServlet() {
+    final MessageSender messageSender = new AuditMessageSender(new ActiveMqMessageSender(new JmsTemplate(activeMQConnectionFactory())), AUDIT_LOGGER);
+
+    return new JmsExampleOneServlet(new UseCaseExampleOneStepOne(messageSender));
+  }
+
+  QueueConsumerConfiguration UseCaseExampleOneStepTwoInstructionListener() {
+    MessageListener messageListener = new UseCaseExampleOneStepTwoInstructionListener(new UseCaseExampleOneStepTwo());
+    UnaryOperator<MessageListener> messageListenerDecorator = aMessageListener -> new AuditMessageListener(aMessageListener, AUDIT_LOGGER);
+    return new ApplicationQueueConsumerConfiguration(settings, applicationLogger, EXAMPLE_ONE_STEP_ONE_INSTRUCTION, messageListenerDecorator.apply(messageListener));
   }
 }

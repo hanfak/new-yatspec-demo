@@ -5,7 +5,7 @@ import org.apache.activemq.command.ActiveMQQueue;
 
 public enum QueueName {
 
-    STEP_ONE_INSTRUCTION(new ActiveMQQueue("StepOneInstruction"));
+    EXAMPLE_ONE_STEP_ONE_INSTRUCTION(new ActiveMQQueue("ExampleOneStepOneInstruction"));
 
     private final ActiveMQDestination activeMQDestination;
 

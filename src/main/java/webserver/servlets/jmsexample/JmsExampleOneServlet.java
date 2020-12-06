@@ -1,6 +1,6 @@
 package webserver.servlets.jmsexample;
 
-import usecases.UseCaseStepOne;
+import usecases.jmsexample.UseCaseExampleOneStepOne;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,15 +10,15 @@ import java.io.IOException;
 
 public class JmsExampleOneServlet extends HttpServlet {
 
-  private final UseCaseStepOne useCaseStepOne;
+  private final UseCaseExampleOneStepOne useCaseExampleOneStepOne;
 
-  public JmsExampleOneServlet(UseCaseStepOne useCaseStepOne) {
-    this.useCaseStepOne = useCaseStepOne;
+  public JmsExampleOneServlet(UseCaseExampleOneStepOne useCaseExampleOneStepOne) {
+    this.useCaseExampleOneStepOne = useCaseExampleOneStepOne;
   }
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    useCaseStepOne.execute();
+    useCaseExampleOneStepOne.execute();
 
     // TODO delegate for marshalling json
     resp.getWriter().print("In progress");

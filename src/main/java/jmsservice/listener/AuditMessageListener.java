@@ -13,6 +13,7 @@ import static json.ObjectMapperFactory.createTolerantObjectMapper;
 
 
 public class AuditMessageListener implements MessageListener {
+
     private final MessageListener messageListener;
     private final Logger auditLogger;
 

@@ -1,22 +1,22 @@
 package jmsservice.listener.configuration;
 
 import jmsservice.QueueName;
-import jmsservice.listener.SwitcherooErrorHandler;
+import jmsservice.listener.ApplicationErrorHandler;
 import org.slf4j.Logger;
 import org.springframework.util.ErrorHandler;
 import settings.ActiveMQSettings;
 
 import javax.jms.MessageListener;
 
-public class SwitcherooQueueConsumerConfiguration implements QueueConsumerConfiguration {
+public class ApplicationQueueConsumerConfiguration implements QueueConsumerConfiguration {
 
     private final ActiveMQSettings activeMQSettings;
     private final Logger applicationLogger;
     private final QueueName queueName;
     private final MessageListener messageListener;
 
-    public SwitcherooQueueConsumerConfiguration(ActiveMQSettings activeMQSettings, Logger applicationLogger,
-                                                QueueName queueName, MessageListener messageListener) {
+    public ApplicationQueueConsumerConfiguration(ActiveMQSettings activeMQSettings, Logger applicationLogger,
+                                                 QueueName queueName, MessageListener messageListener) {
         this.activeMQSettings = activeMQSettings;
         this.applicationLogger = applicationLogger;
         this.queueName = queueName;
@@ -35,7 +35,7 @@ public class SwitcherooQueueConsumerConfiguration implements QueueConsumerConfig
 
     @Override
     public ErrorHandler errorHandler() {
-        return new SwitcherooErrorHandler(applicationLogger);
+        return new ApplicationErrorHandler(applicationLogger);
     }
 
     @Override

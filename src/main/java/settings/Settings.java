@@ -66,12 +66,12 @@ public class Settings implements ResponseLetterSettings, StarWarsApiSettings, Ra
 
   @Override
   public Optional<String> getActiveSiteForConsumer(QueueName queueName) {
-    return properties.getOptionalProperty(String.format("switcheroo.queue.%s.active.consumer.site", queueName.getActiveMQDestination().getPhysicalName().toLowerCase()));
+    return properties.getOptionalProperty(String.format("application.queue.%s.active.consumer.site", queueName.getActiveMQDestination().getPhysicalName().toLowerCase()));
   }
 
   @Override
   public int getMaxConsumersFor(QueueName queueName) {
-    String propertyKey = format("switcheroo.queue.%s.max.consumers", queueName.getActiveMQDestination().getPhysicalName().toLowerCase());
+    String propertyKey = format("application.queue.%s.max.consumers", queueName.getActiveMQDestination().getPhysicalName().toLowerCase());
     return Integer.parseInt(properties.getPropertyOrDefaultValue(propertyKey, "1"));
   }
 

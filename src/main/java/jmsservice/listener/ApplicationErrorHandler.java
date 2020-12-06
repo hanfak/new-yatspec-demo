@@ -3,11 +3,11 @@ package jmsservice.listener;
 import org.slf4j.Logger;
 import org.springframework.util.ErrorHandler;
 
-public class SwitcherooErrorHandler implements ErrorHandler {
+public class ApplicationErrorHandler implements ErrorHandler {
 
     private final Logger logger;
 
-    public SwitcherooErrorHandler(Logger logger) {
+    public ApplicationErrorHandler(Logger logger) {
         this.logger = logger;
     }
 
