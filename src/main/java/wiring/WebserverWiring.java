@@ -1,10 +1,10 @@
 package wiring;
 
+import adapters.webserver.JettyWebServer;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import webserver.JettyWebServer;
 
-import static webserver.factories.JettyWebServerFactory.jettyWebServer;
-import static webserver.factories.ServletBuilder.createServlet;
+import static adapters.webserver.factories.JettyWebServerFactory.jettyWebServer;
+import static adapters.webserver.factories.ServletBuilder.createServlet;
 
 public class WebserverWiring {
 

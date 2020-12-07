@@ -7,6 +7,7 @@ import acceptancetests._01reqandresponly.thens.ThenTheResponse;
 import acceptancetests._01reqandresponly.thens.ThenTheResponseVersion2;
 import acceptancetests._01reqandresponly.whens.WhenARequestIsMadeTo;
 import acceptancetests._01reqandresponly.whens.WhenARequestIsMadeToBuilder;
+import adapters.logging.LoggingCategory;
 import com.googlecode.yatspec.junit.SequenceDiagramExtension;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.junit.WithCustomResultListeners;
@@ -16,7 +17,6 @@ import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
-import logging.LoggingCategory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,8 +29,8 @@ import java.net.http.HttpResponse;
 import java.util.Collection;
 import java.util.List;
 
+import static adapters.settings.PropertyLoader.load;
 import static org.slf4j.LoggerFactory.getLogger;
-import static settings.PropertyLoader.load;
 
 @ExtendWith(SequenceDiagramExtension.class)
 public class AcceptanceTest implements WithCustomResultListeners {

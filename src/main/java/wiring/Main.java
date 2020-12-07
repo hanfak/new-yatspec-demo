@@ -1,6 +1,6 @@
 package wiring;
 
-import logging.LoggingCategory;
+import adapters.logging.LoggingCategory;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;

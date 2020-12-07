@@ -3,7 +3,7 @@ package acceptancetests._02databasepriming.testinfrastructure;
 import acceptancetests._02databasepriming.givens.CharacterInfoRecord;
 import acceptancetests._02databasepriming.givens.SpeciesInfoId;
 import acceptancetests._02databasepriming.givens.SpeciesInfoRecord;
-import logging.LoggingCategory;
+import adapters.logging.LoggingCategory;
 import org.jooq.DSLContext;
 import org.jooq.Record4;
 import org.jooq.Record5;

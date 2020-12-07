@@ -1,18 +1,29 @@
 package wiring;
 
-import async.ExecutorServiceAsyncProcessor;
+import adapters.async.ExecutorServiceAsyncProcessor;
+import adapters.databaseservice.CharacterDataProvider;
+import adapters.fileservice.FileService;
+import adapters.fileservice.FileSystemWriter;
+import adapters.fileservice.InMemoryIdService;
+import adapters.fileservice.MyFileService;
+import adapters.httpclient.*;
+import adapters.jmsservice.listener.instructions.JsonInstructionsFactory;
+import adapters.jmsservice.sender.ActiveMqMessageSender;
+import adapters.jmsservice.sender.AuditMessageSender;
+import adapters.logging.LoggingCategory;
+import adapters.settings.Settings;
+import adapters.thirdparty.AppHttpClient;
+import adapters.thirdparty.randomjsonservice.RandomXmlService;
+import adapters.thirdparty.starwarsservice.StarWarsService;
+import adapters.webserver.JettyWebServer;
+import adapters.webserver.servlets.*;
+import adapters.webserver.servlets.generateResponseLetter.GenerateResponseLetterUnmarshaller;
+import adapters.webserver.servlets.generateResponseLetter.GenerateResponseLetterUseCaseServlet;
+import adapters.webserver.servlets.jmsexample.JmsExampleOneServlet;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import databaseservice.CharacterDataProvider;
-import fileservice.FileService;
-import fileservice.FileSystemWriter;
-import fileservice.InMemoryIdService;
-import fileservice.MyFileService;
-import httpclient.*;
-import jmsservice.listener.instructions.JsonInstructionsFactory;
-import jmsservice.sender.ActiveMqMessageSender;
-import jmsservice.sender.AuditMessageSender;
-import jmsservice.sender.MessageSender;
-import logging.LoggingCategory;
+import core.usecases.ports.incoming.GenerateResponseLetterUseCasePort;
+import core.usecases.ports.outgoing.MessageSender;
+import core.usecases.services.jmsexample.UseCaseExampleOneStepOne;
 import org.eclipse.jetty.server.Server;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -20,21 +31,10 @@ import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.core.JmsTemplate;
-import settings.Settings;
-import thirdparty.AppHttpClient;
-import thirdparty.randomjsonservice.RandomXmlService;
-import thirdparty.starwarsservice.StarWarsService;
-import usecases.generateresponseletter.GenerateResponseLetterUseCasePort;
-import usecases.jmsexample.UseCaseExampleOneStepOne;
-import webserver.JettyWebServer;
-import webserver.servlets.*;
-import webserver.servlets.generateResponseLetter.GenerateResponseLetterUnmarshaller;
-import webserver.servlets.generateResponseLetter.GenerateResponseLetterUseCaseServlet;
-import webserver.servlets.jmsexample.JmsExampleOneServlet;
 
 import javax.sql.DataSource;
 
-import static databaseservice.DatasourceConfig.createDataSource;
+import static adapters.databaseservice.DatasourceConfig.createDataSource;
 import static wiring.JmsWiring.jmsWiring;
 import static wiring.WebserverWiring.webserverWiring;
 
@@ -120,7 +120,7 @@ public class ApplicationWiring {
     return new StarWarsService(appHttpClient(), settings);
   }
 
-  private RandomXmlService randomXmlService() {
+  private ActivityService randomXmlService() {
     return new RandomXmlService(appHttpClient(), settings);
   }
   // TODO extract to client wiring

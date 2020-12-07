@@ -1,21 +1,21 @@
 package wiring;
 
-import jmsservice.listener.ApplicationMessageListener;
-import jmsservice.listener.AuditMessageListener;
-import jmsservice.listener.configuration.ApplicationQueueConsumerConfiguration;
-import jmsservice.listener.configuration.ConfigurableDefaultMessageListenerContainer;
-import jmsservice.listener.configuration.QueueConsumerConfiguration;
-import jmsservice.listener.queuelisteners.UseCaseExampleOneStepTwoInstructionListener;
+import adapters.jmsservice.listener.ApplicationMessageListener;
+import adapters.jmsservice.listener.AuditMessageListener;
+import adapters.jmsservice.listener.configuration.ApplicationQueueConsumerConfiguration;
+import adapters.jmsservice.listener.configuration.ConfigurableDefaultMessageListenerContainer;
+import adapters.jmsservice.listener.configuration.QueueConsumerConfiguration;
+import adapters.jmsservice.listener.queuelisteners.UseCaseExampleOneStepTwoInstructionListener;
+import adapters.settings.Settings;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
-import settings.Settings;
 
 import javax.jms.MessageListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-import static jmsservice.QueueName.EXAMPLE_ONE_STEP_ONE_INSTRUCTION;
+import static adapters.jmsservice.QueueName.EXAMPLE_ONE_STEP_ONE_INSTRUCTION;
 
 public class JmsWiring {
 

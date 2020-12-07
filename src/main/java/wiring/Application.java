@@ -1,11 +1,11 @@
 package wiring;
 
+import adapters.webserver.JettyWebServer;
 import org.slf4j.Logger;
-import webserver.JettyWebServer;
 
 import javax.sql.DataSource;
 
-import static settings.PropertyLoader.load;
+import static adapters.settings.PropertyLoader.load;
 
 public final class Application {
 

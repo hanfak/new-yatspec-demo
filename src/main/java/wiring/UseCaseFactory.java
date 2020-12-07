@@ -1,14 +1,14 @@
 package wiring;
 
-import fileservice.FileSystemFileReader;
-import fileservice.FileWriter;
-import fileservice.InMemoryIdService;
+import adapters.fileservice.FileSystemFileReader;
+import adapters.fileservice.InMemoryIdService;
+import adapters.settings.Settings;
+import core.usecases.ports.incoming.GenerateResponseLetterUseCasePort;
+import core.usecases.ports.outgoing.FileWriter;
+import core.usecases.services.generateresponseletter.GenerateResponseLetterUseCase;
+import core.usecases.services.generateresponseletter.ResponseLetterReplacer;
+import core.usecases.services.jmsexample.UseCaseExampleOneStepTwo;
 import org.slf4j.Logger;
-import settings.Settings;
-import usecases.generateresponseletter.GenerateResponseLetterUseCase;
-import usecases.generateresponseletter.GenerateResponseLetterUseCasePort;
-import usecases.generateresponseletter.ResponseLetterReplacer;
-import usecases.jmsexample.UseCaseExampleOneStepTwo;
 
 public class UseCaseFactory {
 

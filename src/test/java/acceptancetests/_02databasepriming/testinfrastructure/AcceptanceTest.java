@@ -8,6 +8,7 @@ import acceptancetests._02databasepriming.thens.ThenTheCharacterInfoDatabaseCont
 import acceptancetests._02databasepriming.thens.ThenTheDatabaseContains;
 import acceptancetests._02databasepriming.thens.ThenTheResponseVersion2;
 import acceptancetests._02databasepriming.whens.WhenARequestIsMadeToBuilder;
+import adapters.logging.LoggingCategory;
 import com.googlecode.yatspec.junit.SequenceDiagramExtension;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.junit.WithCustomResultListeners;
@@ -17,7 +18,6 @@ import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
-import logging.LoggingCategory;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -34,8 +34,8 @@ import java.net.http.HttpResponse;
 import java.util.Collection;
 import java.util.List;
 
+import static adapters.settings.PropertyLoader.load;
 import static org.slf4j.LoggerFactory.getLogger;
-import static settings.PropertyLoader.load;
 
 @ExtendWith(SequenceDiagramExtension.class)
 public class AcceptanceTest implements WithCustomResultListeners {

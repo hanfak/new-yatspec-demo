@@ -1,7 +1,7 @@
 package acceptancetests._01reqandresponly.testinfrastructure.renderers;
 
+import adapters.httpclient.HttpResponseFormatter;
 import com.googlecode.yatspec.rendering.Renderer;
-import httpclient.HttpResponseFormatter;
 
 import java.net.http.HttpResponse;
 

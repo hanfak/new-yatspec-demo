@@ -1,7 +1,7 @@
 package acceptancetests._02databasepriming.testinfrastructure.renderers;
 
+import adapters.httpclient.HttpRequestFormatter;
 import com.googlecode.yatspec.rendering.Renderer;
-import httpclient.HttpRequestFormatter;
 
 import java.net.http.HttpRequest;
 
