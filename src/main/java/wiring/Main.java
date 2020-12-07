@@ -7,6 +7,7 @@ import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 
 import static org.jooq.sources.Tables.CHARACTERINFO;
+import static org.jooq.sources.Tables.CHARACTERS;
 import static org.jooq.sources.Tables.SPECIFIESINFO;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -32,11 +33,16 @@ public final class Main {
     APPLICATION_LOGGER.info("cleaning data");
     dslContext.deleteFrom(CHARACTERINFO).execute();
     dslContext.deleteFrom(SPECIFIESINFO).execute();
+    dslContext.deleteFrom(CHARACTERS).execute();
   }
 
   // Some data to use in running app for some end points
   private static void populateDatabase(DSLContext dslContext) {
     APPLICATION_LOGGER.info("inserting data");
+    dslContext.insertInto(CHARACTERS)
+        .set(CHARACTERS.PERSON_ID, 1)
+        .set(CHARACTERS.PERSON_NAME, "Luke Skywalker")
+        .execute();
     dslContext.insertInto(SPECIFIESINFO)
         .set(SPECIFIESINFO.PERSON_ID, 1)
         .set(SPECIFIESINFO.SPECIES, "human")
@@ -47,6 +53,10 @@ public final class Main {
         .set(CHARACTERINFO.PERSON_ID, 1)
         .set(CHARACTERINFO.PERSON_NAME, "Luke Skywalker")
         .set(CHARACTERINFO.BIRTH_YEAR, "1000")
+        .execute();
+    dslContext.insertInto(CHARACTERS)
+        .set(CHARACTERS.PERSON_ID, 20)
+        .set(CHARACTERS.PERSON_NAME, "Yoda")
         .execute();
     dslContext.insertInto(SPECIFIESINFO)
         .set(SPECIFIESINFO.PERSON_ID, 20)

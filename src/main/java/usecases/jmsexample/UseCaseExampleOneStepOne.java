@@ -1,30 +1,34 @@
 package usecases.jmsexample;
 
-import jmsservice.listener.instructions.UseCaseExampleOneStepTwoInstruction;
+import com.google.common.util.concurrent.UncheckedExecutionException;
 import jmsservice.sender.MessageSender;
+import org.slf4j.Logger;
 
 import static jmsservice.QueueName.EXAMPLE_ONE_STEP_ONE_INSTRUCTION;
-import static json.JsonUtils.jsonRepresentationOrBlowUpOf;
 
 // Called from web request from servlet
 public class UseCaseExampleOneStepOne {
 
   private final MessageSender messageSender;
+  private final InstructionFactory instructionFactory;
+  private final Logger logger;
 
-  public UseCaseExampleOneStepOne(MessageSender messageSender) {
+  public UseCaseExampleOneStepOne(MessageSender messageSender, InstructionFactory instructionFactory, Logger applicationLogger) {
     this.messageSender = messageSender;
+    this.instructionFactory = instructionFactory;
+    this.logger = applicationLogger;
   }
 
   public void execute() {
     // Can do some preprocessing first
-    System.out.println("**** Preprocessing ******");
-    // Pass message using data from database to queue
-    messageSender.send(EXAMPLE_ONE_STEP_ONE_INSTRUCTION, createInstruction());
-    System.out.println("**** Message sent ******");
+    logger.info("**** Preprocessing ******");
+    try {
+      Thread.sleep(2000);
+    } catch (InterruptedException e) {
+      throw new UncheckedExecutionException(e);
+    }
 
-  }
-
-  private String createInstruction() {
-    return jsonRepresentationOrBlowUpOf(new UseCaseExampleOneStepTwoInstruction(1L, "Blah"));
+    messageSender.send(EXAMPLE_ONE_STEP_ONE_INSTRUCTION, instructionFactory.createUseCaseExampleOneStepTwoInstruction(1L, "blah"));
+    logger.info("**** Message sent ******");
   }
 }

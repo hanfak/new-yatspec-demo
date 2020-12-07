@@ -13,6 +13,8 @@
 - linking notes
 - dictionary
 - ~~Extract dabaseconfiguration as singleton and extract out~~
+- upgrade yatspec
+    - fix custom rendering for matching on interfaces as well as objects
 
 - new usecase to test rules
       - use rules engine
