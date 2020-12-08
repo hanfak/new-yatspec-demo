@@ -32,6 +32,7 @@ public class UseCaseExampleOneStepOne implements UseCase {
     }
 
     messageService.send(LOCATION, instructionFactory.createUseCaseExampleOneStepTwoInstruction(1L, "blah"));
+
     logger.info("**** Message sent ******");
   }
 }

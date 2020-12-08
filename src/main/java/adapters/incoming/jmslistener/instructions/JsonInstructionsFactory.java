@@ -7,6 +7,6 @@ import static adapters.json.JsonUtils.jsonRepresentationOrBlowUpOf;
 public class JsonInstructionsFactory implements InstructionFactory {
   @Override
   public String createUseCaseExampleOneStepTwoInstruction(Long id, String value) {
-    return jsonRepresentationOrBlowUpOf(new UseCaseExampleOneStepTwoInstruction(id, value));
+    return jsonRepresentationOrBlowUpOf(new UseCaseExampleOneStepTwoMessagePayload(id, value));
   }
 }

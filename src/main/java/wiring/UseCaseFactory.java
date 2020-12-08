@@ -4,6 +4,7 @@ import adapters.libraries.ApacheCommonsLang3Adapter;
 import adapters.outgoing.fileservice.FileSystemFileReader;
 import adapters.outgoing.fileservice.InMemoryIdService;
 import adapters.settings.internal.Settings;
+import core.usecases.ports.incoming.ExampleOneStepTwoService;
 import core.usecases.ports.incoming.GenerateResponseLetterUseCasePort;
 import core.usecases.ports.outgoing.FileWriter;
 import core.usecases.services.generateresponseletter.GenerateResponseLetterUseCase;
@@ -21,7 +22,7 @@ public class UseCaseFactory {
     this.settings = settings;
   }
 
-  UseCaseExampleOneStepTwo useCaseExampleOneStepTwo() {
+  ExampleOneStepTwoService useCaseExampleOneStepTwo() {
     return new UseCaseExampleOneStepTwo(logger);
   }
 

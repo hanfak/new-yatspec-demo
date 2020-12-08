@@ -1,10 +1,9 @@
 package core.usecases.services.jmsexample;
 
-import adapters.incoming.jmslistener.instructions.UseCaseExampleOneStepTwoInstruction;
-import com.google.common.util.concurrent.UncheckedExecutionException;
+import core.usecases.ports.incoming.ExampleOneStepTwoService;
 import org.slf4j.Logger;
 
-public class UseCaseExampleOneStepTwo {
+public class UseCaseExampleOneStepTwo implements ExampleOneStepTwoService {
 
   private final Logger logger;
 
@@ -13,7 +12,7 @@ public class UseCaseExampleOneStepTwo {
   }
 
   // Mapping for instruction via interface
-  public void execute(UseCaseExampleOneStepTwoInstruction instruction) {
+  public void execute(ExampleOneStepTwoIncomingInstruction instruction) {
     // Get info from starwars api
     //    Person characterInfo = starWarsInterfaceService.getCharacterInfo(instruction.getValue());
     logger.info("**** processing of message instruction ******");
@@ -24,7 +23,7 @@ public class UseCaseExampleOneStepTwo {
     try {
       Thread.sleep(5000);
     } catch (InterruptedException e) {
-      throw new UncheckedExecutionException(e);
+      throw new IllegalArgumentException(e);
     }
 
     logger.info("**** Respond when finished ie some file/database/email/request to a user ******");
