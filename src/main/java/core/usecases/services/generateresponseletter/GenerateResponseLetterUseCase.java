@@ -1,6 +1,6 @@
 package core.usecases.services.generateresponseletter;
 
-import adapters.settings.ResponseLetterSettings;
+import adapters.settings.api.ResponseLetterSettings;
 import core.usecases.ports.incoming.GenerateResponseLetterUseCasePort;
 import core.usecases.ports.outgoing.FileReader;
 import core.usecases.ports.outgoing.FileWriter;

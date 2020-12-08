@@ -1,8 +1,8 @@
 package wiring;
 
-import adapters.fileservice.FileSystemFileReader;
-import adapters.fileservice.InMemoryIdService;
-import adapters.settings.Settings;
+import adapters.outgoing.fileservice.FileSystemFileReader;
+import adapters.outgoing.fileservice.InMemoryIdService;
+import adapters.settings.internal.Settings;
 import core.usecases.ports.incoming.GenerateResponseLetterUseCasePort;
 import core.usecases.ports.outgoing.FileWriter;
 import core.usecases.services.generateresponseletter.GenerateResponseLetterUseCase;

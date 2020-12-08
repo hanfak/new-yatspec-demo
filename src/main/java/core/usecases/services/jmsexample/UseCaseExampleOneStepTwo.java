@@ -1,6 +1,6 @@
 package core.usecases.services.jmsexample;
 
-import adapters.jmsservice.listener.instructions.UseCaseExampleOneStepTwoInstruction;
+import adapters.incoming.jmslistener.instructions.UseCaseExampleOneStepTwoInstruction;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import org.slf4j.Logger;
 

@@ -1,12 +1,12 @@
 package wiring;
 
-import adapters.jmsservice.listener.ApplicationMessageListener;
-import adapters.jmsservice.listener.AuditMessageListener;
-import adapters.jmsservice.listener.configuration.ApplicationQueueConsumerConfiguration;
-import adapters.jmsservice.listener.configuration.ConfigurableDefaultMessageListenerContainer;
-import adapters.jmsservice.listener.configuration.QueueConsumerConfiguration;
-import adapters.jmsservice.listener.queuelisteners.UseCaseExampleOneStepTwoInstructionListener;
-import adapters.settings.Settings;
+import adapters.incoming.jmslistener.ApplicationMessageListener;
+import adapters.incoming.jmslistener.AuditMessageListener;
+import adapters.incoming.jmslistener.configuration.ApplicationQueueConsumerConfiguration;
+import adapters.incoming.jmslistener.configuration.ConfigurableDefaultMessageListenerContainer;
+import adapters.incoming.jmslistener.configuration.QueueConsumerConfiguration;
+import adapters.incoming.jmslistener.queuelisteners.UseCaseExampleOneStepTwoInstructionListener;
+import adapters.settings.internal.Settings;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
 

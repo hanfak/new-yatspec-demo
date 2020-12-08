@@ -1,25 +1,25 @@
 package wiring;
 
 import adapters.async.ExecutorServiceAsyncProcessor;
-import adapters.databaseservice.CharacterDataProvider;
-import adapters.fileservice.FileService;
-import adapters.fileservice.FileSystemWriter;
-import adapters.fileservice.InMemoryIdService;
-import adapters.fileservice.MyFileService;
-import adapters.httpclient.*;
-import adapters.jmsservice.listener.instructions.JsonInstructionsFactory;
-import adapters.jmsservice.sender.ActiveMqMessageSender;
-import adapters.jmsservice.sender.AuditMessageSender;
+import adapters.incoming.jmslistener.instructions.JsonInstructionsFactory;
+import adapters.incoming.webserver.JettyWebServer;
+import adapters.incoming.webserver.servlets.*;
+import adapters.incoming.webserver.servlets.generateResponseLetter.GenerateResponseLetterUnmarshaller;
+import adapters.incoming.webserver.servlets.generateResponseLetter.GenerateResponseLetterUseCaseServlet;
+import adapters.incoming.webserver.servlets.jmsexample.JmsExampleOneServlet;
 import adapters.logging.LoggingCategory;
-import adapters.settings.Settings;
-import adapters.thirdparty.AppHttpClient;
-import adapters.thirdparty.randomjsonservice.RandomXmlService;
-import adapters.thirdparty.starwarsservice.StarWarsService;
-import adapters.webserver.JettyWebServer;
-import adapters.webserver.servlets.*;
-import adapters.webserver.servlets.generateResponseLetter.GenerateResponseLetterUnmarshaller;
-import adapters.webserver.servlets.generateResponseLetter.GenerateResponseLetterUseCaseServlet;
-import adapters.webserver.servlets.jmsexample.JmsExampleOneServlet;
+import adapters.outgoing.databaseservice.CharacterDataProvider;
+import adapters.outgoing.fileservice.FileService;
+import adapters.outgoing.fileservice.FileSystemWriter;
+import adapters.outgoing.fileservice.InMemoryIdService;
+import adapters.outgoing.fileservice.MyFileService;
+import adapters.outgoing.httpclient.*;
+import adapters.outgoing.jmssender.ActiveMqMessageSender;
+import adapters.outgoing.jmssender.AuditMessageSender;
+import adapters.outgoing.thirdparty.AppHttpClient;
+import adapters.outgoing.thirdparty.randomjsonservice.RandomXmlService;
+import adapters.outgoing.thirdparty.starwarsservice.StarWarsService;
+import adapters.settings.internal.Settings;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import core.usecases.ports.incoming.GenerateResponseLetterUseCasePort;
 import core.usecases.ports.outgoing.MessageSender;
@@ -34,7 +34,7 @@ import org.springframework.jms.core.JmsTemplate;
 
 import javax.sql.DataSource;
 
-import static adapters.databaseservice.DatasourceConfig.createDataSource;
+import static adapters.outgoing.databaseservice.DatasourceConfig.createDataSource;
 import static wiring.JmsWiring.jmsWiring;
 import static wiring.WebserverWiring.webserverWiring;
 

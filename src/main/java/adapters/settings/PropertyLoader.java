@@ -1,6 +1,7 @@
 package adapters.settings;
 
 import adapters.logging.LoggingCategory;
+import adapters.settings.internal.Settings;
 import org.slf4j.Logger;
 
 import java.io.FileInputStream;

@@ -1,6 +1,6 @@
 package wiring;
 
-import adapters.webserver.JettyWebServer;
+import adapters.incoming.webserver.JettyWebServer;
 import org.slf4j.Logger;
 
 import javax.sql.DataSource;
