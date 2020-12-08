@@ -5,6 +5,7 @@ import org.apache.activemq.command.ActiveMQQueue;
 
 import java.util.Arrays;
 
+// todo Should be split for listener and sender
 public enum QueueName {
 
     EXAMPLE_ONE_STEP_ONE_QUEUE(new ActiveMQQueue("ExampleOneStepOneQueue"));

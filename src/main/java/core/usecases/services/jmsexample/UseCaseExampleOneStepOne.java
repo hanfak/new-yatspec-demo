@@ -1,6 +1,5 @@
 package core.usecases.services.jmsexample;
 
-import com.google.common.util.concurrent.UncheckedExecutionException;
 import core.usecases.ports.incoming.UseCase;
 import core.usecases.ports.outgoing.InstructionFactory;
 import core.usecases.ports.outgoing.MessageService;
@@ -28,7 +27,7 @@ public class UseCaseExampleOneStepOne implements UseCase {
     try {
       Thread.sleep(2000);
     } catch (InterruptedException e) {
-      throw new UncheckedExecutionException(e);
+      throw new IllegalStateException(e);
     }
 
     messageService.send(LOCATION, instructionFactory.createUseCaseExampleOneStepTwoInstruction(1L, "blah"));
