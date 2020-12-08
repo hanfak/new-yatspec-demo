@@ -1,23 +1,23 @@
 package adapters.outgoing.jmssender;
 
-import adapters.jmsservice.QueueName;
-import core.usecases.ports.outgoing.MessageSender;
+import core.usecases.ports.outgoing.MessageService;
 import org.apache.activemq.command.ActiveMQTextMessage;
 import org.springframework.jms.core.JmsTemplate;
 
+import static adapters.jmsservice.QueueName.lookupQueue;
 import static javax.jms.DeliveryMode.PERSISTENT;
 import static javax.jms.Session.AUTO_ACKNOWLEDGE;
 
-public class ActiveMqMessageSender implements MessageSender {
+public class ActiveMqMessageService implements MessageService {
 
     private final JmsTemplate jmsTemplate;
 
-    public ActiveMqMessageSender(JmsTemplate jmsTemplate) {
+    public ActiveMqMessageService(JmsTemplate jmsTemplate) {
         this.jmsTemplate = jmsTemplate;
     }
 
     @Override
-    public void send(QueueName queueName, String payload) {
+    public void send(String queueName, String payload) {
         jmsTemplate.setSessionAcknowledgeMode(AUTO_ACKNOWLEDGE);
         jmsTemplate.setDeliveryMode(PERSISTENT);
 
@@ -25,7 +25,7 @@ public class ActiveMqMessageSender implements MessageSender {
             ActiveMQTextMessage activeMQTextMessage = new ActiveMQTextMessage();
             activeMQTextMessage.setText(payload);
 
-            jmsTemplate.convertAndSend(queueName.getActiveMQDestination(), activeMQTextMessage);
+            jmsTemplate.convertAndSend(lookupQueue(queueName).getActiveMQDestination(), activeMQTextMessage);
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }

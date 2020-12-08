@@ -14,15 +14,15 @@ import adapters.outgoing.fileservice.FileSystemWriter;
 import adapters.outgoing.fileservice.InMemoryIdService;
 import adapters.outgoing.fileservice.MyFileService;
 import adapters.outgoing.httpclient.*;
-import adapters.outgoing.jmssender.ActiveMqMessageSender;
-import adapters.outgoing.jmssender.AuditMessageSender;
+import adapters.outgoing.jmssender.ActiveMqMessageService;
+import adapters.outgoing.jmssender.AuditMessageService;
 import adapters.outgoing.thirdparty.AppHttpClient;
 import adapters.outgoing.thirdparty.randomjsonservice.RandomXmlService;
 import adapters.outgoing.thirdparty.starwarsservice.StarWarsService;
 import adapters.settings.internal.Settings;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import core.usecases.ports.incoming.GenerateResponseLetterUseCasePort;
-import core.usecases.ports.outgoing.MessageSender;
+import core.usecases.ports.outgoing.MessageService;
 import core.usecases.services.jmsexample.UseCaseExampleOneStepOne;
 import org.eclipse.jetty.server.Server;
 import org.jooq.DSLContext;
@@ -179,9 +179,9 @@ public class ApplicationWiring {
 
   JmsExampleOneServlet jmsExampleOneServlet() {
     JmsTemplate jmsTemplate = new JmsTemplate(singletons.jmsWiring.activeMQConnectionFactory());
-    MessageSender messageSender = new AuditMessageSender(new ActiveMqMessageSender(jmsTemplate), AUDIT_LOGGER);
+    MessageService messageService = new AuditMessageService(new ActiveMqMessageService(jmsTemplate), AUDIT_LOGGER);
 
-    return new JmsExampleOneServlet(new UseCaseExampleOneStepOne(messageSender, jsonInstructionFactory(), applicationLogger));
+    return new JmsExampleOneServlet(new UseCaseExampleOneStepOne(messageService, jsonInstructionFactory(), applicationLogger));
   }
 
   private JsonInstructionsFactory jsonInstructionFactory() {

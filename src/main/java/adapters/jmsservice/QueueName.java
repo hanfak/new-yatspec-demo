@@ -3,9 +3,11 @@ package adapters.jmsservice;
 import org.apache.activemq.command.ActiveMQDestination;
 import org.apache.activemq.command.ActiveMQQueue;
 
+import java.util.Arrays;
+
 public enum QueueName {
 
-    EXAMPLE_ONE_STEP_ONE_INSTRUCTION(new ActiveMQQueue("ExampleOneStepOneInstruction"));
+    EXAMPLE_ONE_STEP_ONE_QUEUE(new ActiveMQQueue("ExampleOneStepOneQueue"));
 
     private final ActiveMQDestination activeMQDestination;
 
@@ -15,5 +17,12 @@ public enum QueueName {
 
     public ActiveMQDestination getActiveMQDestination() {
         return activeMQDestination;
+    }
+
+    public static QueueName lookupQueue(String queueName) {
+        return Arrays.stream(QueueName.values())
+            .filter(value -> value.activeMQDestination.getPhysicalName().equalsIgnoreCase(queueName))
+            .findFirst()
+            .orElseThrow(IllegalArgumentException::new);
     }
 }

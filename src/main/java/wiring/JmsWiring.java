@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-import static adapters.jmsservice.QueueName.EXAMPLE_ONE_STEP_ONE_INSTRUCTION;
+import static adapters.jmsservice.QueueName.EXAMPLE_ONE_STEP_ONE_QUEUE;
 
 public class JmsWiring {
 
@@ -76,6 +76,6 @@ public class JmsWiring {
   QueueConsumerConfiguration useCaseExampleOneStepTwoInstructionListener() {
     MessageListener messageListener = new UseCaseExampleOneStepTwoInstructionListener(useCaseFactory.useCaseExampleOneStepTwo());
     UnaryOperator<MessageListener> messageListenerDecorator = aMessageListener -> new AuditMessageListener(aMessageListener, auditLogger);
-    return new ApplicationQueueConsumerConfiguration(settings, applicationLogger, EXAMPLE_ONE_STEP_ONE_INSTRUCTION, messageListenerDecorator.apply(messageListener));
+    return new ApplicationQueueConsumerConfiguration(settings, applicationLogger, EXAMPLE_ONE_STEP_ONE_QUEUE, messageListenerDecorator.apply(messageListener));
   }
 }
