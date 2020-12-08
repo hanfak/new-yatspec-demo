@@ -12,6 +12,9 @@ import org.slf4j.Logger;
 import static java.lang.String.format;
 import static java.nio.file.Paths.get;
 
+// slf4j is 3rd party, and should be be wrapped in interface, but it is already an interface
+// and there is an acceptable and conscious decision to allow it in the Core package
+
 public class GenerateResponseLetterUseCase implements GenerateResponseLetterUseCasePort {
 
   private final TemplateReplacementFileService templateReplacementFileService;

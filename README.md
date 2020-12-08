@@ -15,6 +15,10 @@ Requirements
 
 ## Examples Contents
 
+- Source files 
+    - Clean architecture
+    - No framwork
+
 - Http request and response 
     - use of @Notes, to add comments for reader
     - Custom Assertj assertions, create fluent thens and readable assertions

@@ -1,5 +1,6 @@
 package wiring;
 
+import adapters.libraries.ApacheCommonsLang3Adapter;
 import adapters.outgoing.fileservice.FileSystemFileReader;
 import adapters.outgoing.fileservice.InMemoryIdService;
 import adapters.settings.internal.Settings;
@@ -25,7 +26,11 @@ public class UseCaseFactory {
   }
 
   GenerateResponseLetterUseCasePort generateResponseLetterUseCase(FileWriter fileWriter) {
-    return new GenerateResponseLetterUseCase(new ResponseLetterReplacer(), new FileSystemFileReader(),
-        fileWriter, new InMemoryIdService(), settings, logger);
+    ResponseLetterReplacer templateReplacementFileService = new ResponseLetterReplacer(new ApacheCommonsLang3Adapter());
+    return new GenerateResponseLetterUseCase(
+        templateReplacementFileService,
+        new FileSystemFileReader(),
+        fileWriter,
+        new InMemoryIdService(), settings, logger);
   }
 }
