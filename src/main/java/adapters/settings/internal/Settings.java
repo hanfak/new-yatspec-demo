@@ -1,7 +1,11 @@
 package adapters.settings.internal;
 
 import adapters.jmsservice.QueueName;
-import adapters.settings.api.*;
+import adapters.settings.api.ActiveMQSettings;
+import adapters.settings.api.DatabaseSettings;
+import adapters.settings.api.RandomJsonApiSettings;
+import adapters.settings.api.StarWarsApiSettings;
+import core.usecases.ports.outgoing.ResponseLetterSettings;
 import org.slf4j.Logger;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package adapters.settings.api;
+package core.usecases.ports.outgoing;
 
 public interface ResponseLetterSettings {
   String responseLetterTemplatePath();

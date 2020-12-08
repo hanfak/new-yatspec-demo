@@ -1,12 +1,8 @@
 package core.usecases.services.generateresponseletter;
 
-import adapters.settings.api.ResponseLetterSettings;
 import core.usecases.ports.incoming.GenerateResponseLetterUseCasePort;
-import core.usecases.ports.outgoing.FileReader;
-import core.usecases.ports.outgoing.FileWriter;
-import core.usecases.ports.outgoing.TemplateReplacementFileService;
+import core.usecases.ports.outgoing.*;
 import core.usecases.ports.outgoing.TemplateReplacementFileService.TemplateData;
-import core.usecases.ports.outgoing.UniqueIdService;
 import org.slf4j.Logger;
 
 import static java.lang.String.format;
