@@ -3,6 +3,10 @@ example
 - listen to queue and call another usecase
 - Create messageListenerfactory in wiring
 
+TODO:
+- [LOG_START] [LOG_TYPE=APP] 2020-12-09 18:00:12,082 [ActiveMQ Task-1] INFO (FailoverTransport: 1065) - Successfully connected to nio://localhost:61616 [LOG_END]
+- This log is happenning twice. Need only connect once to broker
+
 example 
 - usecase send to queue, with different instructions
 - listen to queue, and depending on instruction sends to different usecases

@@ -7,6 +7,7 @@ import adapters.incoming.webserver.servlets.*;
 import adapters.incoming.webserver.servlets.generateResponseLetter.GenerateResponseLetterUnmarshaller;
 import adapters.incoming.webserver.servlets.generateResponseLetter.GenerateResponseLetterUseCaseServlet;
 import adapters.incoming.webserver.servlets.jmsexample.JmsExampleOneServlet;
+import adapters.incoming.webserver.servlets.jmsexample.JmsExampleTwoServlet;
 import adapters.logging.LoggingCategory;
 import adapters.outgoing.databaseservice.CharacterDataProvider;
 import adapters.outgoing.fileservice.FileService;
@@ -24,6 +25,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import core.usecases.ports.incoming.GenerateResponseLetterUseCasePort;
 import core.usecases.ports.outgoing.MessageService;
 import core.usecases.services.jmsexample.UseCaseExampleOneStepOne;
+import core.usecases.services.jmsexample.exampletwo.UseCaseExampleTwoStepOne;
 import org.eclipse.jetty.server.Server;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -178,10 +180,17 @@ public class ApplicationWiring {
   }
 
   JmsExampleOneServlet jmsExampleOneServlet() {
-    JmsTemplate jmsTemplate = new JmsTemplate(singletons.jmsWiring.activeMQConnectionFactory());
-    MessageService messageService = new AuditMessageService(new ActiveMqMessageService(jmsTemplate), AUDIT_LOGGER);
+    return new JmsExampleOneServlet(new UseCaseExampleOneStepOne(jmsMessageService(), jsonInstructionFactory(), applicationLogger));
+  }
 
-    return new JmsExampleOneServlet(new UseCaseExampleOneStepOne(messageService, jsonInstructionFactory(), applicationLogger));
+  JmsExampleTwoServlet jmsExampleTwoServlet() {
+    return new JmsExampleTwoServlet(new UseCaseExampleTwoStepOne(jmsMessageService(), jsonInstructionFactory(), applicationLogger));
+  }
+
+  // Can be replaced with stub for testing
+  public MessageService jmsMessageService() {
+    JmsTemplate jmsTemplate = new JmsTemplate(singletons.jmsWiring.activeMQConnectionFactory());
+    return new AuditMessageService(new ActiveMqMessageService(jmsTemplate), AUDIT_LOGGER);
   }
 
   private JsonInstructionsFactory jsonInstructionFactory() {

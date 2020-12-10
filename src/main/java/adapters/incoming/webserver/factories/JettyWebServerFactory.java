@@ -2,7 +2,6 @@ package adapters.incoming.webserver.factories;
 
 import adapters.incoming.webserver.JettyWebServer;
 import adapters.incoming.webserver.handlers.UncaughtErrorHandler;
-import adapters.logging.LoggingCategory;
 import org.eclipse.jetty.server.CustomRequestLog;
 import org.eclipse.jetty.server.Slf4jRequestLogWriter;
 import org.eclipse.jetty.servlet.FilterHolder;
@@ -15,6 +14,7 @@ import org.zalando.logbook.servlet.LogbookFilter;
 import java.util.EnumSet;
 
 import static adapters.logging.LoggingCategory.ACCESS;
+import static adapters.logging.LoggingCategory.AUDIT;
 import static javax.servlet.DispatcherType.ASYNC;
 import static javax.servlet.DispatcherType.ERROR;
 import static javax.servlet.DispatcherType.REQUEST;
@@ -45,7 +45,7 @@ public class JettyWebServerFactory {
   public static void addLoggingFilter(ServletContextHandler servletContextHandler) {
     Logbook logbook = Logbook.builder()
         .formatter(new DefaultHttpLogFormatter())
-        .writer(new DefaultHttpLogWriter(getLogger(LoggingCategory.AUDIT.name()), INFO))
+        .writer(new DefaultHttpLogWriter(getLogger(AUDIT.name()), INFO))
         .build();
     FilterHolder filterHolder = new FilterHolder(new LogbookFilter(logbook));
     servletContextHandler.addFilter(filterHolder, "/*", EnumSet.of(REQUEST, ASYNC, ERROR));

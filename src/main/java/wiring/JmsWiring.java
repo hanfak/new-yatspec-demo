@@ -6,6 +6,7 @@ import adapters.incoming.jmslistener.configuration.ApplicationQueueConsumerConfi
 import adapters.incoming.jmslistener.configuration.ConfigurableDefaultMessageListenerContainer;
 import adapters.incoming.jmslistener.configuration.QueueConsumerConfiguration;
 import adapters.incoming.jmslistener.queuelisteners.UseCaseExampleOneStepTwoInstructionListener;
+import adapters.incoming.jmslistener.queuelisteners.UseCaseExampleTwoStep2InstructionListener;
 import adapters.settings.internal.Settings;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 
 import static adapters.jmsservice.QueueName.EXAMPLE_ONE_STEP_ONE_QUEUE;
+import static adapters.jmsservice.QueueName.EXAMPLE_TWO_STEP_ONE_QUEUE;
 
 public class JmsWiring {
 
@@ -71,11 +73,18 @@ public class JmsWiring {
     applicationMessageListeners.clear();
     ConfigurableDefaultMessageListenerContainer defaultMessageListenerContainer = new ConfigurableDefaultMessageListenerContainer(activeMQConnectionFactory());
     applicationMessageListeners.add(new ApplicationMessageListener(useCaseExampleOneStepTwoInstructionListener(), defaultMessageListenerContainer));
+    applicationMessageListeners.add(new ApplicationMessageListener(useCaseExampleTwoStep2InstructionListener(), defaultMessageListenerContainer));
   }
 
   QueueConsumerConfiguration useCaseExampleOneStepTwoInstructionListener() {
     MessageListener messageListener = new UseCaseExampleOneStepTwoInstructionListener(useCaseFactory.useCaseExampleOneStepTwo());
     UnaryOperator<MessageListener> messageListenerDecorator = aMessageListener -> new AuditMessageListener(aMessageListener, auditLogger);
     return new ApplicationQueueConsumerConfiguration(settings, applicationLogger, EXAMPLE_ONE_STEP_ONE_QUEUE, messageListenerDecorator.apply(messageListener));
+  }
+
+  QueueConsumerConfiguration useCaseExampleTwoStep2InstructionListener() {
+    MessageListener messageListener = new UseCaseExampleTwoStep2InstructionListener(useCaseFactory.useCaseExampleTwoStep2A(), useCaseFactory.useCaseExampleTwoStep2B());
+    UnaryOperator<MessageListener> messageListenerDecorator = aMessageListener -> new AuditMessageListener(aMessageListener, auditLogger);
+    return new ApplicationQueueConsumerConfiguration(settings, applicationLogger, EXAMPLE_TWO_STEP_ONE_QUEUE, messageListenerDecorator.apply(messageListener));
   }
 }

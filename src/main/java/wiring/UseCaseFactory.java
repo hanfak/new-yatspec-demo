@@ -5,11 +5,15 @@ import adapters.outgoing.fileservice.FileSystemFileReader;
 import adapters.outgoing.fileservice.InMemoryIdService;
 import adapters.settings.internal.Settings;
 import core.usecases.ports.incoming.ExampleOneStepTwoService;
+import core.usecases.ports.incoming.ExampleTwoStep2AService;
+import core.usecases.ports.incoming.ExampleTwoStep2BService;
 import core.usecases.ports.incoming.GenerateResponseLetterUseCasePort;
 import core.usecases.ports.outgoing.FileWriter;
 import core.usecases.services.generateresponseletter.GenerateResponseLetterUseCase;
 import core.usecases.services.generateresponseletter.ResponseLetterReplacer;
 import core.usecases.services.jmsexample.UseCaseExampleOneStepTwo;
+import core.usecases.services.jmsexample.exampletwo.UseCaseExampleTwoStep2A;
+import core.usecases.services.jmsexample.exampletwo.UseCaseExampleTwoStep2B;
 import org.slf4j.Logger;
 
 public class UseCaseFactory {
@@ -20,6 +24,14 @@ public class UseCaseFactory {
   public UseCaseFactory(Logger logger, Settings settings) {
     this.logger = logger;
     this.settings = settings;
+  }
+
+  ExampleTwoStep2AService useCaseExampleTwoStep2A() {
+    return new UseCaseExampleTwoStep2A(logger);
+  }
+
+  ExampleTwoStep2BService useCaseExampleTwoStep2B() {
+    return new UseCaseExampleTwoStep2B(logger);
   }
 
   ExampleOneStepTwoService useCaseExampleOneStepTwo() {

@@ -19,7 +19,7 @@ public final class Main {
 
   public static void main(String... args) {
     Application application = new Application(PROD_PROPERTIES, APPLICATION_LOGGER);
-    setupData(application); // Would not be used in production, if need data would be done via sql scripts in flyway migration
+//    setupData(application); // Would not be used in production, if need data would be done via sql scripts in flyway migration
     application.start();
   }
 

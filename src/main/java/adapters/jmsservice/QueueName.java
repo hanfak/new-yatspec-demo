@@ -8,7 +8,9 @@ import java.util.Arrays;
 // todo Should be split for listener and sender
 public enum QueueName {
 
-    EXAMPLE_ONE_STEP_ONE_QUEUE(new ActiveMQQueue("ExampleOneStepOneQueue"));
+    EXAMPLE_ONE_STEP_ONE_QUEUE(new ActiveMQQueue("ExampleOneStepOneQueue")),
+    EXAMPLE_TWO_STEP_ONE_QUEUE(new ActiveMQQueue("ExampleTwoStepOneQueue"))
+    ;
 
     private final ActiveMQDestination activeMQDestination;
 
