@@ -1,6 +1,6 @@
 package adapters.incoming.webserver.servlets.jmsexample;
 
-import core.usecases.services.jmsexample.UseCaseExampleOneStepOne;
+import core.usecases.services.jmsexample.exampleone.UseCaseExampleOneStepOne;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

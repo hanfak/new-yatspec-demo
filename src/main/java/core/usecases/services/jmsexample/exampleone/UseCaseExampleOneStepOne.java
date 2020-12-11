@@ -1,4 +1,4 @@
-package core.usecases.services.jmsexample;
+package core.usecases.services.jmsexample.exampleone;
 
 import core.usecases.ports.incoming.UseCase;
 import core.usecases.ports.outgoing.InstructionFactory;

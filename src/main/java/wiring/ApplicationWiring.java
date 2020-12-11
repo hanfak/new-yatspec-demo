@@ -24,7 +24,7 @@ import adapters.settings.internal.Settings;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import core.usecases.ports.incoming.GenerateResponseLetterUseCasePort;
 import core.usecases.ports.outgoing.MessageService;
-import core.usecases.services.jmsexample.UseCaseExampleOneStepOne;
+import core.usecases.services.jmsexample.exampleone.UseCaseExampleOneStepOne;
 import core.usecases.services.jmsexample.exampletwo.UseCaseExampleTwoStepOne;
 import org.eclipse.jetty.server.Server;
 import org.jooq.DSLContext;

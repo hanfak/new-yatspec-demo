@@ -11,7 +11,7 @@ import core.usecases.ports.incoming.GenerateResponseLetterUseCasePort;
 import core.usecases.ports.outgoing.FileWriter;
 import core.usecases.services.generateresponseletter.GenerateResponseLetterUseCase;
 import core.usecases.services.generateresponseletter.ResponseLetterReplacer;
-import core.usecases.services.jmsexample.UseCaseExampleOneStepTwo;
+import core.usecases.services.jmsexample.exampleone.UseCaseExampleOneStepTwo;
 import core.usecases.services.jmsexample.exampletwo.UseCaseExampleTwoStep2A;
 import core.usecases.services.jmsexample.exampletwo.UseCaseExampleTwoStep2B;
 import org.slf4j.Logger;
