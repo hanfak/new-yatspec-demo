@@ -74,6 +74,8 @@ public class JmsWiring {
     ConfigurableDefaultMessageListenerContainer defaultMessageListenerContainer = new ConfigurableDefaultMessageListenerContainer(activeMQConnectionFactory());
     applicationMessageListeners.add(new ApplicationMessageListener(useCaseExampleOneStepTwoInstructionListener(), defaultMessageListenerContainer));
     applicationMessageListeners.add(new ApplicationMessageListener(useCaseExampleTwoStep2InstructionListener(), defaultMessageListenerContainer));
+    // Need a duplicate listener for queue that you want to have multiple consumers on
+    applicationMessageListeners.add(new ApplicationMessageListener(useCaseExampleTwoStep2InstructionListener(), defaultMessageListenerContainer));
   }
 
   QueueConsumerConfiguration useCaseExampleOneStepTwoInstructionListener() {
