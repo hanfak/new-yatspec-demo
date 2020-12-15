@@ -6,9 +6,7 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 
-import static org.jooq.sources.Tables.CHARACTERINFO;
-import static org.jooq.sources.Tables.CHARACTERS;
-import static org.jooq.sources.Tables.SPECIFIESINFO;
+import static org.jooq.sources.Tables.*;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public final class Main {
@@ -19,7 +17,7 @@ public final class Main {
 
   public static void main(String... args) {
     Application application = new Application(PROD_PROPERTIES, APPLICATION_LOGGER);
-//    setupData(application); // Would not be used in production, if need data would be done via sql scripts in flyway migration
+    setupData(application); // Would not be used in production, if need data would be done via sql scripts in flyway migration
     application.start();
   }
 
@@ -34,6 +32,8 @@ public final class Main {
     dslContext.deleteFrom(CHARACTERINFO).execute();
     dslContext.deleteFrom(SPECIFIESINFO).execute();
     dslContext.deleteFrom(CHARACTERS).execute();
+    dslContext.deleteFrom(EVENTS).execute();
+    dslContext.deleteFrom(AGGREGATES).execute();
   }
 
   // Some data to use in running app for some end points

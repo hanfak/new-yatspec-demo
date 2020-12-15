@@ -37,6 +37,7 @@ public class WebserverWiring {
         .addServlet(applicationWiring.generateResponseLetterUseCaseServlet(), "/generateResponseLetter")
         .addServlet(applicationWiring.jmsExampleOneServlet(), "/jmsExampleOneServlet")
         .addServlet(applicationWiring.jmsExampleTwoServlet(), "/jmsExampleTwoServlet")
+        .addServlet(applicationWiring.aggregateExampleOneServlet(), "/aggregateExampleOneServlet")
     ;
 
     return jettyWebServer(jettyWebServer).create(servletContextHandler);

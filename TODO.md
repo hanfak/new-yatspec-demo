@@ -15,13 +15,22 @@
 - ~~Extract dabaseconfiguration as singleton and extract out~~
 - upgrade yatspec
     - fix custom rendering for matching on interfaces as well as objects
+- Aggregate using cqrs
+- Transactions, with usecase, 
+    - if exception/timeout etc, roll back (database changes), 
+    - requeue message
+    - maybe update state to in error
+
 
 - new usecase to test rules
       - use rules engine
       - split the usecase from the servlets, have inject a httpResponseMarshaller class into servlet
 - Make more clean architecture
     - package structure
-    - modules?
+    - Clean arch 
+        - file io, use intermediary (new layer) between api in infrastructure and port in core, for file writer
+    - Modularise layers
+        - use jigsaw
     - interfaces, DIP
     - Extract usecases from servlets
 - html ouput index page, renderer

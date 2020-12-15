@@ -9,7 +9,10 @@ import java.util.Arrays;
 public enum QueueName {
 
     EXAMPLE_ONE_STEP_ONE_QUEUE(new ActiveMQQueue("ExampleOneStepOneQueue")),
-    EXAMPLE_TWO_STEP_ONE_QUEUE(new ActiveMQQueue("ExampleTwoStepOneQueue"))
+    EXAMPLE_TWO_STEP_ONE_QUEUE(new ActiveMQQueue("ExampleTwoStepOneQueue")),
+    AGGREGATE_QUEUE_ONE(new ActiveMQQueue("AggregateQueueOne")),
+    EVENT_QUEUE_ONE(new ActiveMQQueue("EventQueueOne")),
+    INTERNAL_JOB_QUEUE(new ActiveMQQueue("InternalJobQueue"))
     ;
 
     private final ActiveMQDestination activeMQDestination;

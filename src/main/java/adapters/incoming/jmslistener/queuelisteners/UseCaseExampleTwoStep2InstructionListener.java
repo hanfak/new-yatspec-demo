@@ -8,6 +8,7 @@ import core.usecases.ports.incoming.ExampleTwoStep2AService;
 import core.usecases.ports.incoming.ExampleTwoStep2AService.ExampleTwoStep2AIncomingInstruction;
 import core.usecases.ports.incoming.ExampleTwoStep2BService;
 import core.usecases.ports.incoming.ExampleTwoStep2BService.ExampleTwoStep2BIncomingInstruction;
+import org.slf4j.Logger;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -19,10 +20,12 @@ public class UseCaseExampleTwoStep2InstructionListener implements MessageListene
 
   private final ExampleTwoStep2AService exampleTwoStep2AService;
   private final ExampleTwoStep2BService exampleTwoStep2BService;
+  private final Logger logger;
 
-  public UseCaseExampleTwoStep2InstructionListener(ExampleTwoStep2AService exampleTwoStep2AService, ExampleTwoStep2BService exampleTwoStep2BService) {
+  public UseCaseExampleTwoStep2InstructionListener(ExampleTwoStep2AService exampleTwoStep2AService, ExampleTwoStep2BService exampleTwoStep2BService, Logger logger) {
     this.exampleTwoStep2AService = exampleTwoStep2AService;
     this.exampleTwoStep2BService = exampleTwoStep2BService;
+    this.logger = logger;
   }
 
   @Override
@@ -39,7 +42,10 @@ public class UseCaseExampleTwoStep2InstructionListener implements MessageListene
         executeExampleTwoStep2BService(text);
       } else {
         // No message matched a usecase, it will get dropped
-        throw new IllegalArgumentException("Payload did not match");
+        String errorMessage = String.format("Listener could not process unrecognised meesage type '%s'",
+            messageType.getMessageType());
+        logger.warn(errorMessage);
+        throw new RuntimeException(errorMessage);
       }
     } catch (Exception e) {
       throw new IllegalStateException(e);

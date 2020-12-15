@@ -1,45 +1,38 @@
 package wiring;
 
 import adapters.async.ExecutorServiceAsyncProcessor;
-import adapters.incoming.jmslistener.instructions.JsonInstructionsFactory;
 import adapters.incoming.webserver.JettyWebServer;
 import adapters.incoming.webserver.servlets.*;
+import adapters.incoming.webserver.servlets.aggregate.AggregateExampleOneServlet;
+import adapters.incoming.webserver.servlets.aggregate.AggregateExampleOneUnmarshaller;
 import adapters.incoming.webserver.servlets.generateResponseLetter.GenerateResponseLetterUnmarshaller;
 import adapters.incoming.webserver.servlets.generateResponseLetter.GenerateResponseLetterUseCaseServlet;
 import adapters.incoming.webserver.servlets.jmsexample.JmsExampleOneServlet;
 import adapters.incoming.webserver.servlets.jmsexample.JmsExampleTwoServlet;
 import adapters.logging.LoggingCategory;
-import adapters.outgoing.databaseservice.CharacterDataProvider;
 import adapters.outgoing.fileservice.FileService;
-import adapters.outgoing.fileservice.FileSystemWriter;
 import adapters.outgoing.fileservice.InMemoryIdService;
 import adapters.outgoing.fileservice.MyFileService;
 import adapters.outgoing.httpclient.*;
-import adapters.outgoing.jmssender.ActiveMqMessageService;
-import adapters.outgoing.jmssender.AuditMessageService;
 import adapters.outgoing.thirdparty.AppHttpClient;
 import adapters.outgoing.thirdparty.randomjsonservice.RandomXmlService;
 import adapters.outgoing.thirdparty.starwarsservice.StarWarsService;
 import adapters.settings.internal.Settings;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import core.usecases.ports.incoming.GenerateResponseLetterUseCasePort;
-import core.usecases.ports.outgoing.MessageService;
-import core.usecases.services.jmsexample.exampleone.UseCaseExampleOneStepOne;
-import core.usecases.services.jmsexample.exampletwo.UseCaseExampleTwoStepOne;
+import org.apache.activemq.ActiveMQConnectionFactory;
 import org.eclipse.jetty.server.Server;
-import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jms.core.JmsTemplate;
 
 import javax.sql.DataSource;
 
 import static adapters.outgoing.databaseservice.DatasourceConfig.createDataSource;
 import static wiring.JmsWiring.jmsWiring;
+import static wiring.UseCaseFactory.useCaseFactory;
 import static wiring.WebserverWiring.webserverWiring;
 
+// TODO Fix wiring, use singleton correctly
 // can override methods here in subclass for testing
 public class ApplicationWiring {
 
@@ -47,18 +40,20 @@ public class ApplicationWiring {
 
   private final Settings settings;
   private final UseCaseFactory useCaseFactory;
+  private final JmsWiring jmsWiring;
   private final Singletons singletons;
   private final Logger applicationLogger;
 
   private static class Singletons {
+
     final DataSource dataSource;
     final WebserverWiring webserverWiring;
-    final JmsWiring jmsWiring;
+    final DataRepositoryFactory dataRepositoryFactory;
 
-    public Singletons(DataSource dataSource, WebserverWiring webserverWiring, JmsWiring jmsWiring) {
+    public Singletons(DataSource dataSource, WebserverWiring webserverWiring, DataRepositoryFactory dataRepositoryFactory) {
       this.dataSource = dataSource;
       this.webserverWiring = webserverWiring;
-      this.jmsWiring = jmsWiring;
+      this.dataRepositoryFactory = dataRepositoryFactory;
     }
   }
 
@@ -66,32 +61,42 @@ public class ApplicationWiring {
     throw new AssertionError("Should not be instantiated outside of static factory method");
   }
 
-  private ApplicationWiring(UseCaseFactory useCaseFactory, Singletons singletons, Settings settings, Logger applicationLogger) {
+  private ApplicationWiring(UseCaseFactory useCaseFactory, JmsWiring jmsWiring, Singletons singletons, Settings settings, Logger applicationLogger) {
     this.useCaseFactory = useCaseFactory;
+    this.jmsWiring = jmsWiring;
     this.singletons = singletons;
     this.settings = settings;
     this.applicationLogger = applicationLogger;
   }
 
+  // For running application
   public static ApplicationWiring wiring(Settings settings, Logger applicationLogger) {
+    DataSource dataSource = createDataSource(settings);
+    return wiringWithCustomAdapters(settings, applicationLogger, new DataRepositoryFactory(dataSource, applicationLogger), new FileIoFactory(applicationLogger));
+  }
+
+  // For Testing, can pass in own databaseFactory (can inherit from prod and add extra database methods for testing)
+  public static ApplicationWiring wiringWithCustomAdapters(Settings settings, Logger applicationLogger, DataRepositoryFactory dataRepositoryFactory, FileIoFactory fileIoFactory) {
     JettyWebServer jettyWebServer = new JettyWebServer(applicationLogger, new Server(settings.webserverPort()));
     WebserverWiring webserverWiring = webserverWiring(jettyWebServer);
-    UseCaseFactory useCaseFactory = new UseCaseFactory(applicationLogger, settings);
-    JmsWiring jmsWiring = jmsWiring(useCaseFactory, settings, applicationLogger, AUDIT_LOGGER);
-    Singletons singletons = new Singletons(createDataSource(settings), webserverWiring, jmsWiring);
-    return new ApplicationWiring(useCaseFactory, singletons, settings, applicationLogger);
+    ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory(settings.brokerUrl());
+    UseCaseFactory useCaseFactory = useCaseFactory(fileIoFactory, dataRepositoryFactory, applicationLogger, settings, activeMQConnectionFactory, AUDIT_LOGGER);
+    JmsWiring jmsWiring = jmsWiring(useCaseFactory, activeMQConnectionFactory, settings, applicationLogger, AUDIT_LOGGER);
+    DataSource dataSource = createDataSource(settings);
+    Singletons singletons = new Singletons(dataSource, webserverWiring, dataRepositoryFactory);
+    return new ApplicationWiring(useCaseFactory, jmsWiring, singletons, settings, applicationLogger);
   }
 
   public void setupJmsListeners() {
-    singletons.jmsWiring.addConsumerConfiguration();
+    jmsWiring.addConsumerConfiguration();
   }
 
   public void stopJmsListeners() {
-    singletons.jmsWiring.stopListeners();
+    jmsWiring.stopListeners();
   }
 
   public void startJmsListeners() {
-    singletons.jmsWiring.startListeners();
+    jmsWiring.startListeners();
   }
 
   public DataSource getDataSource() {
@@ -101,17 +106,6 @@ public class ApplicationWiring {
   JettyWebServer jettyWebServer() {
     return singletons.webserverWiring.setupWebServer(this); // TODO: Fix passing this object
   }
-
-  // TODO extract to database wiring
-  public DSLContext databaseContextFactory() {
-    return DSL.using(getDataSource(), SQLDialect.POSTGRES);
-  }
-
-  // Can be overridden for tests
-  public DataProvider characterDataProvider() {
-    return new CharacterDataProvider(databaseContextFactory());
-  }
-  // TODO extract to database wiring
 
   // TODO extract to client wiring
   private AppHttpClient appHttpClient() {
@@ -127,17 +121,16 @@ public class ApplicationWiring {
   }
   // TODO extract to client wiring
 
-
   // Can be overridden for tests
   public FileService fileService() {
     return new MyFileService(new InMemoryIdService(), new XmlMapper(), applicationLogger);
   }
 
-  // Can be overridden for tests
-  public FileSystemWriter fileWriter() {
-    return new FileSystemWriter(applicationLogger);
+  private DataProvider characterDataProvider() {
+    return singletons.dataRepositoryFactory.characterDataProvider();
   }
 
+  // TODO extract to servlet factory??
   protected UseCaseServlet useCaseServlet() {
     return new UseCaseServlet(starWarsInterfaceService(), characterDataProvider(), fileService());
   }
@@ -175,25 +168,19 @@ public class ApplicationWiring {
   }
 
   GenerateResponseLetterUseCaseServlet generateResponseLetterUseCaseServlet() {
-    GenerateResponseLetterUseCasePort generateResponseLetterUseCasePort = useCaseFactory.generateResponseLetterUseCase(fileWriter());
+    GenerateResponseLetterUseCasePort generateResponseLetterUseCasePort = useCaseFactory.generateResponseLetterUseCase();
     return new GenerateResponseLetterUseCaseServlet(new GenerateResponseLetterUnmarshaller(), generateResponseLetterUseCasePort, new ExecutorServiceAsyncProcessor());
   }
 
   JmsExampleOneServlet jmsExampleOneServlet() {
-    return new JmsExampleOneServlet(new UseCaseExampleOneStepOne(jmsMessageService(), jsonInstructionFactory(), applicationLogger));
+    return new JmsExampleOneServlet(useCaseFactory.useCaseExampleOneStepOne());
   }
 
   JmsExampleTwoServlet jmsExampleTwoServlet() {
-    return new JmsExampleTwoServlet(new UseCaseExampleTwoStepOne(jmsMessageService(), jsonInstructionFactory(), applicationLogger));
+    return new JmsExampleTwoServlet(useCaseFactory.useCaseExampleTwoStepOne());
   }
 
-  // Can be replaced with stub for testing
-  public MessageService jmsMessageService() {
-    JmsTemplate jmsTemplate = new JmsTemplate(singletons.jmsWiring.activeMQConnectionFactory());
-    return new AuditMessageService(new ActiveMqMessageService(jmsTemplate), AUDIT_LOGGER);
-  }
-
-  private JsonInstructionsFactory jsonInstructionFactory() {
-    return new JsonInstructionsFactory();
+  AggregateExampleOneServlet aggregateExampleOneServlet() {
+    return new AggregateExampleOneServlet(useCaseFactory.aggregateExample1Step1Service(), new AggregateExampleOneUnmarshaller());
   }
 }

@@ -19,6 +19,7 @@ example
     - processed UC2
     - Complete UC2
 - usecase send to queue
+- usecase send to internal queue after requested state
 - listen to queue and call another usecase
 - When usecase two, has finished, send req or create file or update db to confirm
     - Some cron job to check event is complete
@@ -26,6 +27,8 @@ example
 
 example 
 - dead letter queue
+- In usecase randomly throw exception, which then adds it to the DLQ, and resends to same queue which executes the
+ same usecas
 
 Other 
 

@@ -28,6 +28,9 @@ Requirements
     - Use of testState and storing captured inputs(req and resp) in logs (a map) in the when and extracting during thens
     - Use of builder pattern to create fluent whens
     - Use of inheritence to hide common methods, fields etc
+- Database sql
+    - Flywaydb, to create schema
+    - Postgresql
 - Database interactions 
     - source 
         - Use JOOQ library to handle sql

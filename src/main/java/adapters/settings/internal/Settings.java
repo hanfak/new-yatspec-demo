@@ -5,18 +5,22 @@ import adapters.settings.api.ActiveMQSettings;
 import adapters.settings.api.DatabaseSettings;
 import adapters.settings.api.RandomJsonApiSettings;
 import adapters.settings.api.StarWarsApiSettings;
+import core.usecases.ports.outgoing.InternalJobSettings;
 import core.usecases.ports.outgoing.ResponseLetterSettings;
 import org.slf4j.Logger;
 
+import java.time.Duration;
 import java.util.Optional;
 import java.util.Properties;
 
+import static java.lang.Long.parseLong;
 import static java.lang.String.format;
+import static java.time.Duration.ofMinutes;
 
 // TODO interface for fileservice config etc
 // Having multiple settings interface allows users to be specific, plus can create new interfaces which extend
 // several interfaces, and users can use this.
-public class Settings implements ResponseLetterSettings, StarWarsApiSettings, RandomJsonApiSettings, DatabaseSettings, ActiveMQSettings {
+public class Settings implements ResponseLetterSettings, StarWarsApiSettings, RandomJsonApiSettings, DatabaseSettings, ActiveMQSettings, InternalJobSettings {
 
   private final EnhancedProperties properties;
 
@@ -82,5 +86,11 @@ public class Settings implements ResponseLetterSettings, StarWarsApiSettings, Ra
 
   public int webserverPort() {
     return Integer.parseInt(properties.getPropertyOrDefaultValue("webserver.port", "2222"));
+  }
+
+  @Override
+  public Duration getAggregateCompleteDelayDuration() {
+    return ofMinutes(parseLong(properties.getPropertyOrDefaultValue("aggregate.complete.job.delay.in.minutes", "1")));
+
   }
 }
