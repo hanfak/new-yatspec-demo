@@ -10,7 +10,7 @@ public class CharacterInfoInDatabaseRenderer implements Renderer<CharacterInfoRe
     private static final int NUMBER_OF_EXPECTED_FIELDS = 5;
 
     @Override
-    public String render(CharacterInfoRecord characterInfoRecord) throws Exception {
+    public String render(CharacterInfoRecord characterInfoRecord) {
         // We want to render what is being put in the database
         if (Objects.isNull(characterInfoRecord.getCharacterInfoId())) {
             return characterInfoRecord.toString();

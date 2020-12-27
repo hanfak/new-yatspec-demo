@@ -10,7 +10,7 @@ public class SpeciesInfoInDatabaseRendererVersion2 implements Renderer<SpeciesIn
     private static final int NUMBER_OF_EXPECTED_FIELDS = 5;
 
     @Override
-    public String render(SpeciesInfoRecord speciesInfoRecord) throws Exception {
+    public String render(SpeciesInfoRecord speciesInfoRecord) {
         // We want to render what is being put in the database
         if (Objects.isNull(speciesInfoRecord.getSpeciesInfoId())) {
             return speciesInfoRecord.toString();

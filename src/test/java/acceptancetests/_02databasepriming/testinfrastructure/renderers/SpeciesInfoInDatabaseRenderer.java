@@ -8,7 +8,7 @@ public class SpeciesInfoInDatabaseRenderer implements Renderer<SpeciesInfoRecord
     private static final int NUMBER_OF_EXPECTED_FIELDS = 5;
 
     @Override
-    public String render(SpeciesInfoRecord speciesInfoRecord) throws Exception {
+    public String render(SpeciesInfoRecord speciesInfoRecord) {
         StringBuilder tableHtml = new StringBuilder().append("<table>");
 
         addHeaders(tableHtml);
@@ -40,6 +40,5 @@ public class SpeciesInfoInDatabaseRenderer implements Renderer<SpeciesInfoRecord
         cell.append("<td >").append(speciesInfoRecord.getName()).append("</td>");
         cell.append("<td >").append(speciesInfoRecord.getAverageHeight()).append("</td>");
         cell.append("<td >").append(speciesInfoRecord.getLifespan()).append("</td>");
-
     }
 }

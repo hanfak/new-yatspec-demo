@@ -71,12 +71,12 @@ public class AcceptanceTest implements WithCustomResultListeners {
   public Collection<SpecResultListener> getResultListeners() throws Exception {
     return List.of(
         new HtmlResultRenderer()
-            .withCustomRenderer(HttpRequest.class, new HttpRequestRenderer())
-            .withCustomRenderer(HttpResponse.class, new HttpResponseRenderer())
-            .withCustomRenderer(JavaSource.class, new CustomJavaSourceRenderer())
-            .withCustomRenderer(SpeciesInfoRecord.class, new SpeciesInfoInDatabaseRendererVersion2())
-            .withCustomRenderer(CharacterInfoRecord.class, new CharacterInfoInDatabaseRenderer())
-            .withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer<>()),
+            .withCustomRenderer(HttpRequest.class, result -> new HttpRequestRenderer())
+            .withCustomRenderer(HttpResponse.class,result -> new HttpResponseRenderer())
+            .withCustomRenderer(JavaSource.class, result ->new CustomJavaSourceRenderer())
+            .withCustomRenderer(SpeciesInfoRecord.class, result ->new SpeciesInfoInDatabaseRendererVersion2())
+            .withCustomRenderer(CharacterInfoRecord.class, result ->new CharacterInfoInDatabaseRenderer())
+            .withCustomRenderer(SvgWrapper.class,result -> new DontHighlightRenderer<>()),
         new HtmlIndexRenderer()
     );
   }

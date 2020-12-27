@@ -1,7 +1,6 @@
 package acceptancetests._02databasepriming.testinfrastructure.renderers;
 
 import acceptancetests._02databasepriming.givens.CharacterInfoRecord;
-import acceptancetests._02databasepriming.givens.SpeciesInfoRecord;
 import com.googlecode.yatspec.rendering.Renderer;
 
 import java.util.Objects;
@@ -11,7 +10,7 @@ public class CharacterInfoInDatabaseRenderer implements Renderer<CharacterInfoRe
     private static final int NUMBER_OF_EXPECTED_FIELDS = 4;
 
     @Override
-    public String render(CharacterInfoRecord characterInfoRecord) throws Exception {
+    public String render(CharacterInfoRecord characterInfoRecord) {
         // We want to render what is being put in the database
         if (Objects.isNull(characterInfoRecord.getCharacterInfoId())) {
             return characterInfoRecord.toString();

@@ -8,7 +8,7 @@ public class SpeciesInfoInDatabaseRenderer implements Renderer<SpeciesInfoRecord
     private static final int NUMBER_OF_EXPECTED_FIELDS = 5;
 
     @Override
-    public String render(SpeciesInfoRecord speciesInfoRecord) throws Exception {
+    public String render(SpeciesInfoRecord speciesInfoRecord) {
         StringBuilder tableHtml = new StringBuilder().append("<table>");
 
         addHeaders(tableHtml);
