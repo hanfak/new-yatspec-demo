@@ -55,7 +55,7 @@ public class UseCaseFactory {
     this.singletons = singletons;
   }
 
-  public static UseCaseFactory useCaseFactory(FileIoFactory fileIoFactory, DataRepositoryFactory dataRepositoryFactory, Logger logger, Settings settings, ActiveMQConnectionFactory activeMQConnectionFactory, Logger auditLogger) {
+  public static UseCaseFactory useCaseFactory(FileIoFactory fileIoFactory, DataRespositoryFactoryInterface dataRepositoryFactory, Logger logger, Settings settings, ActiveMQConnectionFactory activeMQConnectionFactory, Logger auditLogger) {
     MessageService messageService = new AuditMessageService(new ActiveMqMessageService(new JmsTemplate(activeMQConnectionFactory)), auditLogger);
     Singletons singletons = new Singletons(messageService, dataRepositoryFactory.aggregateDataProviderRepository(), dataRepositoryFactory.eventDataProviderRepository(), fileIoFactory.fileWriter());
     return new UseCaseFactory(logger, settings, singletons);

@@ -40,7 +40,6 @@ public class AcceptanceTest implements WithCustomResultListeners {
   private final static Logger APPLICATION_LOGGER = getLogger(LoggingCategory.APPLICATION.name());
 
   private final Application application = new Application(ApplicationWiring.wiring(load("target/test-classes/application.test.properties"), APPLICATION_LOGGER));
-  private final TestDataProvider testDataProvider = new TestDataProvider(application.getDataSource());
   public final WhenARequestIsMadeTo whenARequestIsMadeTo = new WhenARequestIsMadeTo(testState);
   public final ThenTheResponse thenTheResponse = new ThenTheResponse(whenARequestIsMadeTo::getHttpResponse);
 
@@ -67,7 +66,6 @@ public class AcceptanceTest implements WithCustomResultListeners {
     // created before tests are run during build, and the tests are run against this. Will need some logic
     // To check if container is running, then dont start app locally
     application.start();
-    testDataProvider.deleteAllInfoFromAllTables();
   }
 
   @AfterEach

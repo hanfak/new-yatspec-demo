@@ -3,7 +3,7 @@ CREATE SCHEMA IF NOT EXISTS records;
 CREATE SEQUENCE characters_sequence START 1;
 CREATE SEQUENCE characterInfo_sequence START 1;
 CREATE SEQUENCE specifiesInfo_sequence START 1;
-
+-- Could use serial type for id
 CREATE TABLE records.characters(
    ID             integer       DEFAULT nextval('characters_sequence'::regclass) NOT NULL UNIQUE,
    PERSON_ID      integer       NOT NULL UNIQUE PRIMARY KEY,

@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 
 import javax.sql.DataSource;
 
-public class DataRepositoryFactory {
+public class DataRepositoryFactory implements DataRespositoryFactoryInterface {
 
   private final Singletons singletons;
   private final Logger logger;
@@ -34,14 +34,17 @@ public class DataRepositoryFactory {
     this.logger = logger;
   }
 
+  @Override
   public DataProvider characterDataProvider() {
     return new CharacterDataProvider(singletons.dslContext);
   }
 
+  @Override
   public AggregateDataProviderRepository aggregateDataProviderRepository() {
     return new AggregateDataProviderRepository(singletons.dslContext, logger);
   }
 
+  @Override
   public EventDataProviderRepository eventDataProviderRepository() {
     return new EventDataProviderRepository(singletons.dslContext, logger);
   }

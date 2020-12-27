@@ -48,9 +48,9 @@ public class ApplicationWiring {
 
     final DataSource dataSource;
     final WebserverWiring webserverWiring;
-    final DataRepositoryFactory dataRepositoryFactory;
+    final DataRespositoryFactoryInterface dataRepositoryFactory;
 
-    public Singletons(DataSource dataSource, WebserverWiring webserverWiring, DataRepositoryFactory dataRepositoryFactory) {
+    public Singletons(DataSource dataSource, WebserverWiring webserverWiring, DataRespositoryFactoryInterface dataRepositoryFactory) {
       this.dataSource = dataSource;
       this.webserverWiring = webserverWiring;
       this.dataRepositoryFactory = dataRepositoryFactory;
@@ -72,18 +72,17 @@ public class ApplicationWiring {
   // For running application
   public static ApplicationWiring wiring(Settings settings, Logger applicationLogger) {
     DataSource dataSource = createDataSource(settings);
-    return wiringWithCustomAdapters(settings, applicationLogger, new DataRepositoryFactory(dataSource, applicationLogger), new FileIoFactory(applicationLogger));
+    return wiringWithCustomAdapters(settings, applicationLogger, new DataRepositoryFactory(dataSource, applicationLogger), new FileIoFactory(applicationLogger), true, dataSource);
   }
 
   // For Testing, can pass in own databaseFactory (can inherit from prod and add extra database methods for testing)
-  public static ApplicationWiring wiringWithCustomAdapters(Settings settings, Logger applicationLogger, DataRepositoryFactory dataRepositoryFactory, FileIoFactory fileIoFactory) {
+  public static ApplicationWiring wiringWithCustomAdapters(Settings settings, Logger applicationLogger, DataRespositoryFactoryInterface dataRepositoryFactory, FileIoFactory fileIoFactory, Boolean dataSourceUsed, DataSource dataSource) {
     JettyWebServer jettyWebServer = new JettyWebServer(applicationLogger, new Server(settings.webserverPort()));
     WebserverWiring webserverWiring = webserverWiring(jettyWebServer);
     ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory(settings.brokerUrl());
     UseCaseFactory useCaseFactory = useCaseFactory(fileIoFactory, dataRepositoryFactory, applicationLogger, settings, activeMQConnectionFactory, AUDIT_LOGGER);
     JmsWiring jmsWiring = jmsWiring(useCaseFactory, activeMQConnectionFactory, settings, applicationLogger, AUDIT_LOGGER);
-    DataSource dataSource = createDataSource(settings);
-    Singletons singletons = new Singletons(dataSource, webserverWiring, dataRepositoryFactory);
+    Singletons singletons = new Singletons(dataSourceUsed ? createDataSource(settings) : null, webserverWiring, dataRepositoryFactory);
     return new ApplicationWiring(useCaseFactory, jmsWiring, singletons, settings, applicationLogger);
   }
 
