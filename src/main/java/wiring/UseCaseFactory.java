@@ -1,6 +1,7 @@
 package wiring;
 
 import adapters.incoming.jmslistener.instructions.JsonInstructionsFactory;
+import adapters.incoming.webserver.servlets.StarWarsInterfaceService;
 import adapters.libraries.ApacheCommonsLang3Adapter;
 import adapters.outgoing.databaseservice.AggregateDataProviderRepository;
 import adapters.outgoing.databaseservice.EventDataProviderRepository;
@@ -17,6 +18,7 @@ import core.usecases.services.aggregateexample.exampleone.UseCaseAggregateExampl
 import core.usecases.services.aggregateexample.exampleone.UseCaseAggregateExample1Step2;
 import core.usecases.services.aggregateexample.exampleone.UseCaseAggregateExample1Step3;
 import core.usecases.services.aggregateexample.exampleone.UseCaseAggregateExample1Step4Completed;
+import core.usecases.services.externalcalls.ExternalCallExampleOneUsecase;
 import core.usecases.services.generateresponseletter.GenerateResponseLetterUseCase;
 import core.usecases.services.generateresponseletter.ResponseLetterReplacer;
 import core.usecases.services.jmsexample.exampleone.UseCaseExampleOneStepOne;
@@ -134,5 +136,9 @@ public class UseCaseFactory {
         new FileSystemFileReader(),
         singletons.fileWriter,
         new InMemoryIdService(), settings, logger);
+  }
+
+  ExternalCallExampleOneUsecase externalCallExampleOneService(StarWarsInterfaceService starWarsInterfaceService) {
+    return new ExternalCallExampleOneUsecase(starWarsInterfaceService);
   }
 }

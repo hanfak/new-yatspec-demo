@@ -5,6 +5,8 @@ import adapters.incoming.webserver.JettyWebServer;
 import adapters.incoming.webserver.servlets.*;
 import adapters.incoming.webserver.servlets.aggregate.AggregateExampleOneServlet;
 import adapters.incoming.webserver.servlets.aggregate.AggregateExampleOneUnmarshaller;
+import adapters.incoming.webserver.servlets.exteranlcalls.ExternalCallExampleOneMarshaller;
+import adapters.incoming.webserver.servlets.exteranlcalls.ExternalCallExampleOneServlet;
 import adapters.incoming.webserver.servlets.generateResponseLetter.GenerateResponseLetterUnmarshaller;
 import adapters.incoming.webserver.servlets.generateResponseLetter.GenerateResponseLetterUseCaseServlet;
 import adapters.incoming.webserver.servlets.jmsexample.JmsExampleOneServlet;
@@ -181,5 +183,9 @@ public class ApplicationWiring {
 
   AggregateExampleOneServlet aggregateExampleOneServlet() {
     return new AggregateExampleOneServlet(useCaseFactory.aggregateExample1Step1Service(), new AggregateExampleOneUnmarshaller());
+  }
+
+  ExternalCallExampleOneServlet externalCallExampleOneServlet() {
+    return new ExternalCallExampleOneServlet(useCaseFactory.externalCallExampleOneService(starWarsInterfaceService()), new ExternalCallExampleOneMarshaller());
   }
 }

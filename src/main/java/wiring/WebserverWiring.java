@@ -38,6 +38,7 @@ public class WebserverWiring {
         .addServlet(applicationWiring.jmsExampleOneServlet(), "/jmsExampleOneServlet")
         .addServlet(applicationWiring.jmsExampleTwoServlet(), "/jmsExampleTwoServlet")
         .addServlet(applicationWiring.aggregateExampleOneServlet(), "/aggregateExampleOneServlet")
+        .addServlet(applicationWiring.externalCallExampleOneServlet(), "/externalCallExampleOneServlet/*")
     ;
 
     return jettyWebServer(jettyWebServer).create(servletContextHandler);
