@@ -1,7 +1,7 @@
 package core.usecases.services.aggregateexample.exampleone;
 
 import core.domain.EventState;
-import core.usecases.ports.incoming.AggregateExample1Step2Service;
+import core.usecases.ports.incoming.aggregateexample.AggregateExample1Step2Service;
 import core.usecases.ports.outgoing.AggregateDataProvider;
 import core.usecases.ports.outgoing.EventDataProvider;
 import core.usecases.ports.outgoing.InstructionFactory;

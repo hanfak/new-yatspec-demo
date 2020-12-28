@@ -1,14 +1,14 @@
 package adapters.incoming.jmslistener.queuelisteners;
 
 import adapters.incoming.jmslistener.instructions.InternalQueueMessagePayload;
-import core.usecases.ports.incoming.AggregateExample1Step4CompletedService;
+import core.usecases.ports.incoming.aggregateexample.AggregateExample1Step4CompletedService;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 import static adapters.json.ObjectMapperFactory.createTolerantObjectMapper;
-import static core.usecases.ports.incoming.AggregateExample1Step4CompletedService.AggregateExample1Step4CompletedIncomingInstruction.incomingInstruction;
+import static core.usecases.ports.incoming.aggregateexample.AggregateExample1Step4CompletedService.AggregateExample1Step4CompletedIncomingInstruction.incomingInstruction;
 
 public class InternalJobInstructionListener implements MessageListener {
 

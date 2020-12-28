@@ -1,6 +1,6 @@
 package core.usecases.services.jmsexample.exampleone;
 
-import core.usecases.ports.incoming.ExampleOneStepTwoService;
+import core.usecases.ports.incoming.jmsexample.ExampleOneStepTwoService;
 import org.slf4j.Logger;
 
 public class UseCaseExampleOneStepTwo implements ExampleOneStepTwoService {

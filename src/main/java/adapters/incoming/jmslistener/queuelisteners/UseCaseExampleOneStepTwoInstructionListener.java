@@ -1,14 +1,14 @@
 package adapters.incoming.jmslistener.queuelisteners;
 
 import adapters.incoming.jmslistener.instructions.UseCaseExampleOneStepTwoMessagePayload;
-import core.usecases.ports.incoming.ExampleOneStepTwoService;
+import core.usecases.ports.incoming.jmsexample.ExampleOneStepTwoService;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 import static adapters.json.ObjectMapperFactory.createTolerantObjectMapper;
-import static core.usecases.ports.incoming.ExampleOneStepTwoService.ExampleOneStepTwoIncomingInstruction.incomingInstruction;
+import static core.usecases.ports.incoming.jmsexample.ExampleOneStepTwoService.ExampleOneStepTwoIncomingInstruction.incomingInstruction;
 
 public class UseCaseExampleOneStepTwoInstructionListener implements MessageListener {
 

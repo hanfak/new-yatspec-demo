@@ -1,4 +1,4 @@
-package core.usecases.ports.incoming;
+package core.usecases.ports.incoming.aggregateexample;
 
 import javax.validation.constraints.NotNull;
 

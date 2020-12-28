@@ -1,6 +1,6 @@
 package core.usecases.services.aggregateexample.exampleone;
 
-import core.usecases.ports.incoming.AggregateExample1Step1Service;
+import core.usecases.ports.incoming.aggregateexample.AggregateExample1Step1Service;
 import core.usecases.ports.outgoing.AggregateDataProvider;
 import core.usecases.ports.outgoing.InstructionFactory;
 import core.usecases.ports.outgoing.InternalJobSettings;

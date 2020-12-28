@@ -4,7 +4,7 @@ import core.domain.AggregateState;
 import core.domain.Event;
 import core.domain.FailedEvent;
 import core.domain.SuccessfullyProcessedEvent;
-import core.usecases.ports.incoming.AggregateExample1Step4CompletedService;
+import core.usecases.ports.incoming.aggregateexample.AggregateExample1Step4CompletedService;
 import core.usecases.ports.outgoing.*;
 import core.usecases.ports.outgoing.AggregateReport.AggregateCompletionDetails;
 import org.slf4j.Logger;

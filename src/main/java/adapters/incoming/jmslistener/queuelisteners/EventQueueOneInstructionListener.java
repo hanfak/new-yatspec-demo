@@ -1,14 +1,14 @@
 package adapters.incoming.jmslistener.queuelisteners;
 
 import adapters.incoming.jmslistener.instructions.EventQueueOneMessagePayload;
-import core.usecases.ports.incoming.AggregateExample1Step3Service;
+import core.usecases.ports.incoming.aggregateexample.AggregateExample1Step3Service;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 import static adapters.json.ObjectMapperFactory.createTolerantObjectMapper;
-import static core.usecases.ports.incoming.AggregateExample1Step3Service.EventIncomingInstruction.incomingInstruction;
+import static core.usecases.ports.incoming.aggregateexample.AggregateExample1Step3Service.EventIncomingInstruction.incomingInstruction;
 
 public class EventQueueOneInstructionListener implements MessageListener {
 

@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static adapters.settings.PropertyLoader.load;
+import static java.util.Optional.empty;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @ExtendWith(SequenceDiagramExtension.class)
@@ -56,7 +57,7 @@ public class AcceptanceTest implements WithCustomResultListeners {
   private static final AtomicInteger characterInfoDatabaseId = new AtomicInteger(1);
 
   private static final DataRespositoryFactoryInterface databaseStub = new DatabaseStubFactory(characterDatabase, characterInfoDatabase, speciesInfoDatabase, characterInfoDatabaseId);
-  private static final Application application = new Application(ApplicationWiring.wiringWithCustomAdapters(load(TEST_PROPERTIES_PATH), APPLICATION_LOGGER, databaseStub, new FileIoFactory(APPLICATION_LOGGER), false, null));
+  private static final Application application = new Application(ApplicationWiring.wiringWithCustomAdapters(load(TEST_PROPERTIES_PATH), APPLICATION_LOGGER, databaseStub, empty(), new FileIoFactory(APPLICATION_LOGGER), empty()));
   private final TestDataProvider testDataProvider = new TestDataProvider(characterDatabase, characterInfoDatabase, speciesInfoDatabase, characterInfoDatabaseId);
 
   public final GivenTheDatabaseContains givenTheDatabaseContains = new GivenTheDatabaseContains(testState, testDataProvider);

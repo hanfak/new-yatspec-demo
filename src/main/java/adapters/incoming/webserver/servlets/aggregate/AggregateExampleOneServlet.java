@@ -1,8 +1,8 @@
 package adapters.incoming.webserver.servlets.aggregate;
 
 import adapters.incoming.webserver.servlets.Unmarshaller;
-import core.usecases.ports.incoming.AggregateExample1Step1Service;
-import core.usecases.ports.incoming.AggregateExample1Step1Service.AggregateCommand;
+import core.usecases.ports.incoming.aggregateexample.AggregateExample1Step1Service;
+import core.usecases.ports.incoming.aggregateexample.AggregateExample1Step1Service.AggregateCommand;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;

@@ -1,6 +1,6 @@
 package core.usecases.services.jmsexample.exampletwo;
 
-import core.usecases.ports.incoming.ExampleTwoStep2BService;
+import core.usecases.ports.incoming.jmsexample.ExampleTwoStep2BService;
 import org.slf4j.Logger;
 
 public class UseCaseExampleTwoStep2B implements ExampleTwoStep2BService {

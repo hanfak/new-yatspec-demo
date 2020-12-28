@@ -4,10 +4,10 @@ import adapters.incoming.jmslistener.instructions.ExampleTwoStepOneMessageTypeIn
 import adapters.incoming.jmslistener.instructions.UseCaseExampleTwoStep2AMessagePayload;
 import adapters.incoming.jmslistener.instructions.UseCaseExampleTwoStep2BMessagePayload;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import core.usecases.ports.incoming.ExampleTwoStep2AService;
-import core.usecases.ports.incoming.ExampleTwoStep2AService.ExampleTwoStep2AIncomingInstruction;
-import core.usecases.ports.incoming.ExampleTwoStep2BService;
-import core.usecases.ports.incoming.ExampleTwoStep2BService.ExampleTwoStep2BIncomingInstruction;
+import core.usecases.ports.incoming.jmsexample.ExampleTwoStep2AService;
+import core.usecases.ports.incoming.jmsexample.ExampleTwoStep2AService.ExampleTwoStep2AIncomingInstruction;
+import core.usecases.ports.incoming.jmsexample.ExampleTwoStep2BService;
+import core.usecases.ports.incoming.jmsexample.ExampleTwoStep2BService.ExampleTwoStep2BIncomingInstruction;
 import org.slf4j.Logger;
 
 import javax.jms.Message;

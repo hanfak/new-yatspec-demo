@@ -1,7 +1,6 @@
 package wiring;
 
 import adapters.incoming.jmslistener.instructions.JsonInstructionsFactory;
-import adapters.incoming.webserver.servlets.StarWarsInterfaceService;
 import adapters.libraries.ApacheCommonsLang3Adapter;
 import adapters.outgoing.databaseservice.AggregateDataProviderRepository;
 import adapters.outgoing.databaseservice.EventDataProviderRepository;
@@ -12,7 +11,14 @@ import adapters.outgoing.fileservice.InMemoryIdService;
 import adapters.outgoing.jmssender.ActiveMqMessageService;
 import adapters.outgoing.jmssender.AuditMessageService;
 import adapters.settings.internal.Settings;
-import core.usecases.ports.incoming.*;
+import core.usecases.ports.incoming.GenerateResponseLetterUseCasePort;
+import core.usecases.ports.incoming.aggregateexample.AggregateExample1Step1Service;
+import core.usecases.ports.incoming.aggregateexample.AggregateExample1Step2Service;
+import core.usecases.ports.incoming.aggregateexample.AggregateExample1Step3Service;
+import core.usecases.ports.incoming.aggregateexample.AggregateExample1Step4CompletedService;
+import core.usecases.ports.incoming.jmsexample.ExampleOneStepTwoService;
+import core.usecases.ports.incoming.jmsexample.ExampleTwoStep2AService;
+import core.usecases.ports.incoming.jmsexample.ExampleTwoStep2BService;
 import core.usecases.ports.outgoing.MessageService;
 import core.usecases.services.aggregateexample.exampleone.UseCaseAggregateExample1Step1;
 import core.usecases.services.aggregateexample.exampleone.UseCaseAggregateExample1Step2;
@@ -34,33 +40,27 @@ public class UseCaseFactory {
 
   private final Logger logger;
   private final Settings settings;
-  private final Singletons singletons;
+  private final MessageService messageService;
+  private final ExternalCallWiring externalCallWiring;
+  private final AggregateDataProviderRepository aggregateDataProviderRepository;
+  private final EventDataProviderRepository eventDataProviderRepository;
+  private final FileSystemWriter fileWriter;
 
-  private static class Singletons {
-
-    private final MessageService messageService;
-    private final AggregateDataProviderRepository aggregateDataProviderRepository;
-    private final EventDataProviderRepository eventDataProviderRepository;
-    public final FileSystemWriter fileWriter;
-
-    private Singletons(MessageService messageService, AggregateDataProviderRepository aggregateDataProviderRepository, EventDataProviderRepository eventDataProviderRepository, FileSystemWriter fileWriter) {
-      this.messageService = messageService;
-      this.aggregateDataProviderRepository = aggregateDataProviderRepository;
-      this.eventDataProviderRepository = eventDataProviderRepository;
-      this.fileWriter = fileWriter;
-    }
-  }
-
-  private UseCaseFactory(Logger logger, Settings settings, Singletons singletons) {
+  private UseCaseFactory(Logger logger, Settings settings, MessageService messageService,
+                         ExternalCallWiring externalCallWiring, AggregateDataProviderRepository aggregateDataProviderRepository,
+                         EventDataProviderRepository eventDataProviderRepository, FileSystemWriter fileWriter) {
     this.logger = logger;
     this.settings = settings;
-    this.singletons = singletons;
+    this.messageService = messageService;
+    this.externalCallWiring = externalCallWiring;
+    this.aggregateDataProviderRepository = aggregateDataProviderRepository;
+    this.eventDataProviderRepository = eventDataProviderRepository;
+    this.fileWriter = fileWriter;
   }
 
-  public static UseCaseFactory useCaseFactory(FileIoFactory fileIoFactory, DataRespositoryFactoryInterface dataRepositoryFactory, Logger logger, Settings settings, ActiveMQConnectionFactory activeMQConnectionFactory, Logger auditLogger) {
+  public static UseCaseFactory useCaseFactory(FileIoFactory fileIoFactory, DataRespositoryFactoryInterface dataRepositoryFactory, Logger logger, ExternalCallWiring externalCallWiring, Settings settings, ActiveMQConnectionFactory activeMQConnectionFactory, Logger auditLogger) {
     MessageService messageService = new AuditMessageService(new ActiveMqMessageService(new JmsTemplate(activeMQConnectionFactory)), auditLogger);
-    Singletons singletons = new Singletons(messageService, dataRepositoryFactory.aggregateDataProviderRepository(), dataRepositoryFactory.eventDataProviderRepository(), fileIoFactory.fileWriter());
-    return new UseCaseFactory(logger, settings, singletons);
+    return new UseCaseFactory(logger, settings, messageService, externalCallWiring, dataRepositoryFactory.aggregateDataProviderRepository(), dataRepositoryFactory.eventDataProviderRepository(), fileIoFactory.fileWriter());
   }
 
   // TODO make singleton
@@ -69,7 +69,7 @@ public class UseCaseFactory {
   }
 
   UseCaseExampleOneStepOne useCaseExampleOneStepOne() {
-    return new UseCaseExampleOneStepOne(singletons.messageService,
+    return new UseCaseExampleOneStepOne(messageService,
         jsonInstructionFactory(),
         logger);
   }
@@ -84,7 +84,7 @@ public class UseCaseFactory {
   }
 
   UseCaseExampleTwoStepOne useCaseExampleTwoStepOne() {
-    return new UseCaseExampleTwoStepOne(singletons.messageService,
+    return new UseCaseExampleTwoStepOne(messageService,
         jsonInstructionFactory(),
         logger);
   }
@@ -95,19 +95,19 @@ public class UseCaseFactory {
 
   AggregateExample1Step1Service aggregateExample1Step1Service() {
     return new UseCaseAggregateExample1Step1(
-        singletons.aggregateDataProviderRepository,
-        singletons.messageService,
+        aggregateDataProviderRepository,
+        messageService,
         jsonInstructionFactory(),
         settings,
         logger
-        );
+    );
   }
 
   AggregateExample1Step2Service aggregateExample1Step2Service() {
     return new UseCaseAggregateExample1Step2(
-        singletons.aggregateDataProviderRepository,
-        singletons.eventDataProviderRepository,
-        singletons.messageService,
+        aggregateDataProviderRepository,
+        eventDataProviderRepository,
+        messageService,
         jsonInstructionFactory(),
         logger
     );
@@ -115,17 +115,17 @@ public class UseCaseFactory {
 
   AggregateExample1Step3Service aggregateExample1Step3Service() {
     return new UseCaseAggregateExample1Step3(
-        singletons.eventDataProviderRepository
+        eventDataProviderRepository
     );
   }
 
   AggregateExample1Step4CompletedService aggregateExample1Step4CompletedService() {
     return new UseCaseAggregateExample1Step4Completed(
-        singletons.aggregateDataProviderRepository,
-        singletons.eventDataProviderRepository,
-        singletons.messageService,
+        aggregateDataProviderRepository,
+        eventDataProviderRepository,
+        messageService,
         jsonInstructionFactory(),
-        new AggregateFileReport(singletons.fileWriter), settings, logger
+        new AggregateFileReport(fileWriter), settings, logger
     );
   }
 
@@ -134,11 +134,11 @@ public class UseCaseFactory {
     return new GenerateResponseLetterUseCase(
         templateReplacementFileService,
         new FileSystemFileReader(),
-        singletons.fileWriter,
+        fileWriter,
         new InMemoryIdService(), settings, logger);
   }
 
-  ExternalCallExampleOneUsecase externalCallExampleOneService(StarWarsInterfaceService starWarsInterfaceService) {
-    return new ExternalCallExampleOneUsecase(starWarsInterfaceService);
+  ExternalCallExampleOneUsecase externalCallExampleOneService() {
+    return new ExternalCallExampleOneUsecase(externalCallWiring.starWarsInterfaceService());
   }
 }

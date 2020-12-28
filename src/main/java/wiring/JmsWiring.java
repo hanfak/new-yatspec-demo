@@ -7,9 +7,9 @@ import adapters.incoming.jmslistener.configuration.ConfigurableDefaultMessageLis
 import adapters.incoming.jmslistener.configuration.QueueConsumerConfiguration;
 import adapters.incoming.jmslistener.queuelisteners.*;
 import adapters.settings.internal.Settings;
-import core.usecases.ports.incoming.AggregateExample1Step2Service;
-import core.usecases.ports.incoming.AggregateExample1Step3Service;
-import core.usecases.ports.incoming.AggregateExample1Step4CompletedService;
+import core.usecases.ports.incoming.aggregateexample.AggregateExample1Step2Service;
+import core.usecases.ports.incoming.aggregateexample.AggregateExample1Step3Service;
+import core.usecases.ports.incoming.aggregateexample.AggregateExample1Step4CompletedService;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
 

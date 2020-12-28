@@ -1,6 +1,6 @@
 package core.usecases.services.aggregateexample.exampleone;
 
-import core.usecases.ports.incoming.AggregateExample1Step3Service;
+import core.usecases.ports.incoming.aggregateexample.AggregateExample1Step3Service;
 import core.usecases.ports.outgoing.EventDataProvider;
 
 import java.util.Objects;

@@ -15,10 +15,6 @@ import adapters.logging.LoggingCategory;
 import adapters.outgoing.fileservice.FileService;
 import adapters.outgoing.fileservice.InMemoryIdService;
 import adapters.outgoing.fileservice.MyFileService;
-import adapters.outgoing.httpclient.*;
-import adapters.outgoing.thirdparty.AppHttpClient;
-import adapters.outgoing.thirdparty.randomjsonservice.RandomXmlService;
-import adapters.outgoing.thirdparty.starwarsservice.StarWarsService;
 import adapters.settings.internal.Settings;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import core.usecases.ports.incoming.GenerateResponseLetterUseCasePort;
@@ -28,8 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.util.Optional;
 
 import static adapters.outgoing.databaseservice.DatasourceConfig.createDataSource;
+import static wiring.ExternalCallWiring.externalCallWiringFactory;
 import static wiring.JmsWiring.jmsWiring;
 import static wiring.UseCaseFactory.useCaseFactory;
 import static wiring.WebserverWiring.webserverWiring;
@@ -43,6 +41,7 @@ public class ApplicationWiring {
   private final Settings settings;
   private final UseCaseFactory useCaseFactory;
   private final JmsWiring jmsWiring;
+  private final ExternalCallWiring externalCallWiring;
   private final Singletons singletons;
   private final Logger applicationLogger;
 
@@ -63,9 +62,10 @@ public class ApplicationWiring {
     throw new AssertionError("Should not be instantiated outside of static factory method");
   }
 
-  private ApplicationWiring(UseCaseFactory useCaseFactory, JmsWiring jmsWiring, Singletons singletons, Settings settings, Logger applicationLogger) {
+  private ApplicationWiring(UseCaseFactory useCaseFactory, JmsWiring jmsWiring, ExternalCallWiring externalCallWiring,  Singletons singletons, Settings settings, Logger applicationLogger) {
     this.useCaseFactory = useCaseFactory;
     this.jmsWiring = jmsWiring;
+    this.externalCallWiring = externalCallWiring;
     this.singletons = singletons;
     this.settings = settings;
     this.applicationLogger = applicationLogger;
@@ -74,18 +74,19 @@ public class ApplicationWiring {
   // For running application
   public static ApplicationWiring wiring(Settings settings, Logger applicationLogger) {
     DataSource dataSource = createDataSource(settings);
-    return wiringWithCustomAdapters(settings, applicationLogger, new DataRepositoryFactory(dataSource, applicationLogger), new FileIoFactory(applicationLogger), true, dataSource);
+    return wiringWithCustomAdapters(settings, applicationLogger, new DataRepositoryFactory(dataSource, applicationLogger), Optional.empty(), new FileIoFactory(applicationLogger), Optional.of(dataSource));
   }
 
   // For Testing, can pass in own databaseFactory (can inherit from prod and add extra database methods for testing)
-  public static ApplicationWiring wiringWithCustomAdapters(Settings settings, Logger applicationLogger, DataRespositoryFactoryInterface dataRepositoryFactory, FileIoFactory fileIoFactory, Boolean dataSourceUsed, DataSource dataSource) {
+  public static ApplicationWiring wiringWithCustomAdapters(Settings settings, Logger applicationLogger, DataRespositoryFactoryInterface dataRepositoryFactory, Optional<ExternalCallWiring> optionalExternalCallWiring, FileIoFactory fileIoFactory, Optional<DataSource> optionalDataSource) {
     JettyWebServer jettyWebServer = new JettyWebServer(applicationLogger, new Server(settings.webserverPort()));
     WebserverWiring webserverWiring = webserverWiring(jettyWebServer);
     ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory(settings.brokerUrl());
-    UseCaseFactory useCaseFactory = useCaseFactory(fileIoFactory, dataRepositoryFactory, applicationLogger, settings, activeMQConnectionFactory, AUDIT_LOGGER);
+    ExternalCallWiring externalCallWiring = optionalExternalCallWiring.orElse(externalCallWiringFactory(settings));
+    UseCaseFactory useCaseFactory = useCaseFactory(fileIoFactory, dataRepositoryFactory, applicationLogger, externalCallWiring, settings, activeMQConnectionFactory, AUDIT_LOGGER);
     JmsWiring jmsWiring = jmsWiring(useCaseFactory, activeMQConnectionFactory, settings, applicationLogger, AUDIT_LOGGER);
-    Singletons singletons = new Singletons(dataSourceUsed ? createDataSource(settings) : null, webserverWiring, dataRepositoryFactory);
-    return new ApplicationWiring(useCaseFactory, jmsWiring, singletons, settings, applicationLogger);
+    Singletons singletons = new Singletons(optionalDataSource.orElse(null), webserverWiring, dataRepositoryFactory);
+    return new ApplicationWiring(useCaseFactory, jmsWiring, externalCallWiring, singletons, settings, applicationLogger);
   }
 
   public void setupJmsListeners() {
@@ -108,20 +109,6 @@ public class ApplicationWiring {
     return singletons.webserverWiring.setupWebServer(this); // TODO: Fix passing this object
   }
 
-  // TODO extract to client wiring
-  private AppHttpClient appHttpClient() {
-    return new LoggingHttpClient(new DefaultAppHttpClient(), AUDIT_LOGGER, Timer::start, new HttpRequestFormatter(), new HttpResponseFormatter());
-  }
-
-  private StarWarsInterfaceService starWarsInterfaceService() {
-    return new StarWarsService(appHttpClient(), settings);
-  }
-
-  private ActivityService randomXmlService() {
-    return new RandomXmlService(appHttpClient(), settings);
-  }
-  // TODO extract to client wiring
-
   // Can be overridden for tests
   public FileService fileService() {
     return new MyFileService(new InMemoryIdService(), new XmlMapper(), applicationLogger);
@@ -133,7 +120,7 @@ public class ApplicationWiring {
 
   // TODO extract to servlet factory??
   protected UseCaseServlet useCaseServlet() {
-    return new UseCaseServlet(starWarsInterfaceService(), characterDataProvider(), fileService());
+    return new UseCaseServlet(externalCallWiring.starWarsInterfaceService(), characterDataProvider(), fileService());
   }
 
   protected UseCaseOneServlet useCaseOneServlet() {
@@ -157,15 +144,15 @@ public class ApplicationWiring {
   }
 
   protected UseCaseSixServlet useCaseSixServlet() {
-    return new UseCaseSixServlet(starWarsInterfaceService(), characterDataProvider());
+    return new UseCaseSixServlet(externalCallWiring.starWarsInterfaceService(), characterDataProvider());
   }
 
   protected UseCaseSevenServlet useCaseSevenServlet() {
-    return new UseCaseSevenServlet(starWarsInterfaceService(), characterDataProvider());
+    return new UseCaseSevenServlet(externalCallWiring.starWarsInterfaceService(), characterDataProvider());
   }
 
   protected UseCaseEightServlet useCaseEightServlet() {
-    return new UseCaseEightServlet(starWarsInterfaceService(), randomXmlService(), characterDataProvider());
+    return new UseCaseEightServlet(externalCallWiring.starWarsInterfaceService(), externalCallWiring.randomXmlService(), characterDataProvider());
   }
 
   GenerateResponseLetterUseCaseServlet generateResponseLetterUseCaseServlet() {
@@ -186,6 +173,6 @@ public class ApplicationWiring {
   }
 
   ExternalCallExampleOneServlet externalCallExampleOneServlet() {
-    return new ExternalCallExampleOneServlet(useCaseFactory.externalCallExampleOneService(starWarsInterfaceService()), new ExternalCallExampleOneMarshaller());
+    return new ExternalCallExampleOneServlet(useCaseFactory.externalCallExampleOneService(), new ExternalCallExampleOneMarshaller());
   }
 }
