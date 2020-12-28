@@ -1,3 +1,11 @@
+TODO
+
+- one external call
+- multiple ext call to same services
+- multiple ext call to different services
+- one external call and database useage
+
+
 usecase 6
 - assert on request sent to service
 - captured inputs for request and response to service

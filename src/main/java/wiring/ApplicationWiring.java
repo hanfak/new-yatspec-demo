@@ -27,6 +27,7 @@ import javax.sql.DataSource;
 import java.util.Optional;
 
 import static adapters.outgoing.databaseservice.DatasourceConfig.createDataSource;
+import static java.util.Optional.empty;
 import static wiring.ExternalCallWiring.externalCallWiringFactory;
 import static wiring.JmsWiring.jmsWiring;
 import static wiring.UseCaseFactory.useCaseFactory;
@@ -41,7 +42,7 @@ public class ApplicationWiring {
   private final Settings settings;
   private final UseCaseFactory useCaseFactory;
   private final JmsWiring jmsWiring;
-  private final ExternalCallWiring externalCallWiring;
+  private final ExternalCallWiringInterface externalCallWiring;
   private final Singletons singletons;
   private final Logger applicationLogger;
 
@@ -62,7 +63,7 @@ public class ApplicationWiring {
     throw new AssertionError("Should not be instantiated outside of static factory method");
   }
 
-  private ApplicationWiring(UseCaseFactory useCaseFactory, JmsWiring jmsWiring, ExternalCallWiring externalCallWiring,  Singletons singletons, Settings settings, Logger applicationLogger) {
+  private ApplicationWiring(UseCaseFactory useCaseFactory, JmsWiring jmsWiring, ExternalCallWiringInterface externalCallWiring,  Singletons singletons, Settings settings, Logger applicationLogger) {
     this.useCaseFactory = useCaseFactory;
     this.jmsWiring = jmsWiring;
     this.externalCallWiring = externalCallWiring;
@@ -74,16 +75,17 @@ public class ApplicationWiring {
   // For running application
   public static ApplicationWiring wiring(Settings settings, Logger applicationLogger) {
     DataSource dataSource = createDataSource(settings);
-    return wiringWithCustomAdapters(settings, applicationLogger, new DataRepositoryFactory(dataSource, applicationLogger), Optional.empty(), new FileIoFactory(applicationLogger), Optional.of(dataSource));
+    DataRepositoryFactory dataRepositoryFactory = new DataRepositoryFactory(dataSource, applicationLogger);
+    return wiringWithCustomAdapters(settings, applicationLogger, dataRepositoryFactory, empty(), empty(), Optional.of(dataSource));
   }
 
   // For Testing, can pass in own databaseFactory (can inherit from prod and add extra database methods for testing)
-  public static ApplicationWiring wiringWithCustomAdapters(Settings settings, Logger applicationLogger, DataRespositoryFactoryInterface dataRepositoryFactory, Optional<ExternalCallWiring> optionalExternalCallWiring, FileIoFactory fileIoFactory, Optional<DataSource> optionalDataSource) {
+  public static ApplicationWiring wiringWithCustomAdapters(Settings settings, Logger applicationLogger, DataRespositoryFactoryInterface dataRepositoryFactory, Optional<ExternalCallWiringInterface> optionalExternalCallWiring, Optional<FileIoFactory> fileIoFactory, Optional<DataSource> optionalDataSource) {
     JettyWebServer jettyWebServer = new JettyWebServer(applicationLogger, new Server(settings.webserverPort()));
     WebserverWiring webserverWiring = webserverWiring(jettyWebServer);
     ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory(settings.brokerUrl());
-    ExternalCallWiring externalCallWiring = optionalExternalCallWiring.orElse(externalCallWiringFactory(settings));
-    UseCaseFactory useCaseFactory = useCaseFactory(fileIoFactory, dataRepositoryFactory, applicationLogger, externalCallWiring, settings, activeMQConnectionFactory, AUDIT_LOGGER);
+    ExternalCallWiringInterface externalCallWiring = optionalExternalCallWiring.orElse(externalCallWiringFactory(settings));
+    UseCaseFactory useCaseFactory = useCaseFactory(fileIoFactory.orElse(new FileIoFactory(applicationLogger)), dataRepositoryFactory, applicationLogger, externalCallWiring, settings, activeMQConnectionFactory, AUDIT_LOGGER);
     JmsWiring jmsWiring = jmsWiring(useCaseFactory, activeMQConnectionFactory, settings, applicationLogger, AUDIT_LOGGER);
     Singletons singletons = new Singletons(optionalDataSource.orElse(null), webserverWiring, dataRepositoryFactory);
     return new ApplicationWiring(useCaseFactory, jmsWiring, externalCallWiring, singletons, settings, applicationLogger);

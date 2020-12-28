@@ -41,13 +41,13 @@ public class UseCaseFactory {
   private final Logger logger;
   private final Settings settings;
   private final MessageService messageService;
-  private final ExternalCallWiring externalCallWiring;
+  private final ExternalCallWiringInterface externalCallWiring;
   private final AggregateDataProviderRepository aggregateDataProviderRepository;
   private final EventDataProviderRepository eventDataProviderRepository;
   private final FileSystemWriter fileWriter;
 
   private UseCaseFactory(Logger logger, Settings settings, MessageService messageService,
-                         ExternalCallWiring externalCallWiring, AggregateDataProviderRepository aggregateDataProviderRepository,
+                         ExternalCallWiringInterface externalCallWiring, AggregateDataProviderRepository aggregateDataProviderRepository,
                          EventDataProviderRepository eventDataProviderRepository, FileSystemWriter fileWriter) {
     this.logger = logger;
     this.settings = settings;
@@ -58,7 +58,7 @@ public class UseCaseFactory {
     this.fileWriter = fileWriter;
   }
 
-  public static UseCaseFactory useCaseFactory(FileIoFactory fileIoFactory, DataRespositoryFactoryInterface dataRepositoryFactory, Logger logger, ExternalCallWiring externalCallWiring, Settings settings, ActiveMQConnectionFactory activeMQConnectionFactory, Logger auditLogger) {
+  public static UseCaseFactory useCaseFactory(FileIoFactory fileIoFactory, DataRespositoryFactoryInterface dataRepositoryFactory, Logger logger, ExternalCallWiringInterface externalCallWiring, Settings settings, ActiveMQConnectionFactory activeMQConnectionFactory, Logger auditLogger) {
     MessageService messageService = new AuditMessageService(new ActiveMqMessageService(new JmsTemplate(activeMQConnectionFactory)), auditLogger);
     return new UseCaseFactory(logger, settings, messageService, externalCallWiring, dataRepositoryFactory.aggregateDataProviderRepository(), dataRepositoryFactory.eventDataProviderRepository(), fileIoFactory.fileWriter());
   }

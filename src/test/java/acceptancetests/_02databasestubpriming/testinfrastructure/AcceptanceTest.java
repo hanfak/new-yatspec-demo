@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import wiring.Application;
 import wiring.ApplicationWiring;
 import wiring.DataRespositoryFactoryInterface;
-import wiring.FileIoFactory;
 
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -57,7 +56,7 @@ public class AcceptanceTest implements WithCustomResultListeners {
   private static final AtomicInteger characterInfoDatabaseId = new AtomicInteger(1);
 
   private static final DataRespositoryFactoryInterface databaseStub = new DatabaseStubFactory(characterDatabase, characterInfoDatabase, speciesInfoDatabase, characterInfoDatabaseId);
-  private static final Application application = new Application(ApplicationWiring.wiringWithCustomAdapters(load(TEST_PROPERTIES_PATH), APPLICATION_LOGGER, databaseStub, empty(), new FileIoFactory(APPLICATION_LOGGER), empty()));
+  private static final Application application = new Application(ApplicationWiring.wiringWithCustomAdapters(load(TEST_PROPERTIES_PATH), APPLICATION_LOGGER, databaseStub, empty(), empty(), empty()));
   private final TestDataProvider testDataProvider = new TestDataProvider(characterDatabase, characterInfoDatabase, speciesInfoDatabase, characterInfoDatabaseId);
 
   public final GivenTheDatabaseContains givenTheDatabaseContains = new GivenTheDatabaseContains(testState, testDataProvider);
