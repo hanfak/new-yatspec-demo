@@ -1,4 +1,0 @@
-- Have stub as the queue
-- Have the broaker up in container
-- no givens for queue
-- assert the queue has message with correct body

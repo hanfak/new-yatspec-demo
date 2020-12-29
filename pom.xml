@@ -35,7 +35,7 @@
     <junit.version>4.12</junit.version>
     <mockito.version>3.3.3</mockito.version>
     <assertj.version>3.12.2</assertj.version>
-    <yatspec.version>release-2020.3.2</yatspec.version>
+    <yatspec.version>2020.3.10</yatspec.version>
     <commons.lang.version>3.9</commons.lang.version>
     <log.slf4j.version>1.7.26</log.slf4j.version>
     <json.version>20160212</json.version>
