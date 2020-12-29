@@ -1,4 +1,4 @@
-package acceptancetests._02databasepriming.testinfrastructure.renderers;
+package testinfrastructure.renderers;
 
 import adapters.outgoing.httpclient.HttpResponseFormatter;
 import com.googlecode.yatspec.rendering.Renderer;

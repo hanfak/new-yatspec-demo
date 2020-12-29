@@ -1,4 +1,4 @@
-package acceptancetests._01reqandresponly.testinfrastructure.renderers;
+package testinfrastructure.renderers;
 
 import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.rendering.Renderer;

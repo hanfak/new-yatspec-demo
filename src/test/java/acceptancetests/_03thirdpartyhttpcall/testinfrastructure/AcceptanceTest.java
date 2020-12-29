@@ -2,9 +2,6 @@ package acceptancetests._03thirdpartyhttpcall.testinfrastructure;
 
 import acceptancetests._03thirdpartyhttpcall.GivenStarWarsCharacterInformationService;
 import acceptancetests._03thirdpartyhttpcall.whens.WhenARequestIsMadeToBuilder;
-import acceptancetests.commontestinfrastructure.renderers.CustomJavaSourceRenderer;
-import acceptancetests.commontestinfrastructure.renderers.HttpRequestRenderer;
-import acceptancetests.commontestinfrastructure.renderers.HttpResponseRenderer;
 import adapters.logging.LoggingCategory;
 import adapters.settings.internal.Settings;
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -23,6 +20,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
+import testinfrastructure.renderers.CustomJavaSourceRenderer;
+import testinfrastructure.renderers.HttpRequestRenderer;
+import testinfrastructure.renderers.HttpResponseRenderer;
 import wiring.Application;
 import wiring.DataRepositoryFactory;
 

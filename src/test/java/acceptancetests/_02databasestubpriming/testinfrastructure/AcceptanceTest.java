@@ -1,7 +1,8 @@
 package acceptancetests._02databasestubpriming.testinfrastructure;
 
 import acceptancetests._02databasestubpriming.givens.GivenTheDatabaseContains;
-import acceptancetests._02databasestubpriming.testinfrastructure.renderers.*;
+import acceptancetests._02databasestubpriming.testinfrastructure.renderers.CharacterInfoInDatabaseRenderer;
+import acceptancetests._02databasestubpriming.testinfrastructure.renderers.SpeciesInfoInDatabaseRendererVersion2;
 import acceptancetests._02databasestubpriming.testinfrastructure.stub.CharacterInfoRecord;
 import acceptancetests._02databasestubpriming.testinfrastructure.stub.CharacterRecord;
 import acceptancetests._02databasestubpriming.testinfrastructure.stub.DatabaseStubFactory;
@@ -25,6 +26,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
+import testinfrastructure.renderers.CustomJavaSourceRenderer;
+import testinfrastructure.renderers.HttpRequestRenderer;
+import testinfrastructure.renderers.HttpResponseRenderer;
 import wiring.Application;
 import wiring.ApplicationWiring;
 import wiring.DataRespositoryFactoryInterface;

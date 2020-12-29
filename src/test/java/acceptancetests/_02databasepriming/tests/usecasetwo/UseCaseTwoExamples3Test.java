@@ -4,9 +4,6 @@ import acceptancetests._02databasepriming.givens.GivenTheDatabaseContainsVersion
 import acceptancetests._02databasepriming.givens.SpeciesInfoRecord;
 import acceptancetests._02databasepriming.testinfrastructure.AcceptanceTest;
 import acceptancetests._02databasepriming.testinfrastructure.YatspecConstants;
-import acceptancetests._02databasepriming.testinfrastructure.renderers.CustomJavaSourceRenderer;
-import acceptancetests._02databasepriming.testinfrastructure.renderers.HttpRequestRenderer;
-import acceptancetests._02databasepriming.testinfrastructure.renderers.HttpResponseRenderer;
 import acceptancetests._02databasepriming.testinfrastructure.renderers.SpeciesInfoInDatabaseRenderer;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecResultListener;
@@ -18,6 +15,9 @@ import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 import com.googlecode.yatspec.sequence.Participant;
 import org.junit.jupiter.api.Test;
+import testinfrastructure.renderers.CustomJavaSourceRenderer;
+import testinfrastructure.renderers.HttpRequestRenderer;
+import testinfrastructure.renderers.HttpResponseRenderer;
 
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;

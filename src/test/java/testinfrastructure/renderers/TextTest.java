@@ -1,4 +1,4 @@
-package acceptancetests.commontestinfrastructure.renderers;
+package testinfrastructure.renderers;
 
 import com.googlecode.yatspec.junit.Row;
 import com.googlecode.yatspec.junit.Table;

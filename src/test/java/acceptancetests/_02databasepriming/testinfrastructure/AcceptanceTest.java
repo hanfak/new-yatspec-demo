@@ -1,9 +1,6 @@
 package acceptancetests._02databasepriming.testinfrastructure;
 
 import acceptancetests._02databasepriming.givens.*;
-import acceptancetests._02databasepriming.testinfrastructure.renderers.CustomJavaSourceRenderer;
-import acceptancetests._02databasepriming.testinfrastructure.renderers.HttpRequestRenderer;
-import acceptancetests._02databasepriming.testinfrastructure.renderers.HttpResponseRenderer;
 import acceptancetests._02databasepriming.thens.ThenTheCharacterInfoDatabaseContains;
 import acceptancetests._02databasepriming.thens.ThenTheDatabaseContains;
 import acceptancetests._02databasepriming.thens.ThenTheResponseVersion2;
@@ -26,6 +23,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
+import testinfrastructure.renderers.CustomJavaSourceRenderer;
+import testinfrastructure.renderers.HttpRequestRenderer;
+import testinfrastructure.renderers.HttpResponseRenderer;
 import wiring.Application;
 import wiring.ApplicationWiring;
 

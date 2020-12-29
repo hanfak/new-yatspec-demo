@@ -1,8 +1,5 @@
 package acceptancetests._01reqandresponly.testinfrastructure;
 
-import acceptancetests._01reqandresponly.testinfrastructure.renderers.CustomJavaSourceRenderer;
-import acceptancetests._01reqandresponly.testinfrastructure.renderers.HttpRequestRenderer;
-import acceptancetests._01reqandresponly.testinfrastructure.renderers.HttpResponseRenderer;
 import acceptancetests._01reqandresponly.thens.ThenTheResponse;
 import acceptancetests._01reqandresponly.thens.ThenTheResponseVersion2;
 import acceptancetests._01reqandresponly.whens.WhenARequestIsMadeTo;
@@ -21,6 +18,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
+import testinfrastructure.renderers.CustomJavaSourceRenderer;
+import testinfrastructure.renderers.HttpRequestRenderer;
+import testinfrastructure.renderers.HttpResponseRenderer;
 import wiring.Application;
 import wiring.ApplicationWiring;
 

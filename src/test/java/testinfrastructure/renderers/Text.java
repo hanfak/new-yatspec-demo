@@ -1,4 +1,4 @@
-package acceptancetests.commontestinfrastructure.renderers;
+package testinfrastructure.renderers;
 
 import java.util.HashMap;
 import java.util.Map;
