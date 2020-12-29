@@ -76,12 +76,12 @@ public class UseCaseTwoExamples3Test extends AcceptanceTest implements WithParti
   public Collection<SpecResultListener> getResultListeners() throws Exception {
     return List.of(
         new HtmlResultRenderer()
-            .withCustomRenderer(HttpRequest.class, result -> new HttpRequestRenderer())
-            .withCustomRenderer(HttpResponse.class, result -> new HttpResponseRenderer())
-            .withCustomRenderer(JavaSource.class, result -> new CustomJavaSourceRenderer())
+            .withCustomRenderer(HttpRequest.class, new HttpRequestRenderer())
+            .withCustomRenderer(HttpResponse.class, new HttpResponseRenderer())
+            .withCustomRenderer(JavaSource.class, new CustomJavaSourceRenderer())
             // This looks in capturedInputs for this class type, and uses the renderer to display it correctly in output
-            .withCustomRenderer(SpeciesInfoRecord.class, result -> new SpeciesInfoInDatabaseRenderer())
-            .withCustomRenderer(SvgWrapper.class, result -> new DontHighlightRenderer<>()),
+            .withCustomRenderer(SpeciesInfoRecord.class, new SpeciesInfoInDatabaseRenderer())
+            .withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer<>()),
         new HtmlIndexRenderer()
     );
   }
