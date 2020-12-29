@@ -38,6 +38,7 @@ public class Text {
   private static final Pattern ALL_WORDS_STARTING_WITH_CAPITAL_APART_FROM_CONSTANTS_REGEX = Pattern.compile("([A-Z][a-z]+)|(A\\s+)");
   private static final Pattern MATCH_WORD_QUOTE_IN_FORMATTED_STRING_REGEX = Pattern.compile("QUOTE[0-9]+", Pattern.CASE_INSENSITIVE);
   private static final Pattern MATCH_QUOTED_TEXT_IN_FORMATTED_STRING_REGEX = Pattern.compile("\"(.*?)\"");
+  private static final Pattern MATCH_JSON_STRING_REGEX = Pattern.compile("(\"[{\\[].*?[}\\]]\")");
 
   public static String wordify(String value) {
 
@@ -61,14 +62,21 @@ public class Text {
     if (value.contains("\"\"")) {
       return value;
     }
-    final Matcher matcher = MATCH_QUOTED_TEXT_IN_FORMATTED_STRING_REGEX.matcher(value);
     int i = 0;
     String newValue = value;
-    while (matcher.find()) {
+    final Matcher jsonStringMatcher = MATCH_JSON_STRING_REGEX.matcher(value);
+    while (jsonStringMatcher.find()) {
       i = i + 1;
       final String key = "QUOTE" + i;
-      QUOTED_WORDS.put(key, matcher.group(1));
-      newValue = newValue.replace(matcher.group(1), key);
+      QUOTED_WORDS.put(key, jsonStringMatcher.group(1));
+      newValue = newValue.replace(jsonStringMatcher.group(1), key);
+    }
+    final Matcher quotedStringMatcher = MATCH_QUOTED_TEXT_IN_FORMATTED_STRING_REGEX.matcher(newValue);
+    while (quotedStringMatcher.find()) {
+      i = i + 1;
+      final String key = "QUOTE" + i;
+      QUOTED_WORDS.put(key, quotedStringMatcher.group(1));
+      newValue = newValue.replace(quotedStringMatcher.group(1), key);
     }
     return newValue;
   }

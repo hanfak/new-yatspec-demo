@@ -104,6 +104,25 @@ class TextTest implements WithAssertions {
     assertThat(Text.wordify(input)).isEqualTo(expectedOutput);
   }
 
+  @ParameterizedTest
+  @Table({
+      @Row({"givenACodeHas(\"\");", "Given a code has \"\""}),
+      @Row({"givenACodeHas(\"{}\");", "Given a code has \"{}\""}),
+      @Row({"givenACodeHas(\"{\"field\": 1, \"field2\": \"hello\"}\");", "Given a code has \"{\"field\": 1, \"field2\": \"hello\"}\""}),
+      @Row({"givenACodeHas(\"{\"field\": 1, \"field2\": {\"sub_field_1\":\"boo\",\"sub_field_2\":\"hoo\"}}\");", "Given a code has \"{\"field\": 1, \"field2\": {\"sub_field_1\":\"boo\",\"sub_field_2\":\"hoo\"}}\""}),
+      @Row({"givenACodeHas(\"[]\");", "Given a code has \"[]\""}),
+      @Row({"givenACodeHas(\"{\"employees\":[{\"name\":\"Ram\", \"email\":\"ram@gmail.com\", \"age\":23},{\"name\":\"Shyam\", \"email\":\"shyam23@gmail.com\", \"age\":28}]}\");", "Given a code has \"{\"employees\":[{\"name\":\"Ram\", \"email\":\"ram@gmail.com\", \"age\":23},{\"name\":\"Shyam\", \"email\":\"shyam23@gmail.com\", \"age\":28}]}\""}),
+      @Row({"givenACodeHas(\"[\"Ford\", \"BMW\", \"Fiat\" ]\");", "Given a code has \"[\"Ford\", \"BMW\", \"Fiat\" ]\""}),
+      @Row({"givenACodeHas(\"[{\"field\": 1, \"field2\": \"hello\"}]\");", "Given a code has \"[{\"field\": 1, \"field2\": \"hello\"}]\""}),
+      @Row({"givenACodeHas(\"{\"name\":\"John\",\"age\":30,\"cars\":[ \"Ford\", \"BMW\", \"Fiat\" ]}\");", "Given a code has \"{\"name\":\"John\",\"age\":30,\"cars\":[ \"Ford\", \"BMW\", \"Fiat\" ]}\""}),
+      @Row({"givenACodeHas(\"SOME_CONSTANTS_IN_QUOTES\").andWith(\"{\"field\": 1, \"field2\": \"hello\"}\");", "Given a code has \"SOME_CONSTANTS_IN_QUOTES\" and with \"{\"field\": 1, \"field2\": \"hello\"}\""}),
+      @Row({"givenACodeHas(\"[\"Ford\", \"BMW\", \"Fiat\" ]\").andWith(\"{\"field\": 1, \"field2\": \"hello\"}\");", "Given a code has \"[\"Ford\", \"BMW\", \"Fiat\" ]\" and with \"{\"field\": 1, \"field2\": \"hello\"}\""}),
+      @Row({"givenACodeHas(\"[\"Ford\", \"BMW\", \"Fiat\" ]\").andWith(\"{\"field\": 1, \"field2\": \"hello\"}\").for(\"SOME_CONSTANTS_IN_QUOTES\");", "Given a code has \"[\"Ford\", \"BMW\", \"Fiat\" ]\" and with \"{\"field\": 1, \"field2\": \"hello\"}\" for \"SOME_CONSTANTS_IN_QUOTES\""})
+  })
+  void jsonStringInQuotesShouldNotBeChanged(String input, String expectedOutput) {
+    assertThat(Text.wordify(input)).isEqualTo(expectedOutput);
+  }
+
   // TODO
   @ParameterizedTest
   @Disabled
