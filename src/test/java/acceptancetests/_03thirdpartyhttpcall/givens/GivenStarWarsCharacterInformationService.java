@@ -1,4 +1,4 @@
-package acceptancetests._03thirdpartyhttpcall;
+package acceptancetests._03thirdpartyhttpcall.givens;
 
 import adapters.settings.internal.Settings;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
@@ -26,18 +26,21 @@ public class GivenStarWarsCharacterInformationService {
     this.settings = settings;
   }
 
-  public GivenStarWarsCharacterInformationService forPersonId(int expectedPersonId) {
-    this.personId = expectedPersonId;
+  public GivenStarWarsCharacterInformationService forPersonId(int primedPersonId) {
+    this.personId = primedPersonId;
+    testState.interestingGivens().add("person id", primedPersonId);
     return this;
   }
 
-  public GivenStarWarsCharacterInformationService withBirthYear(String expectedBirthYear) {
-    this.birthYear = expectedBirthYear;
+  public GivenStarWarsCharacterInformationService withBirthYear(String primedBirthYear) {
+    this.birthYear = primedBirthYear;
+    testState.interestingGivens().add("birth year", primedBirthYear);
     return this;
   }
 
-  public GivenStarWarsCharacterInformationService withName(String expectedName) {
-    this.name = expectedName;
+  public GivenStarWarsCharacterInformationService withName(String primedName) {
+    this.name = primedName;
+    testState.interestingGivens().add("name", primedName);
     return this;
   }
 
@@ -63,26 +66,26 @@ public class GivenStarWarsCharacterInformationService {
       "  \"eye_color\": \"blue\",\n" +
       "  \"birth_year\": \"%s\",\n" +
       "  \"gender\": \"male\",\n" +
-      "  \"homeworld\": \"https://swapi.py4e.com/api/planets/14/\",\n" +
+      "  \"homeworld\": \"https://localhost:8090/api/planets/14/\",\n" +
       "  \"films\": [\n" +
-      "    \"https://swapi.py4e.com/api/films/1/\",\n" +
-      "    \"https://swapi.py4e.com/api/films/2/\",\n" +
-      "    \"https://swapi.py4e.com/api/films/3/\",\n" +
-      "    \"https://swapi.py4e.com/api/films/6/\",\n" +
-      "    \"https://swapi.py4e.com/api/films/7/\"\n" +
+      "    \"https://localhost:8090/api/films/1/\",\n" +
+      "    \"https://localhost:8090/api/films/2/\",\n" +
+      "    \"https://localhost:8090/api/films/3/\",\n" +
+      "    \"https://localhost:8090/api/films/6/\",\n" +
+      "    \"https://localhost:8090/api/films/7/\"\n" +
       "  ],\n" +
       "  \"species\": [\n" +
-      "    \"https://swapi.py4e.com/api/species/3/\"\n" +
+      "    \"https://localhost:8090/api/species/3/\"\n" +
       "  ],\n" +
       "  \"vehicles\": [\n" +
-      "    \"https://swapi.py4e.com/api/vehicles/19/\"\n" +
+      "    \"https://localhost:8090/api/vehicles/19/\"\n" +
       "  ],\n" +
       "  \"starships\": [\n" +
-      "    \"https://swapi.py4e.com/api/starships/10/\",\n" +
-      "    \"https://swapi.py4e.com/api/starships/22/\"\n" +
+      "    \"https://localhost:8090/api/starships/10/\",\n" +
+      "    \"https://localhost:8090/api/starships/22/\"\n" +
       "  ],\n" +
       "  \"created\": \"2014-12-10T16:42:45.066000Z\",\n" +
       "  \"edited\": \"2014-12-20T21:17:50.332000Z\",\n" +
-      "  \"url\": \"https://swapi.py4e.com/api/people/%s/\"\n" +
+      "  \"url\": \"https://localhost:8090/api/people/%s/\"\n" +
       "}";
 }

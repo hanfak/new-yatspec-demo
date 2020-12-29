@@ -12,7 +12,7 @@ public class YatspecConstants {
   private static final String CLIENT = "client";
   public static final Participant CLIENT_ACTOR = Participants.ACTOR.create(CLIENT);
 
-  private static final String STAR_WARS_SERVICE = "client";
+  private static final String STAR_WARS_SERVICE = "starWarsService";
   public static final Participant STAR_WARS_SERVICE_PARTICIPANT = Participants.PARTICIPANT.create(STAR_WARS_SERVICE);
 
   private static final String REQUEST_FORMAT = "Request from %s to %s";

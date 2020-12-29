@@ -6,26 +6,26 @@ import java.net.http.HttpResponse;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ThenTheResponseVersion3 {
+public class ThenTheResponseReceived {
   private final TestState testState;
   private final HttpResponse<String> response;
 
-  public ThenTheResponseVersion3(TestState testState, HttpResponse<String> response) {
+  public ThenTheResponseReceived(TestState testState, HttpResponse<String> response) {
     this.testState = testState;
     this.response = response;
   }
 
-  public ThenTheResponseVersion3 hasStatusCode(int expectedStatusCode) {
+  public ThenTheResponseReceived hasStatusCode(int expectedStatusCode) {
     assertThat(response.statusCode()).isEqualTo(expectedStatusCode);
     return this;
   }
 
-  public ThenTheResponseVersion3 hasContentType(String expectedContentType) {
+  public ThenTheResponseReceived hasContentType(String expectedContentType) {
     assertThat(response.headers().firstValue("content-type")).contains(expectedContentType);
     return this;
   }
 
-  public ThenTheResponseVersion3 hasBody(String expectedBody) {
+  public ThenTheResponseReceived hasBody(String expectedBody) {
     assertThat(response.body()).isEqualTo(expectedBody);
     return this;
   }

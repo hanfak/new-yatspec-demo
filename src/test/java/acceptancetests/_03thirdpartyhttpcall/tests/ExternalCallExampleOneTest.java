@@ -1,7 +1,7 @@
 package acceptancetests._03thirdpartyhttpcall.tests;
 
 import acceptancetests._03thirdpartyhttpcall.testinfrastructure.AcceptanceTest;
-import acceptancetests._03thirdpartyhttpcall.thens.ThenTheResponseVersion3;
+import acceptancetests._03thirdpartyhttpcall.thens.ThenTheResponseReceived;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.WithParticipants;
 import com.googlecode.yatspec.sequence.Participant;
@@ -32,16 +32,18 @@ class ExternalCallExampleOneTest extends AcceptanceTest implements WithParticipa
         .withUri("http://localhost:2222/externalCallExampleOneServlet/1")
         .isCalledUsingHttpGetMethod();
 
+    thenRequestWasMadeToStarWarsApi
+        .forPersonId(1)
+        .wasSentSuccessfully();
     thenResponseReceived()
         .hasStatusCode(200)
         .hasContentType("application/json")
         .hasBody("{\"personId\":\"1\",\"details\":{\"name\":\"BOBO\",\"birthYear\":\"777BBY\"}}");
-    // assert on the request made
   }
 
-  private ThenTheResponseVersion3 thenResponseReceived() {
+  private ThenTheResponseReceived thenResponseReceived() {
     HttpResponse<String> response =  testState.getType(RESPONSE_FROM_APP_TO_CLIENT, HttpResponse.class);
-    return new ThenTheResponseVersion3(testState, response);
+    return new ThenTheResponseReceived(testState, response);
   }
 
   @Override

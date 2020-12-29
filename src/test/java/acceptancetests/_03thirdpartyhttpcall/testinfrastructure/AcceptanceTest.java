@@ -1,6 +1,7 @@
 package acceptancetests._03thirdpartyhttpcall.testinfrastructure;
 
-import acceptancetests._03thirdpartyhttpcall.GivenStarWarsCharacterInformationService;
+import acceptancetests._03thirdpartyhttpcall.givens.GivenStarWarsCharacterInformationService;
+import acceptancetests._03thirdpartyhttpcall.thens.ThenRequestWasMadeToStarWarsApi;
 import acceptancetests._03thirdpartyhttpcall.whens.WhenARequestIsMadeToBuilder;
 import adapters.logging.LoggingCategory;
 import adapters.settings.internal.Settings;
@@ -43,18 +44,18 @@ import static wiring.ApplicationWiring.wiringWithCustomAdapters;
 public class AcceptanceTest implements WithCustomResultListeners {
   private static final String TEST_PROPERTIES_PATH = "target/test-classes/application.test.properties";
 
-  public final static TestState testState = new TestState();
+  public static final TestState testState = new TestState();
 
-  private final static Logger APPLICATION_LOGGER = getLogger(LoggingCategory.APPLICATION.name());
-
+  private static final Logger APPLICATION_LOGGER = getLogger(LoggingCategory.APPLICATION.name());
   private static final Settings settings = load(TEST_PROPERTIES_PATH);
   private static final DataRepositoryFactory dataRepositoryFactory = new DataRepositoryFactory(createDataSource(settings), APPLICATION_LOGGER);
   private static final Application application = new Application(wiringWithCustomAdapters(settings, APPLICATION_LOGGER, dataRepositoryFactory, Optional.of(externalCallWiringFactory(settings, testState)), empty(), empty()));
 
+  protected static final WireMockServer wiremock = new WireMockServer(8090);
+
   public final GivenStarWarsCharacterInformationService givenStarWarsCharacterInformationService = new GivenStarWarsCharacterInformationService(testState, settings);
   public final WhenARequestIsMadeToBuilder whenARequest = new WhenARequestIsMadeToBuilder(testState);
-
-  protected static final WireMockServer wiremock = new WireMockServer(8090);
+  public final ThenRequestWasMadeToStarWarsApi thenRequestWasMadeToStarWarsApi = new ThenRequestWasMadeToStarWarsApi(testState);
 
   @Override
   public Collection<SpecResultListener> getResultListeners() throws Exception {
