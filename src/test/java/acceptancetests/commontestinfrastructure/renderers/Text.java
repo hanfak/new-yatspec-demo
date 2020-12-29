@@ -1,4 +1,4 @@
-package acceptancetests._03thirdpartyhttpcall.testinfrastructure.renderers;
+package acceptancetests.commontestinfrastructure.renderers;
 
 import java.util.HashMap;
 import java.util.Map;

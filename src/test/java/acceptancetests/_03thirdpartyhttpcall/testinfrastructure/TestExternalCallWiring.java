@@ -8,6 +8,7 @@ import adapters.outgoing.thirdparty.AppHttpClient;
 import adapters.outgoing.thirdparty.randomjsonservice.RandomXmlService;
 import adapters.outgoing.thirdparty.starwarsservice.StarWarsService;
 import adapters.settings.internal.Settings;
+import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import wiring.ExternalCallWiringInterface;
@@ -17,13 +18,15 @@ public class TestExternalCallWiring implements ExternalCallWiringInterface {
   private final static Logger AUDIT_LOGGER = LoggerFactory.getLogger(LoggingCategory.AUDIT.name());
 
   private final Settings settings;
+  private final TestState testState;
 
-  private TestExternalCallWiring(Settings settings) {
+  private TestExternalCallWiring(Settings settings, TestState testState) {
     this.settings = settings;
+    this.testState = testState;
   }
 
-  static ExternalCallWiringInterface externalCallWiringFactory(Settings settings) {
-    return new TestExternalCallWiring(settings);
+  static ExternalCallWiringInterface externalCallWiringFactory(Settings settings, TestState testState) {
+    return new TestExternalCallWiring(settings, testState);
   }
 
   private AppHttpClient appHttpClient() {
@@ -31,7 +34,7 @@ public class TestExternalCallWiring implements ExternalCallWiringInterface {
   }
 
   private AppHttpClient starWarsYatspecLoggingClient(AppHttpClient appHttpClient) {
-    return new starWarsYatspecLoggingClient(appHttpClient);
+    return new StarWarsYatspecLoggingClient(appHttpClient, testState);
   }
 
   @Override

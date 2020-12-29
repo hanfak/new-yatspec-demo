@@ -23,7 +23,7 @@ public class WhenARequestIsMadeToBuilder {
 
   public WhenARequestIsMadeToBuilder(TestState testState) {
     this.testState = testState;
-    httpClient = HttpClient.newHttpClient();
+    this.httpClient = HttpClient.newHttpClient();
   }
 
   public HttpResponse<String> getHttpResponse() {

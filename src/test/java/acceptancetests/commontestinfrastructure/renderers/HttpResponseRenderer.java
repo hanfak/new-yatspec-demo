@@ -1,4 +1,4 @@
-package acceptancetests._03thirdpartyhttpcall.testinfrastructure.renderers;
+package acceptancetests.commontestinfrastructure.renderers;
 
 import adapters.outgoing.httpclient.HttpResponseFormatter;
 import com.googlecode.yatspec.rendering.Renderer;

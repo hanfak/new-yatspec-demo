@@ -1,4 +1,4 @@
-package acceptancetests._03thirdpartyhttpcall.testinfrastructure.renderers;
+package acceptancetests.commontestinfrastructure.renderers;
 
 import com.googlecode.yatspec.parsing.JavaSource;
 import com.googlecode.yatspec.rendering.Renderer;
