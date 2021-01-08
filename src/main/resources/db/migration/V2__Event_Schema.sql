@@ -2,7 +2,7 @@ CREATE SCHEMA IF NOT EXISTS records;
 
 CREATE SEQUENCE aggregates_sequence START 1;
 CREATE SEQUENCE events_sequence START 1;
--- TODO Add index on AGG_REFERENCE
+
 CREATE TABLE records.aggregates(
    AGG_ID               integer       DEFAULT nextval('aggregates_sequence'::regclass) NOT NULL UNIQUE,
    AGG_REFERENCE        varchar(10)   NOT NULL UNIQUE PRIMARY KEY,

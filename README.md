@@ -67,27 +67,36 @@ For acceptance tests to work will need database to be up
 
 ### Docker Database setup
 
+
 * mkdir -p $HOME/docker/volumes/postgres
 * docker run --rm --name pg-docker -e POSTGRES_PASSWORD=docker -d -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data  postgres:11
-* docker exec -it postgres bash
+* docker exec -it pg-docker bash
 * psql -h localhost -U postgres -d postgres 
 * psql -h localhost -U postgres -d postgres -W
+
+#### Useful postgres commands
  
- create database "starwarslocal";
- -- conntect to db
- \c "starwarslocal"
- --show tables
- \dt
- -- show table with schema
- \dt records.<name of table>
- -- show schema
- \d+ <name of table>
+ * create db
+    * create database "starwarslocal";
+ * conntect to db
+    * \c "starwarslocal"
+ * show table with schema
+    * \dt records.<name of table>
+    * \dt records.*
+ * show schema
+    * \d+ <name of table>
+* show sequences
+    * SELECT * FROM information_schema.sequences;
+* show indexes
+    * select * from pg_indexes where schemaname = 'records';
  
- ### ActiveMQ Docker Setup
+### ActiveMQ Docker Setup
  
 * docker run -d --name='activemq' -it --rm -e 'ACTIVEMQ_CONFIG_MINMEMORY=256' -e 'ACTIVEMQ_CONFIG_MAXMEMORY=512'  -v
  /data/activemq:/data  -v /var/log/activemq:/var/log/activemq -p 8161:8161 -p 61616:61616  --network=host webcenter/activemq:latest
-* docker run -d --name='activemq' -it --rm -e 'ACTIVEMQ_CONFIG_MINMEMORY=256' -e 'ACTIVEMQ_CONFIG_MAXMEMORY=512' -p 8161:8161 -p 61616:61616  webcenter/activemq:latest
+
+* docker run -d --name='activemq' -it --rm -e 'ACTIVEMQ_CONFIG_MINMEMORY=256' -e 'ACTIVEMQ_CONFIG_MAXMEMORY=512' -p 8161:8161 -p 61616:61616  --network=host webcenter/activemq:latest
+
 * To view activemq console, to see queues, processed messages etc:
     * http://127.0.0.1:8161/admin/
     * admin:admin
@@ -104,4 +113,9 @@ For acceptance tests to work will need database to be up
 ## Notes
 
 - Run one test class at a time. All test run will take time, have not set hikari properly 
-- 
+- Due to using jooq, which creates  the classes based on what the schema is in the db, thus code will not compile if
+ database is not setup , you will need to run db migration mvn either: 
+    - exec bash in docker image, and login to postgres (see above commands), and copy schemas into terminal from src/main/resources/db/migration
+    - Run flyway migration via mvn plugin `mvn clean -PdbRecreate`
+- To just clean database use `mvn clean -PdbClean`
+- There is a lot of duplication, this is intentional to self contain all the areas

@@ -9,17 +9,17 @@ import java.util.regex.Pattern;
 import static java.lang.System.lineSeparator;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
-import static org.apache.commons.text.StringEscapeUtils.escapeXml11;
 
 public class CustomJavaSourceRenderer implements Renderer<JavaSource> {
+
   private static final Pattern DOT_CLASS = Pattern.compile("\\.class(\\W|$)");
 
   @Override
   public String render(JavaSource javaSource) {
     List<String> lines = lines(removeDotClass(javaSource.value().trim()));
-    return escapeXml11(lines.stream()
+    return lines.stream()
         .map(Text::wordify)
-        .collect(joining("\n")));
+        .collect(joining("\n"));
   }
 
   public static List<String> lines(final String sourceCode) {
