@@ -29,43 +29,43 @@ import static acceptancetests._02databasepriming.givens.SpeciesInfoRecord.Specie
 
 // see class acceptancetests/_02databasepriming/givens/GivenTheDatabaseContainsVersion4.java for more implementation details
 public class UseCaseThreeExamples1Test extends AcceptanceTest implements WithParticipants {
-  @Notes("This test demonstrates the multiple tables being primed in smae given. While asserted on in different thens")
+  @Notes("This test demonstrates \"{b}hello{/b}\" the multiple tables being primed in smae given. While asserted on in different thens")
   @Test
   void shouldReturnAResponseAfterAccessingDatabase() throws Exception {
-    givenTheDatabaseContains()
-        .hasCharacterInfo(data()
-            .withPersonId(12345)
-            .withBirthYear("1502")
-            .withPersonName("Loial"))
-        .hasASpeciesInfo(record()
-            .withPersonId(12345)
-            .withName("Ogier")
-            .withAverageHeight(3.5F)
-            .withLifespan(500))
-        .isStoredInTheDatabase();
-
-    whenARequest
-        .withUri("http://localhost:2222/usecasethree/12345")
-        .isCalledUsingHttpGetMethod();
-
-    thenTheSpeciesInfoDatabaseContainsARecord()
-        .withSpeciesInfo(record()
-          .withSpeciesInfoId(generatedId())
-          .withPersonId(12345)
-          .withName("Ogier")
-          .withLifespan(500)
-          .withAverageHeight(3.5F))
-        .wasInsertedIntoTheDatabase();
-    thenTheCharacterInfoDatabaseContains.aCharacterInfo(data()
-          .withCharacterInfoId(generatedCharacterInfoId())
-          .withPersonId(12345)
-          .withBirthYear("1502")
-          .withPersonName("Loial"))
-        .wasInsertedIntoTheDatabase();
-    thenReturnedResponse
-        .hasStatusCode(200)
-        .hasContentType("text/html")
-        .hasBody("Hello, Ogier, who lives for 500 years and has average height of 3.5 metres, and was born 1502");
+//    givenTheDatabaseContains()
+//        .hasCharacterInfo(data()
+//            .withPersonId(12345)
+//            .withBirthYear("1502")
+//            .withPersonName("Loial"))
+//        .hasASpeciesInfo(record()
+//            .withPersonId(12345)
+//            .withName("Ogier")
+//            .withAverageHeight(3.5F)
+//            .withLifespan(500))
+//        .isStoredInTheDatabase();
+//
+//    whenARequest
+//        .withUri("http://localhost:2222/usecasethree/12345")
+//        .isCalledUsingHttpGetMethod();
+//
+//    thenTheSpeciesInfoDatabaseContainsARecord()
+//        .withSpeciesInfo(record()
+//          .withSpeciesInfoId(generatedId())
+//          .withPersonId(12345)
+//          .withName("Ogier")
+//          .withLifespan(500)
+//          .withAverageHeight(3.5F))
+//        .wasInsertedIntoTheDatabase();
+//    thenTheCharacterInfoDatabaseContains.aCharacterInfo(data()
+//          .withCharacterInfoId(generatedCharacterInfoId())
+//          .withPersonId(12345)
+//          .withBirthYear("1502")
+//          .withPersonName("Loial"))
+//        .wasInsertedIntoTheDatabase();
+//    thenReturnedResponse
+//        .hasStatusCode(200)
+//        .hasContentType("text/html")
+//        .hasBody("Hello, Ogier, who lives for 500 years and has average height of 3.5 metres, and was born 1502");
   }
 
   private GivenTheDatabaseContainsVersion5 givenTheDatabaseContains() {
@@ -106,12 +106,12 @@ public class UseCaseThreeExamples1Test extends AcceptanceTest implements WithPar
   public Collection<SpecResultListener> getResultListeners() throws Exception {
     return List.of(
         new HtmlResultRenderer()
-            .withCustomRenderer(HttpRequest.class, new HttpRequestRenderer())
-            .withCustomRenderer(HttpResponse.class, new HttpResponseRenderer())
-            .withCustomRenderer(JavaSource.class, new CustomJavaSourceRenderer())
-            .withCustomRenderer(SpeciesInfoRecord.class, new SpeciesInfoInDatabaseRendererVersion2())
-            .withCustomRenderer(CharacterInfoRecord.class, new CharacterInfoInDatabaseRenderer())
-            .withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer<>()),
+            .withCustomRenderer(HttpRequest.class, result ->new HttpRequestRenderer())
+            .withCustomRenderer(HttpResponse.class, result ->new HttpResponseRenderer())
+            .withCustomRenderer(JavaSource.class, result ->new CustomJavaSourceRenderer())
+            .withCustomRenderer(SpeciesInfoRecord.class, result ->new SpeciesInfoInDatabaseRendererVersion2())
+            .withCustomRenderer(CharacterInfoRecord.class,result -> new CharacterInfoInDatabaseRenderer())
+            .withCustomRenderer(SvgWrapper.class, result ->new DontHighlightRenderer<>()),
         new HtmlIndexRenderer()
     );
   }

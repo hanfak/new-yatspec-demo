@@ -53,10 +53,10 @@ public class AcceptanceTest implements WithCustomResultListeners {
   public Collection<SpecResultListener> getResultListeners() throws Exception {
     return List.of(
         new HtmlResultRenderer()
-            .withCustomRenderer(HttpRequest.class, new HttpRequestRenderer())
-            .withCustomRenderer(HttpResponse.class, new HttpResponseRenderer())
-            .withCustomRenderer(JavaSource.class, new CustomJavaSourceRenderer())
-            .withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer<>()),
+            .withCustomRenderer(HttpRequest.class, result -> new HttpRequestRenderer())
+            .withCustomRenderer(HttpResponse.class, result -> new HttpResponseRenderer())
+            .withCustomRenderer(JavaSource.class, result -> new CustomJavaSourceRenderer())
+            .withCustomRenderer(SvgWrapper.class, result -> new DontHighlightRenderer<>()),
         new HtmlIndexRenderer()
     );
   }

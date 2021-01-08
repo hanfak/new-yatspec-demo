@@ -67,10 +67,10 @@ public class AcceptanceTest implements WithCustomResultListeners {
   public Collection<SpecResultListener> getResultListeners() throws Exception {
     return List.of(
         new HtmlResultRenderer()
-            .withCustomRenderer(HttpRequest.class, new HttpRequestRenderer())
-            .withCustomRenderer(HttpResponse.class, new HttpResponseRenderer())
-            .withCustomRenderer(JavaSource.class, new CustomJavaSourceRenderer())
-            .withCustomRenderer(SvgWrapper.class, new DontHighlightRenderer<>()),
+            .withCustomRenderer(HttpRequest.class, result ->new HttpRequestRenderer())
+            .withCustomRenderer(HttpResponse.class, result ->new HttpResponseRenderer())
+            .withCustomRenderer(JavaSource.class, result ->new CustomJavaSourceRenderer())
+            .withCustomRenderer(SvgWrapper.class, result ->new DontHighlightRenderer<>()),
         new HtmlIndexRenderer()
     );
   }
@@ -82,16 +82,16 @@ public class AcceptanceTest implements WithCustomResultListeners {
     // Instead of starting application each time (per test/test class) during build, can use docker image
     // created before tests are run during build, and the tests are run against this. Will need some logic
     // To check if container is running, then dont start app locally
-    application.start();
+//    application.start();
   }
 
   @BeforeEach
   void setUp() {
-    testDataProvider.deleteAllInfoFromAllTables();
+//    testDataProvider.deleteAllInfoFromAllTables();
   }
 
   @AfterAll
   static void afterAll() {
-    application.stop();
+//    application.stop();
   }
 }
