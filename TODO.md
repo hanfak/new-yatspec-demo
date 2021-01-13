@@ -1,4 +1,5 @@
 - ~~extract out  DSL.using(this.dataSource, SQLDialect.POSTGRES) to wiring~~
+- ~~Shows logs in html output~~
 - Test other use cases
 - Assert on files
 - Split wiring builder for prod and test 

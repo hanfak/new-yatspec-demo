@@ -19,10 +19,12 @@ import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
+import testinfrastructure.YatspecLoggerCapturer;
 import testinfrastructure.renderers.CustomJavaSourceRenderer;
 import testinfrastructure.renderers.HttpRequestRenderer;
 import testinfrastructure.renderers.HttpResponseRenderer;
@@ -63,6 +65,8 @@ public class AcceptanceTest implements WithCustomResultListeners {
   public final ThenTheDatabaseContains thenTheDatabaseContains = new ThenTheDatabaseContains(testState, dslContext);
   public final ThenTheCharacterInfoDatabaseContains thenTheCharacterInfoDatabaseContains = new ThenTheCharacterInfoDatabaseContains(testState, testDataProvider);
 
+  private final YatspecLoggerCapturer yatspecLoggerCapturer = new YatspecLoggerCapturer(testState);
+
   @Override
   public Collection<SpecResultListener> getResultListeners() throws Exception {
     return List.of(
@@ -88,6 +92,12 @@ public class AcceptanceTest implements WithCustomResultListeners {
   @BeforeEach
   void setUp() {
     testDataProvider.deleteAllInfoFromAllTables();
+    yatspecLoggerCapturer.beginCapturingOutput();
+  }
+
+  @AfterEach
+  void tearDown() {
+    yatspecLoggerCapturer.captureOutputToYatspec();
   }
 
   @AfterAll

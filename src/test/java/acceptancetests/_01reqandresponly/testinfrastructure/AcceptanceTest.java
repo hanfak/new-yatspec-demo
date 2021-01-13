@@ -18,6 +18,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
+import testinfrastructure.YatspecLoggerCapturer;
 import testinfrastructure.renderers.CustomJavaSourceRenderer;
 import testinfrastructure.renderers.HttpRequestRenderer;
 import testinfrastructure.renderers.HttpResponseRenderer;
@@ -46,7 +47,7 @@ public class AcceptanceTest implements WithCustomResultListeners {
   public final WhenARequestIsMadeToBuilder whenARequest = new WhenARequestIsMadeToBuilder(testState);
   public final ThenTheResponse thenResponse = new ThenTheResponse(whenARequest::getHttpResponse);
   public final ThenTheResponseVersion2 thenReturnedResponse = new ThenTheResponseVersion2(whenARequest::getHttpResponse);
-
+  private final YatspecLoggerCapturer yatspecLoggerCapturer = new YatspecLoggerCapturer(testState);
 
   @Override
   public Collection<SpecResultListener> getResultListeners() throws Exception {
@@ -62,6 +63,7 @@ public class AcceptanceTest implements WithCustomResultListeners {
 
   @BeforeEach
   void setUp() {
+    yatspecLoggerCapturer.beginCapturingOutput();
     // Instead of starting application each time during build, can use docker image
     // created before tests are run during build, and the tests are run against this. Will need some logic
     // To check if container is running, then dont start app locally
@@ -71,5 +73,6 @@ public class AcceptanceTest implements WithCustomResultListeners {
   @AfterEach
   void tearDown() {
     application.stop();
+    yatspecLoggerCapturer.captureOutputToYatspec();
   }
 }

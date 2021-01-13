@@ -17,10 +17,12 @@ import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 import com.googlecode.yatspec.state.givenwhenthen.TestState;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
+import testinfrastructure.YatspecLoggerCapturer;
 import testinfrastructure.renderers.CustomJavaSourceRenderer;
 import testinfrastructure.renderers.HttpRequestRenderer;
 import testinfrastructure.renderers.HttpResponseRenderer;
@@ -57,6 +59,8 @@ public class AcceptanceTest implements WithCustomResultListeners {
   public final WhenARequestIsMadeToBuilder whenARequest = new WhenARequestIsMadeToBuilder(testState);
   public final ThenRequestWasMadeToStarWarsApi thenRequestWasMadeToStarWarsApi = new ThenRequestWasMadeToStarWarsApi(testState);
 
+  private final YatspecLoggerCapturer yatspecLoggerCapture = new YatspecLoggerCapturer(testState);
+
   @Override
   public Collection<SpecResultListener> getResultListeners() throws Exception {
     return List.of(
@@ -81,8 +85,14 @@ public class AcceptanceTest implements WithCustomResultListeners {
 
   @BeforeEach
   void setUp() {
+    yatspecLoggerCapture.beginCapturingOutput();
     WireMock.configureFor(8090);
     wiremock.resetAll(); // each test will setup own responses in givens, might conflict with other tests
+  }
+
+  @AfterEach
+  void tearDown() {
+    yatspecLoggerCapture.captureOutputToYatspec();
   }
 
   @AfterAll
