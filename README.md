@@ -67,7 +67,6 @@ For acceptance tests to work will need database to be up
 
 ### Docker Database setup
 
-
 * mkdir -p $HOME/docker/volumes/postgres
 * docker run --rm --name pg-docker -e POSTGRES_PASSWORD=docker -d -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data  postgres:11
 * docker exec -it pg-docker bash
@@ -89,7 +88,14 @@ For acceptance tests to work will need database to be up
     * SELECT * FROM information_schema.sequences;
 * show indexes
     * select * from pg_indexes where schemaname = 'records';
- 
+    
+#### Troubleshooting
+
+* If database container closes upon starting up. Delete the volume at `$HOME/docker/volumes/postgres` and rerun the
+ docker run command. You will need to create the database in the postgres command line first, and then run `src/test
+ /java/learning/databaseservice/DatabaseMigration.java` to migrate db schema, and run `src/test/java/learning
+ /databaseservice/JooqCodeGeneration.java` to set up jooq objects. Or run the maven commands (mvn clean -PdbRecreate
+ ) and ``mvn test-compile `` should also do it too
 ### ActiveMQ Docker Setup
  
 * docker run -d --name='activemq' -it --rm -e 'ACTIVEMQ_CONFIG_MINMEMORY=256' -e 'ACTIVEMQ_CONFIG_MAXMEMORY=512'  -v

@@ -1,6 +1,6 @@
 package testinfrastructure.renderers;
 
-import com.googlecode.yatspec.parsing.JavaSource;
+import com.googlecode.yatspec.parsing.TestText;
 import com.googlecode.yatspec.rendering.Renderer;
 
 import java.util.List;
@@ -10,13 +10,13 @@ import static java.lang.System.lineSeparator;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.joining;
 
-public class CustomJavaSourceRenderer implements Renderer<JavaSource> {
+public class CustomJavaSourceRenderer implements Renderer<TestText> {
 
   private static final Pattern DOT_CLASS = Pattern.compile("\\.class(\\W|$)");
 
   @Override
-  public String render(JavaSource javaSource) {
-    List<String> lines = lines(removeDotClass(javaSource.value().trim()));
+  public String render(TestText testText) {
+    List<String> lines = lines(removeDotClass(testText.getValue().trim()));
     return lines.stream()
         .map(Text::wordify)
         .collect(joining("\n"));

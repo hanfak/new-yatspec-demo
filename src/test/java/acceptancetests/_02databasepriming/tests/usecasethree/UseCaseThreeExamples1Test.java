@@ -12,12 +12,13 @@ import acceptancetests._02databasepriming.thens.ThenTheDatabaseContains;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.junit.WithParticipants;
-import com.googlecode.yatspec.parsing.JavaSource;
-import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
+import com.googlecode.yatspec.parsing.TestText;
+import com.googlecode.yatspec.plugin.diagram.SvgWrapper;
 import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
 import com.googlecode.yatspec.sequence.Participant;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import testinfrastructure.renderers.CustomJavaSourceRenderer;
 import testinfrastructure.renderers.HttpRequestRenderer;
@@ -35,6 +36,7 @@ import static acceptancetests._02databasepriming.givens.SpeciesInfoRecord.Specie
 public class UseCaseThreeExamples1Test extends AcceptanceTest implements WithParticipants {
   @Notes("This test demonstrates the multiple tables being primed in smae given. While asserted on in different thens")
   @Test
+  @DisplayName("hello")
   void shouldReturnAResponseAfterAccessingDatabase() throws Exception {
     givenTheDatabaseContains()
         .hasCharacterInfo(data()
@@ -112,7 +114,7 @@ public class UseCaseThreeExamples1Test extends AcceptanceTest implements WithPar
         new HtmlResultRenderer()
             .withCustomRenderer(HttpRequest.class, result -> new HttpRequestRenderer())
             .withCustomRenderer(HttpResponse.class, result -> new HttpResponseRenderer())
-            .withCustomRenderer(JavaSource.class, result -> new CustomJavaSourceRenderer())
+            .withCustomRenderer(TestText.class, result -> new CustomJavaSourceRenderer())
             .withCustomRenderer(SpeciesInfoRecord.class, result -> new SpeciesInfoInDatabaseRendererVersion2())
             .withCustomRenderer(CharacterInfoRecord.class, result -> new CharacterInfoInDatabaseRenderer())
             .withCustomRenderer(SvgWrapper.class, result -> new DontHighlightRenderer<>()),

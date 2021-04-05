@@ -1,5 +1,5 @@
 - ~~extract out  DSL.using(this.dataSource, SQLDialect.POSTGRES) to wiring~~
-- ~~Shows logs in html output~~
+- ~~new yatspec version~~
 - Test other use cases
 - Assert on files
 - Split wiring builder for prod and test 
@@ -14,8 +14,6 @@
 - linking notes
 - dictionary
 - ~~Extract dabaseconfiguration as singleton and extract out~~
-- upgrade yatspec
-    - fix custom rendering for matching on interfaces as well as objects
 - Aggregate using cqrs
 - Transactions, with usecase, 
     - if exception/timeout etc, roll back (database changes), 

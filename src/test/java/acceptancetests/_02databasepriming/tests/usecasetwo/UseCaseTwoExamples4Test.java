@@ -10,8 +10,8 @@ import acceptancetests._02databasepriming.thens.ThenTheDatabaseContains;
 import com.googlecode.yatspec.junit.Notes;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.junit.WithParticipants;
-import com.googlecode.yatspec.parsing.JavaSource;
-import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
+import com.googlecode.yatspec.parsing.TestText;
+import com.googlecode.yatspec.plugin.diagram.SvgWrapper;
 import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
@@ -91,7 +91,7 @@ public class UseCaseTwoExamples4Test extends AcceptanceTest implements WithParti
         new HtmlResultRenderer()
             .withCustomRenderer(HttpRequest.class, result -> new HttpRequestRenderer())
             .withCustomRenderer(HttpResponse.class, result -> new HttpResponseRenderer())
-            .withCustomRenderer(JavaSource.class, result -> new CustomJavaSourceRenderer())
+            .withCustomRenderer(TestText.class, result -> new CustomJavaSourceRenderer())
             // This looks in capturedInputs for this class type, and uses the renderer to display it correctly in output
             .withCustomRenderer(SpeciesInfoRecord.class, result -> new SpeciesInfoInDatabaseRendererVersion2())
             .withCustomRenderer(SvgWrapper.class, result -> new DontHighlightRenderer<>()),

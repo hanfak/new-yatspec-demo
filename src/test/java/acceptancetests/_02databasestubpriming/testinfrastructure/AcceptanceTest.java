@@ -15,8 +15,8 @@ import adapters.logging.LoggingCategory;
 import com.googlecode.yatspec.junit.SequenceDiagramExtension;
 import com.googlecode.yatspec.junit.SpecResultListener;
 import com.googlecode.yatspec.junit.WithCustomResultListeners;
-import com.googlecode.yatspec.parsing.JavaSource;
-import com.googlecode.yatspec.plugin.sequencediagram.SvgWrapper;
+import com.googlecode.yatspec.parsing.TestText;
+import com.googlecode.yatspec.plugin.diagram.SvgWrapper;
 import com.googlecode.yatspec.rendering.html.DontHighlightRenderer;
 import com.googlecode.yatspec.rendering.html.HtmlResultRenderer;
 import com.googlecode.yatspec.rendering.html.index.HtmlIndexRenderer;
@@ -81,7 +81,7 @@ public class AcceptanceTest implements WithCustomResultListeners {
         new HtmlResultRenderer()
             .withCustomRenderer(HttpRequest.class, result -> new HttpRequestRenderer())
             .withCustomRenderer(HttpResponse.class, result -> new HttpResponseRenderer())
-            .withCustomRenderer(JavaSource.class, result -> new CustomJavaSourceRenderer())
+            .withCustomRenderer(TestText.class, result -> new CustomJavaSourceRenderer())
             .withCustomRenderer(SpeciesInfoRecord.class, result -> new SpeciesInfoInDatabaseRendererVersion2())
             .withCustomRenderer(CharacterInfoRecord.class, result -> new CharacterInfoInDatabaseRenderer())
             .withCustomRenderer(SvgWrapper.class, result -> new DontHighlightRenderer<>()),
