@@ -30,7 +30,7 @@ public class DataRepositoryFactory implements DataRespositoryFactoryInterface {
   }
 
   public DataRepositoryFactory(DataSource dataSource, Logger logger) {
-    this.singletons = new Singletons(DSL.using(dataSource, SQLDialect.POSTGRES));
+    this.singletons = new Singletons(DSL.using(dataSource, SQLDialect.POSTGRES)); //todo necessary??
     this.logger = logger;
   }
 

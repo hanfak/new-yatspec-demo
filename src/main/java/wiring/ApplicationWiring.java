@@ -17,6 +17,7 @@ import adapters.outgoing.fileservice.InMemoryIdService;
 import adapters.outgoing.fileservice.MyFileService;
 import adapters.settings.internal.Settings;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.google.common.base.Supplier;
 import core.usecases.ports.incoming.GenerateResponseLetterUseCasePort;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.eclipse.jetty.server.Server;
@@ -85,7 +86,8 @@ public class ApplicationWiring {
     WebserverWiring webserverWiring = webserverWiring(jettyWebServer);
     ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory(settings.brokerUrl());
     ExternalCallWiringInterface externalCallWiring = optionalExternalCallWiring.orElse(externalCallWiringFactory(settings));
-    UseCaseFactory useCaseFactory = useCaseFactory(fileIoFactory.orElse(new FileIoFactory(applicationLogger)), dataRepositoryFactory, applicationLogger, externalCallWiring, settings, activeMQConnectionFactory, AUDIT_LOGGER);
+    Supplier<DataProvider> dataProviderSupplier = dataRepositoryFactory::characterDataProvider;
+    UseCaseFactory useCaseFactory = useCaseFactory(fileIoFactory.orElse(new FileIoFactory(applicationLogger)), dataRepositoryFactory, applicationLogger, externalCallWiring, settings, activeMQConnectionFactory, AUDIT_LOGGER, dataProviderSupplier);
     JmsWiring jmsWiring = jmsWiring(useCaseFactory, activeMQConnectionFactory, settings, applicationLogger, AUDIT_LOGGER);
     Singletons singletons = new Singletons(optionalDataSource.orElse(null), webserverWiring, dataRepositoryFactory);
     return new ApplicationWiring(useCaseFactory, jmsWiring, externalCallWiring, singletons, settings, applicationLogger);
@@ -176,5 +178,9 @@ public class ApplicationWiring {
 
   ExternalCallExampleOneServlet externalCallExampleOneServlet() {
     return new ExternalCallExampleOneServlet(useCaseFactory.externalCallExampleOneService(), new ExternalCallExampleOneMarshaller());
+  }
+
+  TransientDependencyUsecaseServlet transientDependencyUsecaseServlet() {
+    return new TransientDependencyUsecaseServlet(useCaseFactory.transientDependencyUsecase());
   }
 }

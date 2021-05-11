@@ -1,6 +1,7 @@
 package wiring;
 
 import adapters.incoming.jmslistener.instructions.JsonInstructionsFactory;
+import adapters.incoming.webserver.servlets.DataProvider;
 import adapters.libraries.ApacheCommonsLang3Adapter;
 import adapters.outgoing.databaseservice.AggregateDataProviderRepository;
 import adapters.outgoing.databaseservice.EventDataProviderRepository;
@@ -11,6 +12,7 @@ import adapters.outgoing.fileservice.InMemoryIdService;
 import adapters.outgoing.jmssender.ActiveMqMessageService;
 import adapters.outgoing.jmssender.AuditMessageService;
 import adapters.settings.internal.Settings;
+import core.usecases.TransientDependencyUsecase;
 import core.usecases.ports.incoming.GenerateResponseLetterUseCasePort;
 import core.usecases.ports.incoming.aggregateexample.AggregateExample1Step1Service;
 import core.usecases.ports.incoming.aggregateexample.AggregateExample1Step2Service;
@@ -36,6 +38,8 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
 import org.springframework.jms.core.JmsTemplate;
 
+import java.util.function.Supplier;
+
 public class UseCaseFactory {
 
   private final Logger logger;
@@ -45,10 +49,12 @@ public class UseCaseFactory {
   private final AggregateDataProviderRepository aggregateDataProviderRepository;
   private final EventDataProviderRepository eventDataProviderRepository;
   private final FileSystemWriter fileWriter;
+  private final Supplier<DataProvider> dataProviderSupplier;
 
   private UseCaseFactory(Logger logger, Settings settings, MessageService messageService,
                          ExternalCallWiringInterface externalCallWiring, AggregateDataProviderRepository aggregateDataProviderRepository,
-                         EventDataProviderRepository eventDataProviderRepository, FileSystemWriter fileWriter) {
+                         EventDataProviderRepository eventDataProviderRepository, FileSystemWriter fileWriter,
+                         Supplier<DataProvider> dataProviderSupplier) {
     this.logger = logger;
     this.settings = settings;
     this.messageService = messageService;
@@ -56,11 +62,14 @@ public class UseCaseFactory {
     this.aggregateDataProviderRepository = aggregateDataProviderRepository;
     this.eventDataProviderRepository = eventDataProviderRepository;
     this.fileWriter = fileWriter;
+    this.dataProviderSupplier = dataProviderSupplier;
+    // Instead of injecting one supplier, can inject factory of suppliers,
+    // and let the factory methods below ask for the supplier they need to pass into the usecase
   }
 
-  public static UseCaseFactory useCaseFactory(FileIoFactory fileIoFactory, DataRespositoryFactoryInterface dataRepositoryFactory, Logger logger, ExternalCallWiringInterface externalCallWiring, Settings settings, ActiveMQConnectionFactory activeMQConnectionFactory, Logger auditLogger) {
+  public static UseCaseFactory useCaseFactory(FileIoFactory fileIoFactory, DataRespositoryFactoryInterface dataRepositoryFactory, Logger logger, ExternalCallWiringInterface externalCallWiring, Settings settings, ActiveMQConnectionFactory activeMQConnectionFactory, Logger auditLogger, Supplier<DataProvider> dataProviderSupplier) {
     MessageService messageService = new AuditMessageService(new ActiveMqMessageService(new JmsTemplate(activeMQConnectionFactory)), auditLogger);
-    return new UseCaseFactory(logger, settings, messageService, externalCallWiring, dataRepositoryFactory.aggregateDataProviderRepository(), dataRepositoryFactory.eventDataProviderRepository(), fileIoFactory.fileWriter());
+    return new UseCaseFactory(logger, settings, messageService, externalCallWiring, dataRepositoryFactory.aggregateDataProviderRepository(), dataRepositoryFactory.eventDataProviderRepository(), fileIoFactory.fileWriter(), dataProviderSupplier);
   }
 
   // TODO make singleton
@@ -140,5 +149,9 @@ public class UseCaseFactory {
 
   ExternalCallExampleOneUsecase externalCallExampleOneService() {
     return new ExternalCallExampleOneUsecase(externalCallWiring.starWarsInterfaceService());
+  }
+
+  TransientDependencyUsecase transientDependencyUsecase() {
+    return new TransientDependencyUsecase(dataProviderSupplier);
   }
 }
